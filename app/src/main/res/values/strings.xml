@@ -1,0 +1,134 @@
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+ -->
+
+<!-- The string resources -->
+
+<!--
+XLIFF is a specification for the loss-less interchange
+of localizable data and its related information.
+-->
+<resources
+
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"
+
+    >
+
+    <string name="app_name">Sunshine</string>
+
+    <!-- Menu strings -->
+
+    <string name="action_refresh" translatable="false">Refresh</string>
+
+    <string name="action_view_location">View Location</string>
+
+    <string name="action_share">Share</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="hello_world">Hello World</string>
+
+    <!-- Messages -->
+
+    <string name="message_error_no_maps_app">Please install a Maps app.</string>
+
+    <!-- Preference strings -->
+
+    <!-- Key for storing location preference in SharedPreferences [CHAR LIMIT = NONE]-->
+    <string name="pref_location_key" translatable="false">location</string>
+
+    <!-- Label, or title, for the location preference [CHAR LIMIT = 30] -->
+    <string name="pref_location_label">Location</string>
+
+    <!-- The default location ID - the City ID for Mountain View, CA [CHAR LIMIT = NONE] -->
+    <string name="pref_location_default" translatable="false">94043</string>
+
+    <!-- Key for storing temperature unit preference in SharedPreferences [CHAR LIMIT = NONE]-->
+    <string name="pref_temperature_unit_key" translatable="false">temperature unit</string>
+
+    <!-- Label, or title, for the temperature unit preference [CHAR LIMIT = 30] -->
+    <string name="pref_temperature_unit_label">Pick Your Units</string>
+
+    <!-- The temperature unit - Metric value [CHAR LIMIT = NONE] -->
+    <string name="pref_temperature_unit_metric_value" translatable="false">metric</string>
+
+    <!-- The temperature unit - Imperial value [CHAR LIMIT = NONE] -->
+    <string name="pref_temperature_unit_imperial_value" translatable="false">imperial</string>
+
+    <!-- The temperature unit - Metric label [CHAR LIMIT = 25] -->
+    <string name="pref_temperature_unit_metric_label">Metric</string>
+
+    <!-- The temperature unit - Imperial label [CHAR LIMIT = 25] -->
+    <string name="pref_temperature_unit_imperial_label">Imperial</string>
+
+    <!-- Titles -->
+
+    <string name="title_activity_detail">Details</string>
+
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Content descriptions -->
+
+    <string name="description_future_weather_icon">Future Weather Icon</string>
+
+    <string name="description_today_weather_icon">Today Weather Icon</string>
+
+    <string name="description_detail_weather_icon">Detail Weather Icon</string>
+
+    <!-- Date labels -->
+
+    <!-- Date label when displaying today's weather forecast [CHAR LIMIT=20] -->
+    <string name="today">Today</string>
+
+    <!-- Date label when displaying tomorrow's weather forecast [CHAR LIMIT=20] -->
+    <string name="tomorrow">Tomorrow</string>
+
+    <!-- Date format for displaying day of week and date (i.e. Mon Jun 1) [CHAR LIMIT=20] -->
+    <string name="format_full_friendly_date">
+        <xliff:g id="day">%1$s</xliff:g>, <xliff:g id="date">%2$s</xliff:g>
+    </string>
+
+    <!-- Temperature format -->
+
+    <!-- Temperature formats in degrees [CHAR LIMIT=NONE] -->
+    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
+
+    <!-- Wind speed formats -->
+
+     <!-- Wind in mph [CHAR LIMIT=25] -->
+    <string name="format_wind_mph">
+        Wind: <xliff:g id="speed">%1$1.0f</xliff:g> mph <xliff:g id="direction">%2$s</xliff:g>
+    </string>
+
+     <!-- Wind in kmh [CHAR LIMIT=25] -->
+    <string name="format_wind_kmh">
+        Wind: <xliff:g id="speed">%1$1.0f</xliff:g> km/h <xliff:g id="direction">%2$s</xliff:g>
+    </string>
+
+    <!-- Pressure format [CHAR LIMIT=25] -->
+    <string name="format_pressure">Pressure: <xliff:g id="pressure">%1.0f</xliff:g> hPa</string>
+
+    <!-- Humidity format [CHAR LIMIT=25] -->
+    <!-- %% shows a % -->
+    <string name="format_humidity">Humidity: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
+
+</resources>

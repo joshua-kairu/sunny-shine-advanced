@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+ -->
+
+<!-- LinearLayout to display the forecast for today -->
+
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+
+    android:orientation="horizontal"
+
+    android:gravity="center_vertical"
+
+    android:padding="@dimen/layout_padding"
+
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    >
+
+    <!-- LinearLayout to hold date, high, and low -->
+
+    <LinearLayout
+
+        android:layout_width="0dp"
+
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical"
+
+        android:layout_weight="1"
+
+        android:paddingRight="@dimen/layout_padding"
+
+        android:paddingEnd="@dimen/layout_padding"
+
+        android:gravity="center_horizontal"
+
+        >
+
+        <!-- TextView for the date -->
+
+        <TextView
+
+            android:id="@+id/list_item_date_textview"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:text="Today, June 24"
+
+            />
+
+        <!-- TextView to hold the high temperature -->
+
+        <TextView
+
+            android:id="@+id/list_item_high_textview"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:text="21"
+
+            />
+
+        <!-- TextView to hold the low temperature -->
+
+        <TextView
+
+            android:id="@+id/list_item_low_textview"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:text="8"
+
+            />
+
+    </LinearLayout>
+
+    <!-- LinearLayout to hold the icon and forecast -->
+
+    <LinearLayout
+
+        android:layout_width="0dp"
+
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical"
+
+        android:layout_weight="1"
+
+        android:gravity="center_horizontal"
+
+        >
+
+        <!-- ImageView to show the weather icon -->
+
+        <ImageView
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:id="@+id/list_item_icon"
+
+            android:contentDescription="@string/description_today_weather_icon"
+
+            android:src="@mipmap/ic_launcher"
+
+            />
+
+        <!-- TextView for the forecast -->
+
+        <TextView
+
+            android:id="@+id/list_item_forecast_textview"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:text="Clear"
+
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

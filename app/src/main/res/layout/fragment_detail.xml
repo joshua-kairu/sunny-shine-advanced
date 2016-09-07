@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+-->
+
+<ScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    >
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:padding="@dimen/activity_vertical_margin"
+
+        android:orientation="vertical"
+
+        >
+
+        <!-- TextView to show the date -->
+
+        <TextView
+
+            android:id="@+id/fd_tv_date"
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            />
+
+        <!-- LinearLayout to hold the temperatures and the forecast icon and description -->
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+
+            android:orientation="horizontal"
+
+            android:layout_marginTop="@dimen/layout_padding"
+
+            android:paddingBottom="@dimen/space_between_content_areas"
+
+            android:baselineAligned="false"
+
+            >
+
+            <!-- LinearLayout to hold the high and low temperatures -->
+
+            <LinearLayout
+
+                android:layout_width="0dp"
+
+                android:layout_height="match_parent"
+
+                android:layout_weight="1"
+
+                android:orientation="vertical"
+
+                android:baselineAligned="false"
+
+                android:gravity="center_vertical"
+
+                >
+
+                <!-- TextView for the high temperature -->
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+
+                    android:id="@+id/fd_tv_high_temperature"
+
+                    android:paddingBottom="@dimen/text_baseline"
+
+                    />
+
+                <!-- TextView for the low temperature -->
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+
+                    android:id="@+id/fd_tv_low_temperature"
+
+                    />
+
+            </LinearLayout>
+
+            <!-- LinearLayout to hold the forecast icon and description -->
+
+            <LinearLayout
+
+                android:layout_width="0dp"
+
+                android:layout_height="match_parent"
+
+                android:layout_weight="1"
+
+                android:orientation="vertical"
+
+                android:gravity="center_horizontal"
+
+                >
+
+                <!-- ImageButton to show the forecast icon -->
+
+                <!--
+                transparent background added because
+                there was a default grey background that didn't look good.
+                -->
+                <ImageButton
+
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+
+                    android:contentDescription="@string/description_detail_weather_icon"
+
+                    android:id="@+id/fd_iv_weather_icon"
+
+                    android:background="@android:color/transparent"
+
+                    />
+
+                <!-- TextView to show the forecast description -->
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+
+                    android:id="@+id/fd_tv_description"
+
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- LinearLayout to hold the humidity, wind, and pressure -->
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical"
+
+            >
+
+            <!-- TextView to hold humidity -->
+
+            <TextView
+
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/fd_tv_humidity"
+
+                android:paddingBottom="@dimen/space_between_content_areas"
+
+                />
+
+            <!-- TextView to hold wind -->
+
+            <TextView
+
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/fd_tv_wind"
+
+                android:paddingBottom="@dimen/space_between_content_areas"
+
+                />
+
+            <!-- TextView to hold pressure -->
+
+            <TextView
+
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/fd_tv_pressure"
+
+                android:paddingBottom="@dimen/space_between_content_areas"
+
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
+

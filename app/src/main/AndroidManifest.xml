@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+-->
+
+<!-- The manifest -->
+
+<manifest
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    package="com.jlt.sunshine"
+
+    >
+
+    <!-- Permissions -->
+
+    <!-- Internet -->
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!--&lt;!&ndash; Provider &ndash;&gt;-->
+
+    <!--<uses-permission android:name=".data.WeatherProvider" />-->
+
+    <application
+
+        android:allowBackup="true"
+
+        android:icon="@mipmap/ic_launcher"
+
+        android:label="@string/app_name"
+
+        android:supportsRtl="true"
+
+        android:theme="@style/AppTheme"
+
+        >
+
+        <activity
+
+            android:name=".MainActivity"
+
+            android:label="@string/app_name"
+
+            >
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+
+        </activity>
+
+        <!-- Details Activity -->
+
+        <!--
+
+        When Up is pressed, go to the Main Activity
+        for Android v4.1/API 16 and above the parentActivityName does this
+        for lower versions the meta-data tag does this
+
+        -->
+
+        <activity
+
+            android:name=".DetailActivity"
+
+            android:label="@string/title_activity_detail"
+
+            android:parentActivityName=".MainActivity"
+
+            android:theme="@style/AppTheme"
+
+            >
+
+            <meta-data
+
+                android:name="android.support.PARENT_ACTIVITY"
+
+                android:value="com.jlt.sunshine.MainActivity"
+
+                />
+
+        </activity>
+
+        <!-- Settings -->
+
+        <activity
+
+            android:name=".SettingsActivity"
+
+            android:label="@string/title_activity_settings"
+
+            android:theme="@style/AppTheme"
+
+            android:parentActivityName=".MainActivity"
+
+            >
+
+            <meta-data
+
+                android:name="android.support.PARENT_ACTIVITY"
+
+                android:value="com.jlt.sunshine.MainActivity"
+
+                />
+
+        </activity>
+
+        <!-- Providers -->
+
+        <provider
+
+            android:authorities="com.jlt.sunshine.app"
+
+            android:name="com.jlt.sunshine.data.WeatherProvider"
+
+            android:exported="false"
+
+            android:enabled="true"
+            
+            />
+
+    </application>
+
+</manifest>
