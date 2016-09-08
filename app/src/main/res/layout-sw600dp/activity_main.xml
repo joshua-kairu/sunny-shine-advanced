@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+ -->
+
+<!--
+main activity layout for
+devices whose smallest width is greater than 600 dp,
+such as 7" and 10" tablets.
+-->
+
+<!-- uses a two-pane layout for a master/detail flow. -->
+
+<!-- android:divider - Drawable to use as a vertical divider between buttons. -->
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    android:baselineAligned="false"
+
+    android:divider="?android:attr/dividerHorizontal"
+
+    android:orientation="horizontal"
+
+    tools:context=".MainActivity"
+
+    >
+
+    <!-- the forecast fragment - is static since we know it will be there before run time. -->
+
+    <!-- list_content - layout that displays a list of individual "item-subitem"s -->
+    <fragment
+
+        android:id="@+id/am_f_forecast"
+
+        android:name="com.jlt.sunshine.ForecastFragment"
+
+        android:layout_width="0dp"
+
+        android:layout_height="match_parent"
+
+        android:layout_weight="2"
+
+        tools:layout="@android:layout/list_content"
+
+        />
+
+    <!-- the detail fragment - is dynamic since it should change based on the forecast chosen. -->
+    <FrameLayout
+
+        android:id="@+id/am_f_weather_detail_container"
+
+        android:layout_width="0dp"
+
+        android:layout_height="match_parent"
+
+        android:layout_weight="4"
+
+        />
+
+</LinearLayout>

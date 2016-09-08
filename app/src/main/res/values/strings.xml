@@ -131,4 +131,14 @@ of localizable data and its related information.
     <!-- %% shows a % -->
     <string name="format_humidity">Humidity: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
 
+    <!-- Mock data -->
+
+    <string name="mock_date">Today, September 03</string>
+    <string name="mock_high_temp">21\u00B0</string>
+    <string name="mock_low_temp">8\u00B0</string>
+    <string name="mock_description">Clear</string>
+    <string name="mock_humidity">Humidity: 84%</string>
+    <string name="mock_wind">Wind: 6 km/H NW</string>
+    <string name="mock_pressure">Pressure: 986 hPA</string>
+
 </resources>

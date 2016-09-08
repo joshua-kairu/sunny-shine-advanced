@@ -23,7 +23,7 @@
 
 -->
 
-<!-- The details layout -->
+<!-- The details layout for phones. -->
 
 <FrameLayout
 
@@ -31,18 +31,14 @@
 
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:id="@+id/ad_fl_container"
+    android:id="@+id/am_f_weather_detail_container"
 
     android:layout_width="match_parent"
 
     android:layout_height="match_parent"
 
-    tools:context="com.jlt.sunshine.DetailActivity"
+    tools:context=".DetailActivity"
 
     tools:ignore="MergeRootFrame"
 
-    >
-
-
-
-</FrameLayout>
+    />

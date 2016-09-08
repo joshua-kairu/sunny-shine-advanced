@@ -89,8 +89,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     /* Strings */
 
-    public static final String FORECASTFRAGMENT_TAG = "FORECASTFRAGMENT_TAG"; // ditto
-
     /* VARIABLES */
 
     /* Forecast Adapters */

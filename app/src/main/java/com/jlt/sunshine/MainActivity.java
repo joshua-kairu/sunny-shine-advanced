@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.jlt.sunshine.data.Utility;
 
-/**
+/*
  *  Sunshine
  *
  * A simple weather app
@@ -33,6 +33,7 @@ import com.jlt.sunshine.data.Utility;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
+/** The landing activity. */
 // begin activity MainActivity
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +43,13 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName(); // the logoger
 
+    public static final String DETAILFRAGMENT_TAG = "DFTAG"; // ditto
+
     /** VARIABLES */
+
+    /** Primitives */
+
+    private boolean mTwoPane; // checks if we are dealing with a one or two pane (phone or tab) UI
 
     /* Strings */
 
@@ -59,41 +66,77 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate( Bundle savedInstanceState ) {
 
         // 0. super things
-        // 1. use the main activity layout
-        // 2. if this is the first run,
-        // 2a. show the place holder fragment
-        // 3. get the current location
+        // 1. get the current location
+        // 2. use the main activity layout
+        // 3. if this is a two pane UI
+        // 3a. set the two pane flag to true
+        // 3b. if this is the first run,
+        // 3b1. replace the detail fragment in the second pane
+        // (the forecast fragment is added to the first pane in xml way before runtime)
+        // 4. otherwise this is not a two pane UI
+        // 4a. set the two pane flag to false
 
         // 0. super things
 
         super.onCreate( savedInstanceState );
 
-        // 1. use the main activity layout
+        // 1. get the current location
+
+        mCurrentLocation = Utility.getPreferredLocation( this );
+
+        // 2. use the main activity layout
 
         setContentView( R.layout.activity_main );
 
-        // 2. if this is the first run,
-        // 2a. show the place holder fragment
+        // 3. if this is a two pane UI
 
-        // begin if for if the saved instance is null
-        if ( savedInstanceState == null ) {
+        // we know two pane status by checking status of the existence of the detail container view
 
-            getSupportFragmentManager()
+        // begin if there is a detail container view
+        if ( findViewById( R.id.am_f_weather_detail_container ) != null ) {
+
+            // 3a. set the two pane flag to true
+
+            mTwoPane = true;
+
+            // 3b. if this is the first run,
+
+            // in the first run the saved instance state is null since
+            // no state, including fragment state,  has been put in there.
+            // but when the screen is rotated during the use of this app,
+            // state, including fragment state, is saved
+            // so saved instance state will not be null.
+            // we do not want a new detail fragment to be put
+            // just because the screen has been rotated.
+
+            // begin if the saved instance is null
+            if ( savedInstanceState == null ) {
+
+                // 3b1. replace the detail fragment in the second pane
+                // (the forecast fragment is added to the first pane in xml way before runtime)
+
+                getSupportFragmentManager()
 
                     .beginTransaction()
 
-                    .add( R.id.am_fl_container, new ForecastFragment(),
-                            ForecastFragment.FORECASTFRAGMENT_TAG )
+                    .replace( R.id.am_f_weather_detail_container,
+                            new DetailFragment(),
+                            DETAILFRAGMENT_TAG )
 
                     .commit();
 
-        } // end if for if the saved instance is null
+            } // end if the saved instance is null
+
+        } // end if there is a detail container view
+
+        // 4. otherwise this is not a two pane UI
+        // 4a. set the two pane flag to false
+
+        else { mTwoPane = false; }
 
         Log.e( LOG_TAG, "onCreate: " );
 
         // 3. get the current location
-
-        mCurrentLocation = Utility.getPreferredLocation( this );
 
     } // end onCreate
 
@@ -134,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
             ForecastFragment forecastFragment =
                     ( ForecastFragment ) getSupportFragmentManager()
-                            .findFragmentByTag( ForecastFragment.FORECASTFRAGMENT_TAG );
+                            .findFragmentById( R.id.am_f_forecast );
 
             // 1b. tell it that the location has changed
 

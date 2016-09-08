@@ -217,13 +217,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     // begin onCreateLoader
     public Loader< Cursor > onCreateLoader( int id, Bundle args ) {
 
-        // 0. create a cursor loader to get the details
+        // 0. if this fragment was created without a Uri, there's no point in creating a loader
+        // 1. create a cursor loader to get the details
 
-        // 0. create a cursor loader to get the details
+        // 0. if this fragment was created without a Uri, there's no point in creating a loader
 
         Intent intent = getActivity().getIntent();
 
-        if ( intent == null ) { return null; }
+        // the Uri is found in the intent's data
+        if ( intent == null || intent.getData() == null ) { return null; }
+
+        // 1. create a cursor loader to get the details
 
         return new CursorLoader(
                 getActivity(),

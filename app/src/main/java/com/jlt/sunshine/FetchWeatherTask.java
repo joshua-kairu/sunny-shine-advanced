@@ -111,7 +111,7 @@ public class FetchWeatherTask extends AsyncTask< String, Void, Void > {
 
         // 0c. the string that will store the received forecast in JSON form
 
-// Will contain the raw JSON response as a string.
+        // Will contain the raw JSON response as a string.
         String forecastJsonStr = null;
 
         String format = "json";
@@ -125,7 +125,6 @@ public class FetchWeatherTask extends AsyncTask< String, Void, Void > {
             // Construct the URL for the OpenWeatherMap query
             // Possible parameters are available at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
-//            URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043,USA&mode=json&units=metric&cnt=7&appid=<appid>");
 
             final String
                     FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?",

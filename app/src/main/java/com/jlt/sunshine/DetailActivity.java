@@ -2,11 +2,10 @@ package com.jlt.sunshine;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-/**
+/*
  *  Sunshine
  *
  * A simple weather app
@@ -26,8 +25,8 @@ import android.view.MenuItem;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
+/** Shows the details of the weather. */
 // begin activity DetailActivity
-// shows the details of the weather
 public class DetailActivity extends AppCompatActivity {
 
     /** CONSTANTS */
@@ -51,7 +50,7 @@ public class DetailActivity extends AppCompatActivity {
         if ( savedInstanceState == null ) {
 
             getSupportFragmentManager().beginTransaction()
-                    .add( R.id.ad_fl_container, new DetailFragment() )
+                    .add( R.id.am_f_weather_detail_container, new DetailFragment() )
                     .commit();
 
         }
@@ -93,18 +92,6 @@ public class DetailActivity extends AppCompatActivity {
 
     } // end onOptionsItemSelected
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-
-    }
-
     /** Other Methods */
-
 
 } // end activity DetailActivity
