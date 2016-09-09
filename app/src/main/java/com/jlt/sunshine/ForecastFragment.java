@@ -20,7 +20,6 @@
 
 package com.jlt.sunshine;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,6 +30,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,6 +41,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.jlt.sunshine.data.ForecastAdapter;
+import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.data.contract.WeatherContract.LocationEntry;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
@@ -89,7 +90,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     /* Strings */
 
+    public static final String LOG_TAG = ForecastFragment.class.getSimpleName(); // the logger
+
     /* VARIABLES */
+
+    /* Forecast Callbacks */
+
+    private ForecastCallback forecastCallbackListener; // listener for any changes
+                                                       // done to the forecast fragment
 
     /* Forecast Adapters */
 
@@ -117,6 +125,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 0. super things
         // 1. register the options menu
+        // 2. initialize the forecast callback listener
 
         // 0. super things
 
@@ -125,6 +134,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 1. register the options menu
 
         setHasOptionsMenu( true );
+
+        // 2. initialize the forecast callback listener
+
+        try { forecastCallbackListener = ( ForecastCallback ) getActivity(); }
+
+        catch ( ClassCastException e ) {
+            Log.e( LOG_TAG, "The parent activity must implement ForecastCallback." );
+        }
 
     } // end onCreate
 
@@ -157,7 +174,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 3. find reference to the list view
         // 4. set adapter to the list
         // 5. when an item in the list view is clicked
-        // 5a. show the weather details for the selected item
+        // 5a. notify the parent activity
         // last. return the inflated view
 
         // 0. inflate the main fragment layout
@@ -200,19 +217,19 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
                     @Override
                     // begin onItemClick
-                    public void onItemClick( AdapterView< ? > parent, View view,
+                    public void onItemClick( AdapterView< ? > adapterView, View view,
                                              int position, long id ) {
 
-                        // 5a. show the weather details for the selected item
+                        // 5a. notify the parent activity
 
                         // 0. get the cursor at the given position
                         // 1. if there is a cursor there
                         // 1a. get the location setting
-                        // 1b. start the details activity using the uri from the cursor in 0
+                        // 1b. pass these to the parent activity
 
                         // 0. get the cursor at the given position
 
-                        Cursor cursor = ( Cursor ) parent.getItemAtPosition( position );
+                        Cursor cursor = ( Cursor ) adapterView.getItemAtPosition( position );
 
                         // 1. if there is a cursor there
 
@@ -223,13 +240,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
                             String locationSetting = Utility.getPreferredLocation( getActivity() );
 
-                            // 1b. start the details activity using the uri from the cursor in 0
+                            // 1b. pass these to the parent activity
 
-                            Intent detailsIntent = new Intent( getActivity(), DetailActivity.class )
-                                    .setData( WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
-                                            locationSetting, cursor.getLong( COLUMN_WEATHER_DATE ) ) );
-
-                            startActivity( detailsIntent );
+                            forecastCallbackListener.onForecastItemSelected(
+                                    WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
+                                            locationSetting, cursor.getLong( COLUMN_WEATHER_DATE ) )
+                            );
 
                         } // end if there exists a cursor
 
@@ -405,6 +421,5 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         getLoaderManager().restartLoader( FORECAST_LOADER_ID, null, this );
 
     } // end method onLocationChanged
-
 
 } // end fragment ForecastFragment

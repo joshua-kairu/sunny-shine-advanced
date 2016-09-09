@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
 
 /*
@@ -35,7 +36,7 @@ import com.jlt.sunshine.data.Utility;
 
 /** The landing activity. */
 // begin activity MainActivity
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ForecastCallback {
 
     /** CONSTANTS */
 
@@ -162,7 +163,9 @@ public class MainActivity extends AppCompatActivity {
         // 1. if the location has been changed
         // 1a. get the forecast fragment
         // 1b. tell it that the location has changed
-        // 1c. update the current location
+        // 1c. get the detail fragment
+        // 1d. tell it that the location has changed
+        // 1e. update the current location
 
         // 0. super things
 
@@ -170,8 +173,10 @@ public class MainActivity extends AppCompatActivity {
 
         // 1. if the location has been changed
 
+        String currentLocation = Utility.getPreferredLocation( this );
+
         // begin if the location has been changed
-        if ( mCurrentLocation.equals( Utility.getPreferredLocation( this ) ) == false ) {
+        if ( mCurrentLocation.equals( currentLocation ) == false ) {
 
             // 1a. get the forecast fragment
 
@@ -181,9 +186,18 @@ public class MainActivity extends AppCompatActivity {
 
             // 1b. tell it that the location has changed
 
-            forecastFragment.onLocationChanged();
+            if ( forecastFragment != null ) { forecastFragment.onLocationChanged(); }
 
-            // 1c. update the current location
+            // 1c. get the detail fragment
+
+            DetailFragment detailFragment = ( DetailFragment ) getSupportFragmentManager()
+                    .findFragmentByTag( DETAILFRAGMENT_TAG );
+
+            // 1d. tell it that the location has changed
+
+            if ( detailFragment != null ) { detailFragment.onLocationChanged( currentLocation ); }
+
+            // 1e. update the current location
 
             mCurrentLocation = Utility.getPreferredLocation( this );
 
@@ -312,14 +326,59 @@ public class MainActivity extends AppCompatActivity {
 
     } // end onOptionsItemSelected
 
-    /** Other Methods */
+    /**
+     * {@link DetailFragment} callback for when an item has been selected.
+     *
+     * @param dateUri
+     */
+    @Override
+    // begin onForecastItemSelected
+    public void onForecastItemSelected( Uri dateUri ) {
 
-        /*
-    * Show a map with the passed URI
-    *
-    * @param URI to use to show a map
-    *
-    * */
+        // 0. if we are on two pane mode
+        // 0a. replace the current detail fragment with a detail fragment
+        // showing the selected item's information
+        // 1. otherwise
+        // 1a. start the detail activity
+
+        // 0. if we are on two pane mode
+
+        // begin if we are two pane
+        if ( mTwoPane == true ) {
+
+            // 0a. replace the current detail fragment with a detail fragment
+            // showing the selected item's information
+
+            DetailFragment detailFragment = DetailFragment.newInstance( dateUri );
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace( R.id.am_f_weather_detail_container, detailFragment )
+                    .commit();
+
+        } // end if we are two pane
+
+        // 1. otherwise
+
+        // begin else we are single pane
+        else {
+
+            // 1a. start the detail activity
+
+            Intent detailsIntent = new Intent( this, DetailActivity.class ).setData( dateUri );
+
+            startActivity( detailsIntent );
+
+        } // end else we are single pane
+
+    } // end onForecastItemSelected
+
+    /* Other Methods */
+
+    /**
+     * Show a map with the passed URI
+     * @param mapUri to use to show a map
+     * */
     // begin method showMap
     private void showMap( Uri mapUri ) {
 

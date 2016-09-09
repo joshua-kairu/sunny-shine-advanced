@@ -43,17 +43,31 @@ public class DetailActivity extends AppCompatActivity {
     // begin onCreate
     protected void onCreate( Bundle savedInstanceState ) {
 
+        // 0. super stuff
+        // 1. use the detail layout
+        // 2. add the detail fragment with the date uri argument
+        // passed into the intent that started this activity
+
+        // 0. super stuff
+
         super.onCreate( savedInstanceState );
+
+        // 1. use the detail layout
 
         setContentView( R.layout.activity_detail );
 
+        // 2. add the detail fragment with the date uri argument
+        // passed into the intent that started this activity
+
+        // begin if this is first run
         if ( savedInstanceState == null ) {
 
             getSupportFragmentManager().beginTransaction()
-                    .add( R.id.am_f_weather_detail_container, new DetailFragment() )
+                    .add( R.id.am_f_weather_detail_container,
+                            DetailFragment.newInstance( getIntent().getData() ) )
                     .commit();
 
-        }
+        } // end if this is first run
 
     } // end onCreate
 

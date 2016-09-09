@@ -183,14 +183,14 @@ public class WeatherContract {
          * */
         // begin method buildWeatherForLocationWithSpecificDateUri
         public static Uri buildWeatherForLocationWithSpecificDateUri(
-                String locationSetting, long startDate ) {
+                String locationSetting, long specificDate ) {
 
             // 0. normalize the start date
             // 1. build the date uri and return it
 
             // 0. normalize the start date
 
-            long normalizedDate = normalizeDate( startDate );
+            long normalizedDate = normalizeDate( specificDate );
 
             // 1. build the date uri and return it
 

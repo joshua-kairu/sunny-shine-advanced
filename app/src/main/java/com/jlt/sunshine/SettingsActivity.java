@@ -1,12 +1,16 @@
 package com.jlt.sunshine;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
-/**
+/*
  *  Sunshine
  *
  * A simple weather app
@@ -26,19 +30,19 @@ import android.preference.PreferenceManager;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
+/** The settings manager. */
 // begin preference activity SettingsActivity
-// the settings manager
 public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
 
-    /** CONSTANTS */
+    /* CONSTANTS */
 
-    /** VARIABLES */
+    /* VARIABLES */
 
-    /** METHODS */
+    /* METHODS */
 
-    /** Getters and Setters */
+    /* Getters and Setters */
 
-    /**
+    /*
      * Overrides
      */
 
@@ -110,6 +114,37 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     } // end onPreferenceChange
 
     /**
+     * Obtain an {@link Intent} that will launch an explicit target activity specified by
+     * this activity's logical parent. The logical parent is named in the application's manifest
+     * by the {@link android.R.attr#parentActivityName parentActivityName} attribute.
+     * Activity subclasses may override this method to modify the Intent returned by
+     * super.getParentActivityIntent() or to implement a different mechanism of retrieving
+     * the parent intent entirely.
+     *
+     * @return a new Intent targeting the defined parent of this activity or null if
+     * there is no valid parent.
+     */
+    @TargetApi( Build.VERSION_CODES.JELLY_BEAN )
+    @Nullable
+    @Override
+    // begin getParentActivityIntent
+    public Intent getParentActivityIntent() {
+
+        // FLAG_ACTIVITY_CLEAR_TOP
+        //  If set, and the activity being launched is already running in the current task,
+        //  then instead of launching a new instance of that activity,
+        //  all of the other activities on top of it will be closed
+        //  and this Intent will be delivered to the (now on top) old activity as a new Intent.
+        //
+        //  For example, consider a task consisting of the activities: A, B, C, D.
+        //  If D calls startActivity() with an Intent that resolves to the component of activity B,
+        //  then C and D will be finished and B receive the given Intent,
+        //  resulting in the stack now being: A, B.
+        return super.getParentActivityIntent().addFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+    } // end getParentActivityIntent
+
+    /*
      * Other Methods
      */
 

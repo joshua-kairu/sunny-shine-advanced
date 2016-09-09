@@ -2,6 +2,7 @@ package com.jlt.sunshine;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -49,7 +50,7 @@ import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
 // begin fragment DetailFragment
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks< Cursor > {
 
-    /** CONSTANTS */
+    /* CONSTANTS */
 
     /* Arrays */
 
@@ -93,7 +94,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private static final String FORECAST_SHARE_HASHTAG = "#SunshineApp"; // the share hashtag
 
-    /** VARIABLES */
+    public static final String ARGUMENT_URI_KEY = "ARGUMENT_URI_KEY"; // key used to refer the uri
+                                                                      // in the bundle passed into
+                                                                      // this fragment during instantiation
+
+    /* VARIABLES */
 
     /* Image Views */
 
@@ -117,7 +122,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView mPressureTextView; // ditto
     private TextView mWindTextView; // ditto
 
-    /**
+    /* Uris */
+
+    private Uri mDataUri; // uri that we will use to fetch the data we will need for this fragment
+
+    /*
      * CONSTRUCTOR
      */
 
@@ -125,11 +134,45 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public DetailFragment() {
     }
 
-    /** METHODS */
-
-    /** Getters and Setters */
-
     /**
+     * Create a new {@link DetailFragment} with the given arguments.
+     *
+     * @param uri A {@link android.net.Uri} we will use to initialize the
+     *            {@link DetailFragment} with.
+     * */
+    // begin instantiating method newInstance
+    public static DetailFragment newInstance( Uri uri ) {
+
+        // 0. create a new DetailFragment
+        // 1. put the parameter uri in a bundle
+        // 2. use the bundle as the arguments for the DetailFragment created at 0
+        // 3. return the DetailFragment created at 0
+
+        // 0. create a new DetailFragment
+
+        DetailFragment detailFragment = new DetailFragment();
+
+        // 1. put the parameter uri in a bundle
+
+        Bundle bundle = new Bundle();
+
+        bundle.putParcelable( ARGUMENT_URI_KEY, uri );
+
+        // 2. use the bundle as the arguments for the DetailFragment created at 0
+
+        detailFragment.setArguments( bundle );
+
+        // 3. return the DetailFragment created at 0
+
+        return detailFragment;
+
+    } // end instantiating method newInstance
+
+    /* METHODS */
+
+    /* Getters and Setters */
+
+    /*
      * Overrides
      */
 
@@ -185,15 +228,22 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     // begin onCreateView
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
-        // 0. use the detail layout
-        // 1. get the needed views
-        // 2. return the inflated detail layout
+        // 0. initialize the data uri from the arguments
+        // 1. use the detail layout
+        // 2. get the needed views
+        // last. return the inflated detail layout
 
-        // 0. use the detail layout
+        // 0. initialize the data uri from the arguments
+
+        if ( getArguments() != null ) {
+            mDataUri = getArguments().getParcelable( ARGUMENT_URI_KEY );
+        }
+
+        // 1. use the detail layout
 
         View rootView = inflater.inflate( R.layout.fragment_detail, container, false );
 
-        // 1. get the needed views
+        // 2. get the needed views
 
         mDateTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_date );
         mHighTempTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_high_temperature );
@@ -204,7 +254,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mWindTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_wind );
         mPressureTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_pressure );
 
-        // 2. return the inflated detail layout
+        // last. return the inflated detail layout
 
         return rootView;
 
@@ -222,16 +272,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         // 0. if this fragment was created without a Uri, there's no point in creating a loader
 
-        Intent intent = getActivity().getIntent();
-
-        // the Uri is found in the intent's data
-        if ( intent == null || intent.getData() == null ) { return null; }
+        if ( mDataUri == null ) { return null; }
 
         // 1. create a cursor loader to get the details
 
         return new CursorLoader(
                 getActivity(),
-                intent.getData(),
+                mDataUri,
                 DETAILS_COLUMNS,
                 null,
                 null,
@@ -316,14 +363,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         // 1. initialize the details loader
 
-        getLoaderManager().initLoader( DETAIL_LOADER_ID, null, this );
-
+        if ( mDataUri != null ) { getLoaderManager().initLoader( DETAIL_LOADER_ID, null, this ); }
 
     } // end onActivityCreated
 
     /* Other Methods */
 
     /*
+
     * Sets the Intent that will be used to share weather detail
     *
     * @param The detail to be shared. Shared details should have the format <Detail> #SunshineApp,
@@ -405,6 +452,56 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     } // end method formatHighLows
 
-    /** INNER CLASSES */
+    /**
+     * Respond to the user's changing their location.
+     *
+     * This is done by replacing the old uri with a new one based on the new location
+     * and restarting the member loader.
+     *
+     * @param newLocation The new location in {@link String} form.
+     * */
+    // begin onLocationChanged
+    public void onLocationChanged( String newLocation ) {
+
+        // 0. replace the old uri
+        // 1. if the old uri existed
+        // 1a. get the date that the old uri pointed to
+        // 1b. create a new uri based on the date in 1a and the parameter new location
+        // 1c. save the new uri created in 1b
+        // 1d. restart the loader
+
+        // 0. replace the old uri
+
+        Uri uri = mDataUri;
+
+        // 1. if the old uri existed
+
+        // begin if uri is not null
+        if ( uri != null ) {
+
+            // 1a. get the date that the old uri pointed to
+
+            long date = WeatherEntry.getDateFromUri( uri );
+
+            // 1b. create a new uri based on the date in 1a and the parameter new location
+
+            Uri updatedUri = WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
+                    newLocation, date );
+
+            // 1c. save the new uri created in 1b
+
+            mDataUri = updatedUri;
+
+            // 1d. restart the loader
+
+            getLoaderManager().restartLoader( DETAIL_LOADER_ID, null, this );
+
+        } // end if uri is not null
+
+        // TODO: 9/9/16 But how will the detail fragment get the information to display if the location information is not in the database?
+
+    } // end onLocationChanged
+
+    /* INNER CLASSES */
 
 } // end fragment DetailFragment

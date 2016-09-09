@@ -55,8 +55,6 @@
 
             android:layout_height="wrap_content"
 
-            android:text="@string/mock_date"
-
             />
 
         <!-- LinearLayout to hold the temperatures and the forecast icon and description -->
@@ -107,8 +105,6 @@
 
                     android:paddingBottom="@dimen/text_baseline"
 
-                    android:text="@string/mock_high_temp"
-
                     />
 
                 <!-- TextView for the low temperature -->
@@ -120,8 +116,6 @@
                     android:layout_height="wrap_content"
 
                     android:id="@+id/fd_tv_low_temperature"
-
-                    android:text="@string/mock_low_temp"
 
                     />
 
@@ -161,8 +155,6 @@
 
                     android:background="@android:color/transparent"
 
-                    android:src="@mipmap/ic_launcher"
-
                     />
 
                 <!-- TextView to show the forecast description -->
@@ -174,8 +166,6 @@
                     android:layout_height="wrap_content"
 
                     android:id="@+id/fd_tv_description"
-
-                    android:text="@string/mock_description"
 
                     />
 
@@ -206,9 +196,6 @@
                 android:id="@+id/fd_tv_humidity"
 
                 android:paddingBottom="@dimen/space_between_content_areas"
-
-                android:text="@string/mock_humidity"
-
                 />
 
             <!-- TextView to hold wind -->
@@ -223,8 +210,6 @@
 
                 android:paddingBottom="@dimen/space_between_content_areas"
 
-                android:text="@string/mock_wind"
-
                 />
 
             <!-- TextView to hold pressure -->
@@ -238,8 +223,6 @@
                 android:id="@+id/fd_tv_pressure"
 
                 android:paddingBottom="@dimen/space_between_content_areas"
-
-                android:text="@string/mock_pressure"
 
                 />
 
