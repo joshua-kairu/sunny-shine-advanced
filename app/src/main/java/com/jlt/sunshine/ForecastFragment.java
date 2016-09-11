@@ -92,6 +92,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     public static final String LOG_TAG = ForecastFragment.class.getSimpleName(); // the logger
 
+    private static final String BUNDLE_SCROLL_POSITION = "BUNDLE_SCROLL_POSITION";
+        // key to store the current scroll position
+
     /* VARIABLES */
 
     /* Forecast Callbacks */
@@ -102,6 +105,16 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     /* Forecast Adapters */
 
     private ForecastAdapter mForecastAdapter; // array adapter to fill the weather list view
+
+    /* List Views */
+
+    private ListView mForecastListView; // ditto
+
+    /* Primitives */
+
+    private int mCurrentScrollPosition = ListView.INVALID_POSITION; // current scroll position of
+                                                                    // the list view. starting off
+                                                                    // with an invalid position
 
     /*
      * CONSTRUCTOR
@@ -175,6 +188,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 4. set adapter to the list
         // 5. when an item in the list view is clicked
         // 5a. notify the parent activity
+        // 5b. update the selected position member variable
+        // 6. if there's instance state,
+        // 6a. mine it for the scroll position
         // last. return the inflated view
 
         // 0. inflate the main fragment layout
@@ -201,16 +217,16 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 3. find reference to the list view
 
-        ListView listView = ( ListView ) rootView.findViewById( R.id.fm_lv_forecast );
+        mForecastListView = ( ListView ) rootView.findViewById( R.id.fm_lv_forecast );
 
         // 4. set adapter to the list
 
-        listView.setAdapter( mForecastAdapter );
+        mForecastListView.setAdapter( mForecastAdapter );
 
         // 5. when an item in the list view is clicked
 
         // begin listView.setOnItemClickListener
-        listView.setOnItemClickListener(
+        mForecastListView.setOnItemClickListener(
 
                 // begin new AdapterView.OnItemClickListener
                 new AdapterView.OnItemClickListener() {
@@ -249,12 +265,24 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
                         } // end if there exists a cursor
 
+                        // 5b. update the selected position member variable
+
+                        mCurrentScrollPosition = position;
+
                     } // end onItemClick
 
                 } // end new AdapterView.OnItemClickListener
 
         ); // end listView.setOnItemClickListener
 
+        // 6. if there's instance state,
+
+        /// 6a. mine it for the scroll position
+
+        if ( savedInstanceState != null &&
+                savedInstanceState.containsKey( BUNDLE_SCROLL_POSITION ) == true ) {
+            mCurrentScrollPosition = savedInstanceState.getInt( BUNDLE_SCROLL_POSITION );
+        }
 
         // last. return the inflated view
 
@@ -350,11 +378,20 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoadFinished( Loader< Cursor > cursorLoader, Cursor cursor ) {
 
         // 0. refresh the list view
+        // 1. if there is an valid list scroll position
+        // 1a. scroll to it
 
         // 0. refresh the list view
 
         // swapCursor - Swap in a new Cursor, returning the old Cursor
         mForecastAdapter.swapCursor( cursor );
+
+        // 1. if there is an valid list scroll position
+        // 1a. scroll to it
+
+        if ( mCurrentScrollPosition != ListView.INVALID_POSITION ) {
+            mForecastListView.smoothScrollToPosition( mCurrentScrollPosition );
+        }
 
     } // end onLoadFinished
 
@@ -372,6 +409,30 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mForecastAdapter.swapCursor( null );
 
     } // end onLoaderReset
+
+    @Override
+    // begin onSaveInstanceState
+    public void onSaveInstanceState( Bundle outState ) {
+
+        // 0. super stuff
+        // 1. if there is an item selected
+        // 1a. put the current scroll position in the bundle
+
+        // 0. super stuff
+
+        super.onSaveInstanceState( outState );
+
+        // 1. if there is an item selected
+
+        // 1a. put the current scroll position in the bundle
+
+        // no item selected will leave the position at INVALID_POSITION
+
+        if ( mCurrentScrollPosition != ListView.INVALID_POSITION ) {
+            outState.putInt( BUNDLE_SCROLL_POSITION, mCurrentScrollPosition );
+        }
+
+    } // end onSaveInstanceState
 
     /* Other Methods */
 
