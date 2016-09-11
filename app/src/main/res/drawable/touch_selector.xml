@@ -23,32 +23,28 @@
 
  -->
 
-<!--
+<!-- state list animator for the forecast list for pre-Lollipop. -->
 
-    Menu for the forecast fragment
-    Contains a
-        refresh button
-
--->
-
-<menu
+<selector
 
     xmlns:android="http://schemas.android.com/apk/res/android"
 
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-
     >
 
-    <!-- Refresh -->
+    <!-- when a row is pressed but not yet activated; finger down mode. -->
+    <!-- use a grey background. -->
+    <item android:state_pressed="true"
+        android:drawable="@color/grey" />
 
-    <item
+    <!-- when a row is activated. In SINGLE_CHOICE_MODE,
+         it flags the active row of a ListView. -->
+    <!-- color the selected item's background light blue. -->
+    <item android:state_activated="true"
 
-        android:id="@+id/action_refresh"
+        android:drawable="@color/sunshine_light_blue" />
 
-        android:title="@string/action_refresh"
+    <!-- Default state -->
+    <!-- transparent background is good here. -->
+    <item android:drawable="@android:color/transparent" />
 
-        app:showAsAction="never"
-
-        />
-
-</menu>
+</selector>

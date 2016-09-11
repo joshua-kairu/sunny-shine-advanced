@@ -2,7 +2,9 @@
 
 <!--
 
- Pata Data - Displays World Bank JSON on Kenya
+ Sunshine
+
+ A simple weather app
 
  Copyright (C) 2016 Kairu Joshua Wambugu
 
@@ -20,6 +22,8 @@
  along with this program.  If not, see http://www.gnu.org/licenses/.
 
  -->
+
+<!-- dimensions. -->
 
 <resources>
 

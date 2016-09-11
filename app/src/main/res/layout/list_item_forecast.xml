@@ -41,6 +41,8 @@
 
     android:padding="@dimen/layout_padding"
 
+    android:background="@drawable/touch_selector"
+
     >
 
     <!-- ImageView to show the weather icon -->

@@ -40,6 +40,11 @@
     android:padding="@dimen/layout_padding"
 
     android:minHeight="?android:attr/listPreferredItemHeight"
+
+    android:background="@drawable/touch_selector"
+
+    android:baselineAligned="false"
+
     >
 
     <!-- LinearLayout to hold date, high, and low -->
@@ -72,8 +77,6 @@
 
             android:layout_height="wrap_content"
 
-            android:text="Today, June 24"
-
             />
 
         <!-- TextView to hold the high temperature -->
@@ -86,8 +89,6 @@
 
             android:layout_height="wrap_content"
 
-            android:text="21"
-
             />
 
         <!-- TextView to hold the low temperature -->
@@ -99,8 +100,6 @@
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
-
-            android:text="8"
 
             />
 
@@ -120,6 +119,8 @@
 
         android:gravity="center_horizontal"
 
+        android:baselineAligned="false"
+
         >
 
         <!-- ImageView to show the weather icon -->
@@ -134,8 +135,6 @@
 
             android:contentDescription="@string/description_today_weather_icon"
 
-            android:src="@mipmap/ic_launcher"
-
             />
 
         <!-- TextView for the forecast -->
@@ -147,8 +146,6 @@
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
-
-            android:text="Clear"
 
             />
 

@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <!--
 
  Sunshine
@@ -23,32 +21,30 @@
 
  -->
 
+<!-- styling for tabs -->
+
 <!--
-
-    Menu for the forecast fragment
-    Contains a
-        refresh button
-
+use a list item selector drawable
 -->
 
-<menu
+<resources>
 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+        <!-- Customize your theme here. -->
 
-    >
+        <item name="colorPrimary">@color/colorPrimary</item>
 
-    <!-- Refresh -->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 
-    <item
+        <item name="colorAccent">@color/colorAccent</item>
 
-        android:id="@+id/action_refresh"
+    </style>
 
-        android:title="@string/action_refresh"
-
-        app:showAsAction="never"
-
-        />
-
-</menu>
+    <!-- style for using a list item selector drawable -->
+    <style name="ForecastListStyle">
+        <item name="android:choiceMode">singleChoice</item>
+    </style>
+    
+</resources>
