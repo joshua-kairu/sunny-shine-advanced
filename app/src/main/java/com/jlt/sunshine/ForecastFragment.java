@@ -148,6 +148,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 1. use the member use today layout variable to communicate to the forecast adapter
 
+        // the forecast adapter could be null if
+        // this method is called before the fragment's onCreateView,
+        // which is where the adapter is initialized
         if ( mForecastAdapter != null ) { mForecastAdapter.setUseTodayLayout( mUseTodayLayout ); }
 
     } // end method setUseTodayLayout
@@ -208,6 +211,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // the location specified by the location setting sorted by ascending date
         // and get a cursor
         // 2. initialize the adapter
+        // 2a. tell it if to use the special today layout
         // 3. find reference to the list view
         // 4. set adapter to the list
         // 5. when an item in the list view is clicked
@@ -238,6 +242,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 2. initialize the adapter
 
         mForecastAdapter = new ForecastAdapter( getActivity(), cursor, 0 );
+
+        // 2a. tell it if to use the special today layout
+
+        mForecastAdapter.setUseTodayLayout( mUseTodayLayout );
 
         // 3. find reference to the list view
 
