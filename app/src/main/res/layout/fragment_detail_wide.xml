@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+-->
+
+<!-- detail for phone landscape and tablet portrait and landscape -->
+
+<!-- fillViewport - if the scrollview should stretch its content to fill the viewport. -->
+<ScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    android:fillViewport="true"
+
+    >
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:padding="@dimen/activity_vertical_margin"
+
+        android:orientation="horizontal"
+
+        >
+
+        <!-- header: day, date -->
+
+        <LinearLayout
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical"
+
+            >
+
+            <!-- TextView to show the day -->
+
+            <TextView
+
+                android:id="@+id/detail_tv_day"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                />
+
+            <!-- TextView to show the date -->
+
+            <TextView
+
+                android:id="@+id/detail_tv_date"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                />
+
+        </LinearLayout>
+
+
+        <!-- LinearLayout to hold the temperatures and the forecast icon and description -->
+
+        <LinearLayout
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical"
+
+            android:layout_marginLeft="@dimen/layout_padding"
+
+            android:layout_marginStart="@dimen/layout_padding"
+
+            >
+
+            <!-- TextView for the high temperature -->
+
+            <TextView
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/detail_tv_high_temperature"
+
+                android:paddingBottom="@dimen/text_baseline"
+
+                />
+
+            <!-- TextView for the low temperature -->
+
+            <TextView
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/detail_tv_low_temperature"
+
+                />
+
+            <!-- TextView to hold humidity -->
+
+            <TextView
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/detail_tv_humidity"
+
+                />
+
+            <!-- TextView to hold wind -->
+
+            <TextView
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/detail_tv_wind"
+
+                />
+
+            <!-- TextView to hold pressure -->
+
+            <TextView
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/detail_tv_pressure"
+
+                />
+
+        </LinearLayout>
+
+        <!-- LinearLayout for icon and description -->
+
+        <LinearLayout
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:gravity="center_horizontal"
+
+            android:orientation="vertical"
+
+            >
+
+            <!-- ImageButton to show the forecast icon -->
+
+            <!--
+            transparent background added because
+            there was a default grey background that didn't look good.
+            -->
+            <ImageButton
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:contentDescription="@string/description_detail_weather_icon"
+
+                android:id="@+id/detail_iv_weather_icon"
+
+                android:background="@android:color/transparent"
+
+                />
+
+            <!-- TextView to show the forecast description -->
+
+            <TextView
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/detail_tv_description"
+
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
+
