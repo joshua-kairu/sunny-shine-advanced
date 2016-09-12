@@ -302,7 +302,7 @@ public class Utility {
      * @return The day in the form of a string formatted "September 1"
      * */
     // begin method getFormattedMonthDay
-    private static String getFormattedMonthDay ( long dateInMillis ) {
+    public static String getFormattedMonthDay ( long dateInMillis ) {
 
         // 0. get the needed date format
         // 1. return the formatted milliseconds

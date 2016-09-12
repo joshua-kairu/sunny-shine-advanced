@@ -45,11 +45,23 @@
 
         >
 
+        <!-- TextView to show the day -->
+
+        <TextView
+
+            android:id="@+id/detail_tv_day"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            />
+
         <!-- TextView to show the date -->
 
         <TextView
 
-            android:id="@+id/fd_tv_date"
+            android:id="@+id/detail_tv_date"
 
             android:layout_width="match_parent"
 
@@ -101,7 +113,7 @@
 
                     android:layout_height="wrap_content"
 
-                    android:id="@+id/fd_tv_high_temperature"
+                    android:id="@+id/detail_tv_high_temperature"
 
                     android:paddingBottom="@dimen/text_baseline"
 
@@ -115,7 +127,7 @@
 
                     android:layout_height="wrap_content"
 
-                    android:id="@+id/fd_tv_low_temperature"
+                    android:id="@+id/detail_tv_low_temperature"
 
                     />
 
@@ -151,7 +163,7 @@
 
                     android:contentDescription="@string/description_detail_weather_icon"
 
-                    android:id="@+id/fd_iv_weather_icon"
+                    android:id="@+id/detail_iv_weather_icon"
 
                     android:background="@android:color/transparent"
 
@@ -165,7 +177,7 @@
 
                     android:layout_height="wrap_content"
 
-                    android:id="@+id/fd_tv_description"
+                    android:id="@+id/detail_tv_description"
 
                     />
 
@@ -193,7 +205,7 @@
 
                 android:layout_height="wrap_content"
 
-                android:id="@+id/fd_tv_humidity"
+                android:id="@+id/detail_tv_humidity"
 
                 android:paddingBottom="@dimen/space_between_content_areas"
                 />
@@ -206,7 +218,7 @@
 
                 android:layout_height="wrap_content"
 
-                android:id="@+id/fd_tv_wind"
+                android:id="@+id/detail_tv_wind"
 
                 android:paddingBottom="@dimen/space_between_content_areas"
 
@@ -220,7 +232,7 @@
 
                 android:layout_height="wrap_content"
 
-                android:id="@+id/fd_tv_pressure"
+                android:id="@+id/detail_tv_pressure"
 
                 android:paddingBottom="@dimen/space_between_content_areas"
 

@@ -114,6 +114,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     /* Text Views */
 
+    private TextView mDayTextView; // ditto
     private TextView mDateTextView; // ditto
     private TextView mHighTempTextView; // ditto
     private TextView mLowTempTextView; // ditto
@@ -245,14 +246,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         // 2. get the needed views
 
-        mDateTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_date );
-        mHighTempTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_high_temperature );
-        mLowTempTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_low_temperature );
-        mWeatherIconImageView = ( ImageView ) rootView.findViewById( R.id.fd_iv_weather_icon );
-        mDescriptionTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_description );
-        mHumidityTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_humidity );
-        mWindTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_wind );
-        mPressureTextView = ( TextView ) rootView.findViewById( R.id.fd_tv_pressure );
+        mDayTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_day );
+        mDateTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_date );
+        mHighTempTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_high_temperature );
+        mLowTempTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_low_temperature );
+        mWeatherIconImageView = ( ImageView ) rootView.findViewById( R.id.detail_iv_weather_icon );
+        mDescriptionTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_description );
+        mHumidityTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_humidity );
+        mWindTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_wind );
+        mPressureTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_pressure );
 
         // last. return the inflated detail layout
 
@@ -301,7 +303,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // begin if there is a row in the cursor
         if ( cursor != null && cursor.moveToFirst() == true )  {
 
-            mDateTextView.setText( Utility.formatDate( cursor.getLong( COLUMN_WEATHER_DATE ) ) );
+            mDayTextView.setText(
+                    Utility.getDayName( getActivity(), cursor.getLong( COLUMN_WEATHER_DATE ) )
+            );
+
+            mDateTextView.setText(
+                    Utility.getFormattedMonthDay( cursor.getLong( COLUMN_WEATHER_DATE ) )
+            );
 
             mHighTempTextView.setText(
                     Utility.formatTemperature( getActivity(),
