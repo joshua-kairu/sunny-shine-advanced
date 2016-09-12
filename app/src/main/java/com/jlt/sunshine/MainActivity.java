@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
         // 4. otherwise this is not a two pane UI
         // 4a. set the two pane flag to false
         // 4b. we should use the today layout in one pane mode
+        // 4c. we should make the action bar as high as the today section
 
         // 0. super things
 
@@ -154,6 +155,14 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
                     getSupportFragmentManager().findFragmentById( R.id.am_f_forecast );
 
             if ( forecastFragment != null ) { forecastFragment.setUseTodayLayout( true ); }
+
+            // 4c. we should make the action bar as high as the today section
+
+//            Toolbar toolbar = ( Toolbar ) findViewById( R.id.am_tb );
+//
+//            setSupportActionBar( toolbar );
+
+            if ( getSupportActionBar() != null ) { getSupportActionBar().setElevation( 0f ); }
 
         } // end else there's no detail container
 

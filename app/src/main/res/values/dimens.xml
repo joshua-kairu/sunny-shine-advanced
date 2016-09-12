@@ -27,25 +27,48 @@
 
 <resources>
 
-    <!-- Material Design dimensions -->
+    <!-- MATERIAL DESIGN DIMENSIONS -->
 
     <!-- Phone -->
 
-    <!-- ListViews -->
+    <!-- Buttons -->
 
-    <dimen name="listview_item_height">72dp</dimen>
+    <dimen name="material_button_height">36dp</dimen>
+
+    <dimen name="material_button_margin">12dp</dimen>
+
+    <dimen name="material_button_padding">16dp</dimen>
+
+    <dimen name="material_button_content_padding">8dp</dimen>
+
+    <dimen name="material_button_dialog_margin_top">24dp</dimen>
+
+    <dimen name="material_button_raised_width_minimum">88dp</dimen>
+
+    <!-- Content margins -->
+
+    <dimen name="content_start_margin">72dp</dimen>
+
+    <!-- FABs -->
+
+    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="fab_pressed_translation_z">12dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
     <!-- Layouts -->
 
     <dimen name="layout_margin_top">16dp</dimen>
     <dimen name="layout_margin_bottom">16dp</dimen>
-
     <dimen name="layout_margin_start">16dp</dimen>
     <dimen name="layout_margin_end">16dp</dimen>
 
     <dimen name="layout_padding">16dp</dimen>
 
     <dimen name="space_between_content_areas">8dp</dimen>
+
+    <!-- ListViews -->
+
+    <dimen name="listview_item_height">72dp</dimen>
 
     <!-- Navigation Drawer -->
 
@@ -63,9 +86,30 @@
     <!-- Text -->
 
     <dimen name="text_baseline">4dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="text_display2_size">45sp</dimen>
+    <dimen name="text_display2_leading">48dp</dimen>
+
+    <dimen name="text_display1_size">34sp</dimen>
+    <dimen name="text_display1_leading">40dp</dimen>
+
+    <dimen name="text_headline_size">24sp</dimen>
+    <dimen name="text_headline_leading">32dp</dimen>
+
+    <dimen name="text_subheading2_size">16sp</dimen> <!-- or 15sp -->
+    <dimen name="text_subheading2_leading">28dp</dimen>
+
+    <dimen name="text_subheading1_size">16sp</dimen> <!-- or 15sp -->
+    <dimen name="text_subheading1_leading">24dp</dimen>
+
+    <dimen name="text_body2_size">14sp</dimen> <!-- or 13sp -->
+    <dimen name="text_body2_leading">24dp</dimen>
+
+    <dimen name="text_body1_size">14sp</dimen> <!-- or 13sp -->
+    <dimen name="text_body1_leading">20dp</dimen>
+
+    <!-- Toolbars -->
+
+    <dimen name="toolbar_elevation">4dp</dimen>
 
 </resources>
