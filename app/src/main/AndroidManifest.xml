@@ -117,7 +117,7 @@
 
             android:label="@string/title_activity_settings"
 
-            android:theme="@style/AppTheme"
+            android:theme="@style/SettingsTheme"
 
             android:parentActivityName=".MainActivity"
 

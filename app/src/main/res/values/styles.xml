@@ -36,11 +36,6 @@
 
     </style>
 
-    <!-- style for using a list item selector drawable.
-         but in phones it is just a stub. -->
-    <style name="ForecastListStyle">
-    </style>
-
     <!-- Main activity theme. -->
     <!-- Puts a custom app bar having the app's name and a sunny logo. -->
     <style name="ForecastTheme" parent="AppTheme">
@@ -49,6 +44,15 @@
 
     </style>
 
+    <!-- Settings activity theme. -->
+    <!-- Puts a custom app bar having the app's name and a sunny logo. -->
+    <style name="SettingsTheme" parent="AppTheme">
+    </style>
+
+    <!-- style for using a list item selector drawable.
+         but in phones it is just a stub. -->
+    <style name="ForecastListStyle">
+    </style>
 
     <!-- custom theme to make an action bar with a logo -->
     <style name="ActionBar.Solid.Sunshine.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
