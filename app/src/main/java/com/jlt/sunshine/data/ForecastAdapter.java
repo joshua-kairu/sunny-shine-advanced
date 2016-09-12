@@ -74,7 +74,12 @@ public class ForecastAdapter extends CursorAdapter {
     /* Strings */
         
     /* VARIABLES */
-    
+
+    /* Primitives */
+
+    private boolean mUseTodayLayout = true; // tells if to use the enlarged today layout
+                                           // should be true in phones but false in tabs
+
     /* CONSTRUCTOR */
 
     /**
@@ -93,7 +98,12 @@ public class ForecastAdapter extends CursorAdapter {
     /* METHODS */
     
     /* Getters and Setters */
-    
+
+    // setter for mUseTodayLayout
+    public void setUseTodayLayout( boolean useTodayLayout ) {
+        this.mUseTodayLayout = useTodayLayout;
+    }
+
     /* Overrides */
 
     /**
@@ -176,9 +186,8 @@ public class ForecastAdapter extends CursorAdapter {
             case VIEW_TYPE_TODAY:
 
                 weatherViewHolder.iconImageView
-                        .setImageDrawable( mContext.getResources().getDrawable(
+                        .setImageResource(
                                 Utility.getArtResourceForWeatherCondition( weatherIconId )
-                                )
                         );
 
                 break;
@@ -186,10 +195,9 @@ public class ForecastAdapter extends CursorAdapter {
             case VIEW_TYPE_FUTURE_DAY:
 
                 weatherViewHolder.iconImageView
-                        .setImageDrawable( mContext.getResources().getDrawable(
+                        .setImageResource(
                                 Utility.getIconResourceForWeatherCondition( weatherIconId )
-                                )
-                        );
+                                );
 
                 break;
 
@@ -228,10 +236,16 @@ public class ForecastAdapter extends CursorAdapter {
     } // end bindView
 
     @Override
-    // getItemViewType
+    // begin getItemViewType
     public int getItemViewType( int position ) {
-        return ( position == 0 ) ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
-    }
+
+        // we should use a different layout for today only if we are in a phone
+        // mUseTodayLayout is true when we are in a phone
+
+        return ( position == 0 && mUseTodayLayout == true ) ?
+                VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
+
+    } // end getItemViewType
 
     @Override
     // getViewTypeCount

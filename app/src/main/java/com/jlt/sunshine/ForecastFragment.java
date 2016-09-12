@@ -116,6 +116,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                                                                     // the list view. starting off
                                                                     // with an invalid position
 
+    private boolean mUseTodayLayout = true; // ditto
+
     /*
      * CONSTRUCTOR
      */
@@ -127,6 +129,28 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     /* METHODS */
 
     /* Getters and Setters */
+
+    /**
+     * Should we use the special today layout in the forecast list?
+     *
+     * @param useTodayLayout {@link Boolean} based on whether we should use
+     *                       the special today layout in the forecast list.
+     * */
+    // begin method setUseTodayLayout
+    public void setUseTodayLayout( boolean useTodayLayout ) {
+
+        // 0. set the member use today layout variable
+        // 1. use the member use today layout variable to communicate to the forecast adapter
+
+        // 0. set the member use today layout variable
+
+        mUseTodayLayout = useTodayLayout;
+
+        // 1. use the member use today layout variable to communicate to the forecast adapter
+
+        if ( mForecastAdapter != null ) { mForecastAdapter.setUseTodayLayout( mUseTodayLayout ); }
+
+    } // end method setUseTodayLayout
 
     /*
      * Overrides

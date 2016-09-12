@@ -74,8 +74,10 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
         // 3b. if this is the first run,
         // 3b1. replace the detail fragment in the second pane
         // (the forecast fragment is added to the first pane in xml way before runtime)
+        // 3c. we shouldn't use the today layout in two pane mode
         // 4. otherwise this is not a two pane UI
         // 4a. set the two pane flag to false
+        // 4b. we should use the today layout in one pane mode
 
         // 0. super things
 
@@ -126,14 +128,34 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
                     .commit();
 
+                // 3c. we shouldn't use the today layout in two pane mode
+
+                ForecastFragment forecastFragment = ( ForecastFragment )
+                        getSupportFragmentManager().findFragmentById( R.id.am_f_forecast );
+
+                if ( forecastFragment != null ) { forecastFragment.setUseTodayLayout( false ); }
+
             } // end if the saved instance is null
 
         } // end if there is a detail container view
 
         // 4. otherwise this is not a two pane UI
-        // 4a. set the two pane flag to false
 
-        else { mTwoPane = false; }
+        // begin else there's no detail container
+        else {
+
+            // 4a. set the two pane flag to false
+
+            mTwoPane = false;
+
+            // 4b. we should use the today layout in one pane mode
+
+            ForecastFragment forecastFragment = ( ForecastFragment )
+                    getSupportFragmentManager().findFragmentById( R.id.am_f_forecast );
+
+            if ( forecastFragment != null ) { forecastFragment.setUseTodayLayout( true ); }
+
+        } // end else there's no detail container
 
         Log.e( LOG_TAG, "onCreate: " );
 
