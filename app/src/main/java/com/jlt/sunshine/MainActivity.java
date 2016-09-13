@@ -129,14 +129,14 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
                     .commit();
 
-                // 3c. we shouldn't use the today layout in two pane mode
-
-                ForecastFragment forecastFragment = ( ForecastFragment )
-                        getSupportFragmentManager().findFragmentById( R.id.am_f_forecast );
-
-                if ( forecastFragment != null ) { forecastFragment.setUseTodayLayout( false ); }
-
             } // end if the saved instance is null
+
+            // 3c. we shouldn't use the today layout in two pane mode
+
+            ForecastFragment forecastFragment = ( ForecastFragment )
+                    getSupportFragmentManager().findFragmentById( R.id.am_f_forecast );
+
+            if ( forecastFragment != null ) { forecastFragment.setUseTodayLayout( false ); }
 
         } // end if there is a detail container view
 
@@ -157,10 +157,6 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
             if ( forecastFragment != null ) { forecastFragment.setUseTodayLayout( true ); }
 
             // 4c. we should make the action bar as high as the today section
-
-//            Toolbar toolbar = ( Toolbar ) findViewById( R.id.am_tb );
-//
-//            setSupportActionBar( toolbar );
 
             if ( getSupportActionBar() != null ) { getSupportActionBar().setElevation( 0f ); }
 
