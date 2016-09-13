@@ -43,21 +43,35 @@
 
     android:background="@drawable/touch_selector"
 
+    android:baselineAligned="false"
+
     >
 
-    <!-- ImageView to show the weather icon -->
+    <!-- FrameLayout to hold the weather icon -->
 
-    <ImageView
+    <FrameLayout
 
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/list_item_icon_container_width"
 
         android:layout_height="wrap_content"
 
-        android:id="@+id/list_item_icon"
+        >
 
-        android:contentDescription="@string/description_future_weather_icon"
+        <!-- ImageView to show the weather icon -->
 
-        />
+        <ImageView
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:id="@+id/list_item_icon"
+
+            android:contentDescription="@string/description_future_weather_icon"
+
+            />
+
+    </FrameLayout>
 
     <!-- LinearLayout to hold the date and forecast -->
 
@@ -69,7 +83,7 @@
 
         android:orientation="vertical"
 
-        android:layout_weight="1"
+        android:layout_weight="7"
 
         android:paddingLeft="@dimen/layout_padding"
 
@@ -87,6 +101,10 @@
 
             android:layout_height="wrap_content"
 
+            android:fontFamily="sans-serif-condensed"
+
+            android:textAppearance="?android:textAppearanceLarge"
+
             />
 
         <!-- TextView for the forecast -->
@@ -99,6 +117,10 @@
 
             android:layout_height="wrap_content"
 
+            android:fontFamily="sans-serif-condensed"
+
+            android:textAppearance="?android:textAppearanceSmall"
+
             />
 
     </LinearLayout>
@@ -107,7 +129,9 @@
 
     <LinearLayout
 
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+
+        android:layout_weight="5"
 
         android:layout_height="wrap_content"
 
@@ -125,6 +149,8 @@
 
             android:layout_height="wrap_content"
 
+            android:textAppearance="?android:textAppearanceLarge"
+
             />
 
         <!-- TextView to hold the low temperature -->
@@ -136,6 +162,8 @@
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
+
+            android:textAppearance="?android:textAppearanceSmall"
 
             />
 

@@ -112,4 +112,8 @@
 
     <dimen name="toolbar_elevation">4dp</dimen>
 
+    <!-- OTHERS -->
+
+    <dimen name="list_item_icon_container_width">60dp</dimen>
+
 </resources>
