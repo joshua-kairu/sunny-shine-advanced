@@ -329,6 +329,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     )
             );
 
+            // content description for accessibility
+            mWeatherIconImageView.setContentDescription(
+                    cursor.getString( COLUMN_WEATHER_SHORT_DESCRIPTION )
+            );
+
             mDescriptionTextView.setText( cursor.getString( COLUMN_WEATHER_SHORT_DESCRIPTION ) );
 
             mHumidityTextView.setText(

@@ -166,6 +166,7 @@ public class ForecastAdapter extends CursorAdapter {
         // 1a. show art for today's weather and an icon for future weather
         // 2. read date from cursor and display it appropriately using view holder data
         // 3. read forecast from cursor and display it using view holder data
+        // 3a. also make the forecast the content description for the image shown in 1a
         // 4. read high temperature from cursor and display it in appropriate units using view holder data
         // 5. read low temperature from cursor and display it in appropriate units using view holder data
 
@@ -216,6 +217,10 @@ public class ForecastAdapter extends CursorAdapter {
         String forecastString = cursor.getString( COLUMN_WEATHER_SHORT_DESCRIPTION );
 
         weatherViewHolder.descriptionTextView.setText( forecastString );
+
+        // 3a. also make the forecast the content description for the image shown in 1a
+
+        weatherViewHolder.descriptionTextView.setContentDescription( forecastString );
 
         // 4. read high temperature from cursor and display it in appropriate units using view holder data
 
