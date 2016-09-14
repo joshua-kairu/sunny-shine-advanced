@@ -39,4 +39,6 @@
 
     <dimen name="detail_date_text_size">20sp</dimen>
 
+    <dimen name="detail_day_date_container_width">180dp</dimen>
+
 </resources>

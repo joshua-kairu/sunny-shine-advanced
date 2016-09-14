@@ -23,20 +23,12 @@
 
  -->
 
-<!-- dimensions. for tabs. -->
+<!-- dimensions. for phone landscape. -->
 
 <resources>
 
     <!-- OTHERS -->
 
-    <dimen name="list_item_date_text_size">20sp</dimen> <!-- for tabs -->
-
-    <dimen name="list_item_forecast_text_size">12sp</dimen> <!-- for tabs -->
-
-    <dimen name="list_item_high_temperature_text_size">20sp</dimen> <!-- for tabs -->
-
-    <dimen name="list_item_low_temperature_text_size">12sp</dimen> <!-- for tabs -->
-
-    <dimen name="detail_date_text_size">20sp</dimen>
+    <dimen name="detail_day_date_container_width">180dp</dimen>
 
 </resources>

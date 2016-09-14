@@ -50,44 +50,65 @@
 
         >
 
-        <!-- header: day, date -->
+        <FrameLayout
 
-        <LinearLayout
-
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/detail_day_date_container_width"
 
             android:layout_height="wrap_content"
 
-            android:orientation="vertical"
-
             >
 
-            <!-- TextView to show the day -->
+            <!-- header: day, date -->
 
-            <TextView
-
-                android:id="@+id/detail_tv_day"
+            <LinearLayout
 
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
 
-                />
+                android:orientation="vertical"
 
-            <!-- TextView to show the date -->
+                >
 
-            <TextView
+                <!-- TextView to show the day -->
 
-                android:id="@+id/detail_tv_date"
+                <TextView
 
-                android:layout_width="wrap_content"
+                    android:id="@+id/detail_tv_day"
 
-                android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
 
-                />
+                    android:layout_height="wrap_content"
 
-        </LinearLayout>
+                    android:fontFamily="sans-serif-condensed"
 
+                    android:textSize="@dimen/detail_day_text_size"
+
+                    android:minWidth="@dimen/detail_wide_day_minimum_width"
+
+                    />
+
+                <!-- TextView to show the date -->
+
+                <TextView
+
+                    android:id="@+id/detail_tv_date"
+
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+
+                    android:fontFamily="sans-serif-condensed"
+
+                    android:textColor="@color/grey_700"
+
+                    android:textSize="@dimen/detail_date_text_size"
+
+                    />
+
+            </LinearLayout>
+
+        </FrameLayout>
 
         <!-- LinearLayout to hold the temperatures and the forecast icon and description -->
 
@@ -117,6 +138,10 @@
 
                 android:paddingBottom="@dimen/text_baseline"
 
+                android:fontFamily="sans-serif-light"
+
+                android:textSize="@dimen/detail_high_temperature_text_size"
+
                 />
 
             <!-- TextView for the low temperature -->
@@ -128,6 +153,18 @@
                 android:layout_height="wrap_content"
 
                 android:id="@+id/detail_tv_low_temperature"
+
+                android:fontFamily="sans-serif-light"
+
+                android:textColor="@color/grey_700"
+
+                android:textSize="@dimen/detail_low_temperature_text_size"
+
+                android:layout_marginLeft="@dimen/text_baseline"
+
+                android:layout_marginStart="@dimen/text_baseline"
+
+                android:layout_marginBottom="@dimen/layout_padding"
 
                 />
 
@@ -141,17 +178,11 @@
 
                 android:id="@+id/detail_tv_humidity"
 
-                />
+                android:fontFamily="sans-serif-condensed"
 
-            <!-- TextView to hold wind -->
+                android:textAppearance="?android:textAppearanceLarge"
 
-            <TextView
-
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-
-                android:id="@+id/detail_tv_wind"
+                android:layout_marginTop="@dimen/text_baseline"
 
                 />
 
@@ -164,6 +195,30 @@
                 android:layout_height="wrap_content"
 
                 android:id="@+id/detail_tv_pressure"
+
+                android:fontFamily="sans-serif-condensed"
+
+                android:textAppearance="?android:textAppearanceLarge"
+
+                android:layout_marginTop="@dimen/text_baseline"
+
+                />
+
+            <!-- TextView to hold wind -->
+
+            <TextView
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/detail_tv_wind"
+
+                android:fontFamily="sans-serif-condensed"
+
+                android:textAppearance="?android:textAppearanceLarge"
+
+                android:layout_marginTop="@dimen/text_baseline"
 
                 />
 
@@ -180,6 +235,10 @@
             android:gravity="center_horizontal"
 
             android:orientation="vertical"
+
+            android:layout_marginLeft="@dimen/layout_padding"
+
+            android:layout_marginStart="@dimen/layout_padding"
 
             >
 
@@ -213,6 +272,12 @@
 
                 android:id="@+id/detail_tv_description"
 
+                android:fontFamily="sans-serif-condensed"
+
+                android:textAppearance="?android:textAppearanceLarge"
+
+                android:textColor="@color/grey_700"
+
                 />
 
         </LinearLayout>
@@ -220,4 +285,3 @@
     </LinearLayout>
 
 </ScrollView>
-

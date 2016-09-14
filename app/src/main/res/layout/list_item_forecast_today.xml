@@ -37,13 +37,15 @@
 
     android:gravity="center_vertical"
 
-    android:padding="@dimen/layout_padding"
-
     android:minHeight="?android:attr/listPreferredItemHeight"
 
     android:background="@drawable/touch_selector"
 
     android:baselineAligned="false"
+
+    android:paddingTop="@dimen/layout_padding"
+
+    android:paddingBottom="@dimen/layout_padding"
 
     >
 
@@ -57,13 +59,11 @@
 
         android:orientation="vertical"
 
-        android:layout_weight="1"
+        android:layout_weight="7"
 
-        android:paddingRight="@dimen/layout_padding"
+        android:layout_marginLeft="@dimen/today_date_temperatures_margin_left"
 
-        android:paddingEnd="@dimen/layout_padding"
-
-        android:gravity="center_horizontal"
+        android:layout_marginStart="@dimen/today_date_temperatures_margin_left"
 
         >
 
@@ -77,6 +77,12 @@
 
             android:layout_height="wrap_content"
 
+            android:textAppearance="?android:textAppearanceLarge"
+
+            android:fontFamily="sans-serif-condensed"
+
+            android:textColor="@android:color/white"
+
             />
 
         <!-- TextView to hold the high temperature -->
@@ -89,6 +95,12 @@
 
             android:layout_height="wrap_content"
 
+            android:fontFamily="sans-serif-light"
+
+            android:textColor="@android:color/white"
+
+            android:textSize="@dimen/today_high_temperature_text_size"
+
             />
 
         <!-- TextView to hold the low temperature -->
@@ -100,6 +112,16 @@
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
+
+            android:fontFamily="sans-serif-light"
+
+            android:textColor="@android:color/white"
+
+            android:textSize="@dimen/today_low_temperature_text_size"
+
+            android:layout_marginLeft="@dimen/text_baseline"
+
+            android:layout_marginStart="@dimen/text_baseline"
 
             />
 
@@ -115,9 +137,11 @@
 
         android:orientation="vertical"
 
-        android:layout_weight="1"
+        android:layout_weight="5"
 
         android:gravity="center_horizontal"
+
+        android:layout_gravity="bottom"
 
         android:baselineAligned="false"
 
@@ -127,9 +151,9 @@
 
         <ImageView
 
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/today_weather_icon_length"
 
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/today_weather_icon_length"
 
             android:id="@+id/list_item_icon"
 
@@ -146,6 +170,14 @@
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
+
+            android:layout_marginBottom="@dimen/text_baseline"
+
+            android:fontFamily="sans-serif-condensed"
+
+            android:textColor="@android:color/white"
+
+            android:textAppearance="?android:textAppearanceLarge"
 
             />
 

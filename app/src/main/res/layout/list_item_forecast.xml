@@ -39,8 +39,6 @@
 
     android:minHeight="?android:attr/listPreferredItemHeight"
 
-    android:padding="@dimen/layout_padding"
-
     android:background="@drawable/touch_selector"
 
     android:baselineAligned="false"
@@ -55,6 +53,8 @@
 
         android:layout_height="wrap_content"
 
+        android:gravity="center_horizontal"
+
         >
 
         <!-- ImageView to show the weather icon -->
@@ -68,6 +68,8 @@
             android:id="@+id/list_item_icon"
 
             android:contentDescription="@string/description_future_weather_icon"
+
+            android:layout_gravity="center_horizontal"
 
             />
 
@@ -85,10 +87,6 @@
 
         android:layout_weight="7"
 
-        android:paddingLeft="@dimen/layout_padding"
-
-        android:paddingStart="@dimen/layout_padding"
-
         >
 
         <!-- TextView for the date -->
@@ -104,6 +102,8 @@
             android:fontFamily="sans-serif-condensed"
 
             android:textAppearance="?android:textAppearanceLarge"
+
+            android:textSize="@dimen/list_item_date_text_size"
 
             />
 
@@ -121,6 +121,8 @@
 
             android:textAppearance="?android:textAppearanceSmall"
 
+            android:textSize="@dimen/list_item_forecast_text_size"
+
             />
 
     </LinearLayout>
@@ -137,6 +139,8 @@
 
         android:orientation="vertical"
 
+        android:gravity="center_horizontal"
+
         >
 
         <!-- TextView to hold the high temperature -->
@@ -149,7 +153,11 @@
 
             android:layout_height="wrap_content"
 
+            android:fontFamily="sans-serif-condensed"
+
             android:textAppearance="?android:textAppearanceLarge"
+
+            android:textSize="@dimen/list_item_high_temperature_text_size"
 
             />
 
@@ -163,7 +171,11 @@
 
             android:layout_height="wrap_content"
 
+            android:fontFamily="sans-serif-condensed"
+
             android:textAppearance="?android:textAppearanceSmall"
+
+            android:textSize="@dimen/list_item_low_temperature_text_size"
 
             />
 

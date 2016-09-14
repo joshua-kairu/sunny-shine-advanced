@@ -43,6 +43,8 @@
 
         android:orientation="vertical"
 
+        android:gravity="center_vertical"
+
         >
 
         <!-- TextView to show the day -->
@@ -55,6 +57,10 @@
 
             android:layout_height="wrap_content"
 
+            android:fontFamily="sans-serif-condensed"
+
+            android:textSize="@dimen/detail_day_text_size"
+
             />
 
         <!-- TextView to show the date -->
@@ -63,9 +69,15 @@
 
             android:id="@+id/detail_tv_date"
 
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
+
+            android:fontFamily="sans-serif-condensed"
+
+            android:textColor="@color/grey_700"
+
+            android:textSize="@dimen/detail_date_text_size"
 
             />
 
@@ -81,9 +93,15 @@
 
             android:layout_marginTop="@dimen/layout_padding"
 
-            android:paddingBottom="@dimen/space_between_content_areas"
+            android:layout_marginBottom="@dimen/layout_padding"
 
             android:baselineAligned="false"
+
+            android:paddingLeft="@dimen/layout_padding"
+
+            android:paddingRight="@dimen/layout_padding"
+
+            android:gravity="center_horizontal"
 
             >
 
@@ -91,17 +109,19 @@
 
             <LinearLayout
 
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
 
-                android:layout_height="match_parent"
-
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
 
                 android:orientation="vertical"
 
                 android:baselineAligned="false"
 
-                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/layout_padding"
+
+                android:layout_marginStart="@dimen/layout_padding"
+
+                android:gravity="start"
 
                 >
 
@@ -115,7 +135,9 @@
 
                     android:id="@+id/detail_tv_high_temperature"
 
-                    android:paddingBottom="@dimen/text_baseline"
+                    android:fontFamily="sans-serif-light"
+
+                    android:textSize="@dimen/detail_high_temperature_text_size"
 
                     />
 
@@ -129,6 +151,12 @@
 
                     android:id="@+id/detail_tv_low_temperature"
 
+                    android:fontFamily="sans-serif-light"
+
+                    android:textColor="@color/grey_700"
+
+                    android:textSize="@dimen/detail_low_temperature_text_size"
+
                     />
 
             </LinearLayout>
@@ -137,25 +165,25 @@
 
             <LinearLayout
 
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
 
-                android:layout_height="match_parent"
-
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
 
                 android:orientation="vertical"
 
                 android:gravity="center_horizontal"
 
+                android:layout_gravity="center_vertical"
+
                 >
 
-                <!-- ImageButton to show the forecast icon -->
+                <!-- ImageView to show the forecast icon -->
 
                 <!--
                 transparent background added because
                 there was a default grey background that didn't look good.
                 -->
-                <ImageButton
+                <ImageView
 
                     android:layout_width="wrap_content"
 
@@ -178,6 +206,12 @@
                     android:layout_height="wrap_content"
 
                     android:id="@+id/detail_tv_description"
+
+                    android:fontFamily="sans-serif-condensed"
+
+                    android:textAppearance="?android:textAppearanceLarge"
+
+                    android:textColor="@color/grey_700"
 
                     />
 
@@ -207,20 +241,11 @@
 
                 android:id="@+id/detail_tv_humidity"
 
-                android:paddingBottom="@dimen/space_between_content_areas"
-                />
+                android:layout_marginBottom="@dimen/text_baseline"
 
-            <!-- TextView to hold wind -->
+                android:fontFamily="sans-serif-light"
 
-            <TextView
-
-                android:layout_width="match_parent"
-
-                android:layout_height="wrap_content"
-
-                android:id="@+id/detail_tv_wind"
-
-                android:paddingBottom="@dimen/space_between_content_areas"
+                android:textAppearance="?android:textAppearanceLarge"
 
                 />
 
@@ -234,7 +259,31 @@
 
                 android:id="@+id/detail_tv_pressure"
 
-                android:paddingBottom="@dimen/space_between_content_areas"
+                android:paddingBottom="@dimen/text_baseline"
+
+                android:fontFamily="sans-serif-light"
+
+                android:textAppearance="?android:textAppearanceLarge"
+
+                android:layout_marginBottom="@dimen/text_baseline"
+
+                />
+
+            <!-- TextView to hold wind -->
+
+            <TextView
+
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+
+                android:id="@+id/detail_tv_wind"
+
+                android:paddingBottom="@dimen/text_baseline"
+
+                android:fontFamily="sans-serif-light"
+
+                android:textAppearance="?android:textAppearanceLarge"
 
                 />
 

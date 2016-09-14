@@ -33,18 +33,11 @@
 
     android:layout_height="match_parent"
 
-    android:paddingRight="@dimen/layout_padding"
-
-    android:paddingLeft="@dimen/layout_padding"
-
-    android:paddingTop="@dimen/layout_padding"
-
-    android:paddingBottom="@dimen/layout_padding"
-
     >
 
     <!-- ListView to show weather forecasts -->
 
+    <!-- divider -  Drawable or color to draw between list items. -->
     <ListView
 
         android:id="@+id/fm_lv_forecast"
@@ -54,6 +47,8 @@
         android:layout_height="match_parent"
 
         style="@style/ForecastListStyle"
+
+        android:divider="@null"
 
         />
 

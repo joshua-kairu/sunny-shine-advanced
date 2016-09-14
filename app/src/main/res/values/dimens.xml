@@ -116,4 +116,30 @@
 
     <dimen name="list_item_icon_container_width">60dp</dimen>
 
+    <dimen name="list_item_date_text_size">22sp</dimen> <!-- for phones -->
+
+    <dimen name="list_item_forecast_text_size">14sp</dimen> <!-- for phones -->
+
+    <dimen name="list_item_high_temperature_text_size">22sp</dimen> <!-- for phones -->
+
+    <dimen name="list_item_low_temperature_text_size">14sp</dimen> <!-- for phones -->
+
+    <dimen name="today_date_temperatures_margin_left">60dp</dimen>
+
+    <dimen name="today_high_temperature_text_size">72sp</dimen>
+
+    <dimen name="today_low_temperature_text_size">36sp</dimen>
+
+    <dimen name="today_weather_icon_length">100dp</dimen>
+
+    <dimen name="detail_day_text_size">24sp</dimen>
+
+    <dimen name="detail_date_text_size">16sp</dimen>
+
+    <dimen name="detail_high_temperature_text_size">96sp</dimen>
+
+    <dimen name="detail_low_temperature_text_size">48sp</dimen>
+
+    <dimen name="detail_wide_day_minimum_width">120dp</dimen>
+
 </resources>
