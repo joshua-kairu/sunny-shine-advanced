@@ -176,9 +176,23 @@ public class Utility {
         // For all days after that: "Thu Sep 1"
 
         // 0. get the current Gregorian day
+        // 0a. and month too
+        // 1. get the Gregorian day referred to by dateInMillis
+        // 1a. and the month too
+        // 2. if the date we're building a string for is today's date
+        // 3. if the date we're building for is less than a week to come and is within this month
+        // 3a. return the day name
+        // 4. otherwise (or if we are in a new month)
+        // 4a. use the form "Thu Sep 1"
+
+        // 0. get the current Gregorian day
 
         GregorianCalendar calendar = new GregorianCalendar();
         int currentDay = calendar.get( Calendar.DAY_OF_MONTH );
+
+        // 0a. and month too
+
+        int currentMonth = calendar.get( Calendar.MONTH );
 
         // 1. get the Gregorian day referred to by dateInMillis
 
@@ -187,6 +201,10 @@ public class Utility {
 
         Log.e( "getFriendlyDateString: ",
                 "current day " + currentDay + "| dateInMillisDay " + dateInMillisDay );
+
+        // 1a. and the month too
+
+        int dateInMillisMonth = calendar.get( Calendar.MONTH );
 
         // 2. if the date we're building a string for is today's date
 
@@ -210,25 +228,29 @@ public class Utility {
 
         } // end if the day we're building for is today
 
-        // 3. if the date we're building for is less than a week to come
+        // 3. if the date we're building for is less than a week to come and is within this month
 
         // 3a. return the day name
 
-        else if ( dateInMillisDay < currentDay + 7 ) { return getDayName( context, dateInMillis ); }
+        else if ( dateInMillisDay < currentDay + 7 && dateInMillisMonth == currentMonth ) {
+            return getDayName( context, dateInMillis );
+        }
 
         // 4. otherwise
 
         // 4a. use the form "Thu Sep 1"
 
-        // begin else we are further from a week
-        else {
+        // begin else we are further from a week or are in another month
+        else
+//            ( dateInMillisDay >= currentDay + 7 || currentMonth != dateInMillisMonth )
+        {
 
             // EEE - Day of the week in at most three characters e.g. "Thu"
             // MMM - Month of the year in at most three characters e.g. "Jan"
             // dd - Day of the month in at most two digits e.g. 02
             return new SimpleDateFormat( "EEE MMM dd", Locale.ENGLISH ).format( dateInMillis );
 
-        } // end else we are further from a week
+        } // end else we are further from a week or are in another month
 
     } // end method getFriendlyDateString
 
