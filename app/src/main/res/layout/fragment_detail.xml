@@ -31,6 +31,10 @@
 
     android:layout_height="match_parent"
 
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+
+
     >
 
     <LinearLayout
@@ -284,6 +288,18 @@
                 android:fontFamily="sans-serif-light"
 
                 android:textAppearance="?android:textAppearanceLarge"
+
+                />
+
+            <com.jlt.sunshine.view.WindDirectionAndSpeedView
+
+                android:id="@+id/detail_wdasv_direction_and_speed"
+
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+
+                app:northIndicatorText="@string/north_indicator_text"
 
                 />
 

@@ -371,6 +371,36 @@ public class Utility {
 
     } // end method getFormattedWind
 
+    /** Gets the wind speed in a form friendly to the user. */
+    // begin method getFormattedWindSpeed
+    public static String getFormattedWindSpeed( Context context, float windSpeed ) {
+
+        // 0. format the wind speed based on preferred units
+        // 1. return the formatted wind text
+
+        // 0. format the wind speed based on preferred units
+
+        int windFormatWithoutDirection;
+
+        if ( Utility.isMetric( context ) == true ) {
+            windFormatWithoutDirection = R.string.format_wind_kmh_sans_direction;
+        }
+
+        // begin else we are not on metric
+        else {
+
+            windFormatWithoutDirection = R.string.format_wind_mph_sans_direction;
+            windSpeed = .621371192237334f * windSpeed; // convert the wind speed from kmh to mph
+
+        } // end else we are not on metric
+
+        // 1. return the formatted wind text
+
+        return String.format( Locale.ENGLISH,
+                context.getString( windFormatWithoutDirection ), windSpeed );
+
+    } // end method getFormattedWind
+
     /**
      * Helper method to provide the icon resource id according to the weather condition id
      * returned by the OpenWeatherMap call.
@@ -511,6 +541,57 @@ public class Utility {
         return -1; // otherwise
 
     } // end method getArtResourceForWeatherCondition
+
+    /** Formats the wind direction and speed in a way friendly to the user. */
+    // begin method getFormattedWindDirectionAndSpeed
+    public static String getFormattedWindDirectionAndSpeed( Context context, float windDirectionDegrees,
+                                                            float windSpeed ) {
+
+        // 0. determine the readable wind direction based on the wind direction degrees
+        // 1. format the wind speed based on preferred units
+        // 2. return the formatted wind text
+
+        // 0. determine the readable wind direction based on the wind direction degrees
+
+        String direction = "Unknown";
+
+        if ( windDirectionDegrees >= 337.5 || windDirectionDegrees < 22.5 ) { direction = "N"; }
+
+        else if ( windDirectionDegrees >= 22.5 && windDirectionDegrees < 67.5 ) { direction = "NE"; }
+
+        else if ( windDirectionDegrees >= 67.5 && windDirectionDegrees < 112.5 ) { direction = "E"; }
+
+        else if ( windDirectionDegrees >= 112.5 && windDirectionDegrees < 157.5 ) { direction = "SE"; }
+
+        else if ( windDirectionDegrees >= 157.5 && windDirectionDegrees < 202.5 ) { direction = "S"; }
+
+        else if ( windDirectionDegrees >= 202.5 && windDirectionDegrees < 247.5 ) { direction = "SW"; }
+
+        else if ( windDirectionDegrees >= 247.5 && windDirectionDegrees < 292.5 ) { direction = "W"; }
+
+        else if ( windDirectionDegrees >= 292.5 && windDirectionDegrees < 337.5 ) { direction = "NW"; }
+
+        // 1. format the wind speed based on preferred units
+
+        int windFormat = -1;
+
+        if ( Utility.isMetric( context ) == true ) {
+            windFormat = R.string.format_wind_direction_speed_kmh;
+        }
+
+        // begin else we are not on metric
+        else {
+
+            windFormat = R.string.format_wind_direction_speed_mph;
+            windSpeed = .621371192237334f * windSpeed; // convert the wind speed from kmh to mph
+
+        } // end else we are not on metric
+
+        // 2. return the formatted wind text
+
+        return context.getString( windFormat, direction, windSpeed );
+
+    } // end method getFormattedWindDirectionAndSpeed
 
     /* INNER CLASSES */
 

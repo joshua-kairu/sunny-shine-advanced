@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
+import com.jlt.sunshine.view.WindDirectionAndSpeedView;
 
 /**
  *  Sunshine
@@ -126,6 +127,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     /* Uris */
 
     private Uri mDataUri; // uri that we will use to fetch the data we will need for this fragment
+
+    /*  */
+
+    private WindDirectionAndSpeedView mDirectionAndSpeedView; // ditto
 
     /*
      * CONSTRUCTOR
@@ -255,6 +260,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mHumidityTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_humidity );
         mWindTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_wind );
         mPressureTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_pressure );
+        mDirectionAndSpeedView = ( WindDirectionAndSpeedView )
+                rootView.findViewById( R.id.detail_wdasv_direction_and_speed );
 
         // last. return the inflated detail layout
 
@@ -350,6 +357,23 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mPressureTextView.setText(
                   getActivity().getString( R.string.format_pressure,
                           cursor.getFloat( COLUMN_WEATHER_PRESSURE ) )
+            );
+
+            mDirectionAndSpeedView.setArrowAngle(
+                    cursor.getFloat( COLUMN_WEATHER_WIND_DIRECTION_DEGREES )
+            );
+
+            mDirectionAndSpeedView.setSpeedText(
+                    Utility.getFormattedWindSpeed( getActivity(),
+                            cursor.getFloat( COLUMN_WEATHER_WIND_SPEED )
+                            )
+            );
+
+            mDirectionAndSpeedView.setWindDirectionAndSpeedText(
+                    Utility.getFormattedWindDirectionAndSpeed( getActivity(),
+                            cursor.getFloat( COLUMN_WEATHER_WIND_DIRECTION_DEGREES ),
+                            cursor.getFloat( COLUMN_WEATHER_WIND_SPEED )
+                    )
             );
 
         } // end if there is a row in the cursor

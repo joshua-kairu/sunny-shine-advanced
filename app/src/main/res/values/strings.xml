@@ -141,4 +141,28 @@ of localizable data and its related information.
     <string name="mock_wind">Wind: 6 km/H NW</string>
     <string name="mock_pressure">Pressure: 986 hPA</string>
 
+    <!-- Custom view strings -->
+
+    <string name="north_indicator_text">N</string>
+
+    <!-- Wind in mph without direction [CHAR LIMIT=25] -->
+    <string name="format_wind_mph_sans_direction">
+        <xliff:g id="speed">%1.0f</xliff:g> mph
+    </string>
+
+    <!-- Wind in kmh without direction [CHAR LIMIT=25] -->
+    <string name="format_wind_kmh_sans_direction">
+        <xliff:g id="speed">%1.0f</xliff:g> km/h
+    </string>/string>
+
+    <!-- Wind direction and speed in km/h -->
+    <string name="format_wind_direction_speed_kmh">
+        Wind: <xliff:g id="direction">%1$s</xliff:g> <xliff:g id="speed">%2$1.0f</xliff:g> km/h
+    </string>/string>
+
+    <!-- Wind direction and speed in mph -->
+    <string name="format_wind_direction_speed_mph">
+        Wind: <xliff:g id="direction">%1$s</xliff:g> <xliff:g id="speed">%2$1.0f</xliff:g> mph
+    </string>/string>
+
 </resources>
