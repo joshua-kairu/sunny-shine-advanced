@@ -36,6 +36,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
@@ -399,22 +400,18 @@ public class WindDirectionAndSpeedView extends View {
         // 1. whatever the width, ask for a height that would let the view get as big as possible
 
         // getSize - Extracts the size from the supplied measure specification.
-        int minimumHeight = MeasureSpec.getSize( widthToUse ) - getSuggestedMinimumWidth() +
-                getPaddingBottom() + getPaddingTop();
+        int minimumHeight = getSuggestedMinimumWidth() + getPaddingBottom() + getPaddingTop();
 
         int heightToUse = -1;
 
         if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
-            heightToUse = resolveSizeAndState(
-                    MeasureSpec.getSize( widthToUse ) - getSuggestedMinimumWidth(),
-                    heightMeasureSpec, 0
-            );
+            heightToUse = resolveSizeAndState( getSuggestedMinimumWidth(), heightMeasureSpec, 0 );
         }
 
         else { heightToUse = minimumHeight; }
 
         // 2. use the gotten width and height
-
+        Log.e( WindDirectionAndSpeedView.class.getSimpleName(), "onMeasure: widthToUse = " + widthToUse + " heightToUse = " + heightToUse );
         // Must be called by onMeasure(int, int) to store the measured width and measured height.
         // Failing to do so will trigger an exception at measurement time.
         setMeasuredDimension( widthToUse, heightToUse );
@@ -1257,8 +1254,8 @@ public class WindDirectionAndSpeedView extends View {
                     getResources().getColor( android.R.color.white )
             );
 
-            mRadiusDifference = a.getFloat( R.styleable.WindDirectionAndSpeedView_radiusDifference,
-                    dpToPx( DEFAULT_RADIUS_DIFFERENCE_DP )
+            mRadiusDifference = a.getDimension( R.styleable.WindDirectionAndSpeedView_radiusDifference,
+                     DEFAULT_RADIUS_DIFFERENCE_DP
             );
 
             mNorthIndicatorText = a.getString( R.styleable.WindDirectionAndSpeedView_northIndicatorText );

@@ -30,11 +30,11 @@
 
     xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
 
     android:layout_height="match_parent"
-
-    android:fillViewport="true"
 
     >
 
@@ -219,6 +219,20 @@
                 android:textAppearance="?android:textAppearanceLarge"
 
                 android:layout_marginTop="@dimen/text_baseline"
+
+                />
+
+            <com.jlt.sunshine.view.WindDirectionAndSpeedView
+
+                android:id="@+id/detail_wdasv_direction_and_speed"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                app:northIndicatorText="@string/north_indicator_text"
+
+                app:radiusDifference="@dimen/text_baseline"
 
                 />
 

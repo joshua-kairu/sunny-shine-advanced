@@ -35,7 +35,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
- * Class to provide utility methods for preference use.
+ * Class to provide utility methods for preference and date and time use.
  * */
 // begin class Utility
 public class Utility {
@@ -241,9 +241,7 @@ public class Utility {
         // 4a. use the form "Thu Sep 1"
 
         // begin else we are further from a week or are in another month
-        else
-//            ( dateInMillisDay >= currentDay + 7 || currentMonth != dateInMillisMonth )
-        {
+        else {
 
             // EEE - Day of the week in at most three characters e.g. "Thu"
             // MMM - Month of the year in at most three characters e.g. "Jan"
