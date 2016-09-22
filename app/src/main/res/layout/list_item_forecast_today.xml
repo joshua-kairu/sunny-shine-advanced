@@ -39,7 +39,7 @@
 
     android:minHeight="?android:attr/listPreferredItemHeight"
 
-    android:background="@drawable/touch_selector"
+    android:background="@drawable/today_touch_selector"
 
     android:baselineAligned="false"
 
