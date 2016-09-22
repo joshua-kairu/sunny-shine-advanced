@@ -147,6 +147,10 @@
             
             />
 
+        <!-- services -->
+
+        <service android:name=".services.SunshineService" />
+
     </application>
 
 </manifest>

@@ -20,11 +20,10 @@
 
 package com.jlt.sunshine;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -45,6 +44,7 @@ import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.data.contract.WeatherContract.LocationEntry;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
+import com.jlt.sunshine.services.SunshineService;
 
 /** Fragment to show the weather forecast. */
 // begin fragment ForecastFragment
@@ -477,19 +477,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 0a. get the user's preferred location
 
-        String locationKey = getResources().getString( R.string.pref_location_key );
-
-        String defaultLocation = getResources().getString( R.string.pref_location_default );
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( getActivity() );
-
-        String locationValue = sharedPreferences.getString( locationKey, defaultLocation );
-
         // 0b. fetch the weather info
 
-        FetchWeatherTask weatherTask = new FetchWeatherTask( getActivity() );
+        Intent sunshineServiceIntent = new Intent( getActivity(), SunshineService.class )
+                .putExtra( SunshineService.ARGUMENT_LOCATION,
+                        Utility.getPreferredLocation( getActivity() )
+                );
 
-        weatherTask.execute( locationValue );
+        getActivity().startService( sunshineServiceIntent );
 
     } // end method updateWeather
 
