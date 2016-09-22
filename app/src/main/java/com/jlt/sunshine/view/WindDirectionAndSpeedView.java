@@ -38,6 +38,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 
 import com.jlt.sunshine.R;
 
@@ -230,7 +231,8 @@ public class WindDirectionAndSpeedView extends View {
         // 0b. if the new angle is greater than 360 then the member one should be within 360
         // 0c. otherwise everything is okay, the member angle should have the value of the new angle
         // 1. animate the new angle
-        // NB. no need to refresh the layout since the animation cares for that
+        // 2. send the accessibility event for arrow angle being changed
+        // last. refresh the layout
 
         // 0. take care of any invalid initialization
 
@@ -250,6 +252,17 @@ public class WindDirectionAndSpeedView extends View {
 
         // we'll animate from 0 degrees to the arrow angle's degrees
         animateArrowRotation( 0, getArrowAngle() );
+
+        // 2. send the accessibility event for arrow angle being changed
+
+        AccessibilityManager accessibilityManager =
+                ( AccessibilityManager ) getContext().getSystemService( Context.ACCESSIBILITY_SERVICE );
+
+        if ( accessibilityManager.isEnabled() == true ) {
+            sendAccessibilityEvent( AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
+        }
+
+        // last. refresh the layout
 
         invalidate();
         requestLayout();
@@ -325,18 +338,37 @@ public class WindDirectionAndSpeedView extends View {
         return mSpeedText;
     }
 
-    // setter for the speed text
+    // begin setter for the speed text
     public void setSpeedText( String speedText ) {
+
+        // 0. initialize the member variable
+        // 1. animate the text
+        // 2. send the accessibility event for arrow angle being changed
+        // last. refresh the layout
+
+        // 0. initialize the member variable
 
         this.mSpeedText = speedText;
 
+        // 1. animate the text
+
         animateSpeedText();
 
-        // refresh the layout
+        // 2. send the accessibility event for arrow angle being changed
+
+        AccessibilityManager accessibilityManager =
+                ( AccessibilityManager ) getContext().getSystemService( Context.ACCESSIBILITY_SERVICE );
+
+        if ( accessibilityManager.isEnabled() == true ) {
+            sendAccessibilityEvent( AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED );
+        }
+
+        // last. refresh the layout
+
         invalidate();
         requestLayout();
 
-    }
+    } // end setter for the speed text
 
     /* Overrides */
 
@@ -710,6 +742,16 @@ public class WindDirectionAndSpeedView extends View {
         mArrowPathRotationMatrix.reset();
 
     } // end onDraw
+
+    /**
+     * Dispatches an AccessibilityEvent to the View first
+     * and then to its children for adding their text content to the event
+     * */
+    @Override
+    // dispatchPopulateAccessibilityEvent
+    public boolean dispatchPopulateAccessibilityEvent( AccessibilityEvent event ) {
+        event.getText().add( getWindDirectionAndSpeedText() ); return true;
+    }
 
     /* Other Methods */
 
