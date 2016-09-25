@@ -35,7 +35,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
@@ -410,7 +409,7 @@ public class WindDirectionAndSpeedView extends View {
         else { heightToUse = minimumHeight; }
 
         // 2. use the gotten width and height
-        Log.e( WindDirectionAndSpeedView.class.getSimpleName(), "onMeasure: widthToUse = " + widthToUse + " heightToUse = " + heightToUse );
+
         // Must be called by onMeasure(int, int) to store the measured width and measured height.
         // Failing to do so will trigger an exception at measurement time.
         setMeasuredDimension( widthToUse, heightToUse );

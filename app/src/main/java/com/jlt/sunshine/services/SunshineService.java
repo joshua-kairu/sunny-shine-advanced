@@ -62,7 +62,7 @@ public class SunshineService extends IntentService {
     private static final String LOG_TAG = SunshineService.class.getSimpleName();
 
     /** Constant to put the location parameter in the intent. */
-    public static final String ARGUMENT_LOCATION = "ARGUMENT_LOCATION";
+    public static final String EXTRA_LOCATION = "EXTRA_LOCATION";
 
     /* VARIABLES */
 
@@ -98,7 +98,7 @@ public class SunshineService extends IntentService {
     protected void onHandleIntent( Intent intent ) {
 
         // no point in starting if there is no zip code to work with
-        if ( intent.getStringExtra( ARGUMENT_LOCATION ) == null ) { return; }
+        if ( intent.getStringExtra( EXTRA_LOCATION ) == null ) { return; }
 
         // 0. null initialize
         // 0a. http connection
@@ -150,7 +150,7 @@ public class SunshineService extends IntentService {
             Uri builtUri =
                     Uri.parse( FORECAST_BASE_URL ).buildUpon()
                             .appendQueryParameter( QUERY_PARAMETER,
-                                    intent.getStringExtra( ARGUMENT_LOCATION )
+                                    intent.getStringExtra( EXTRA_LOCATION )
                             )
                             .appendQueryParameter( FORMAT_PARAMETER, format )
                             .appendQueryParameter( UNITS_PARAMETER, units )
@@ -197,7 +197,7 @@ public class SunshineService extends IntentService {
 
             // 6. return a string of the resultant forecasts
 
-            String locationQuery = intent.getStringExtra( ARGUMENT_LOCATION );
+            String locationQuery = intent.getStringExtra( EXTRA_LOCATION );
             getWeatherDataFromJson( forecastJsonStr, locationQuery );
 
         } catch ( IOException e ) {

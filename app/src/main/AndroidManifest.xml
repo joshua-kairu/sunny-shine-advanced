@@ -147,6 +147,16 @@
             
             />
 
+        <!-- receivers -->
+
+        <receiver
+
+            android:name=".receivers.AlarmBroadcastReceiver"
+
+            android:enabled="true"
+
+            />
+
         <!-- services -->
 
         <service android:name=".services.SunshineService" />

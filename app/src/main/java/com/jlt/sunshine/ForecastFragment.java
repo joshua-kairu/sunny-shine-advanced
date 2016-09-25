@@ -20,6 +20,9 @@
 
 package com.jlt.sunshine;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -44,6 +47,7 @@ import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.data.contract.WeatherContract.LocationEntry;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
+import com.jlt.sunshine.receivers.AlarmBroadcastReceiver;
 import com.jlt.sunshine.services.SunshineService;
 
 /** Fragment to show the weather forecast. */
@@ -97,6 +101,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     /* VARIABLES */
 
+    /* Alarm Managers */
+
+    private AlarmManager mAlarmManager; // ditto
+
     /* Forecast Callbacks */
 
     private ForecastCallback forecastCallbackListener; // listener for any changes
@@ -109,6 +117,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     /* List Views */
 
     private ListView mForecastListView; // ditto
+
+    /* P */
+
+    private PendingIntent mAlarmPendingIntent; // ditto
 
     /* Primitives */
 
@@ -219,7 +231,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 5b. update the selected position member variable
         // 6. if there's instance state,
         // 6a. mine it for the scroll position
-        // last. return the inflated view
+        // lasta. close the cursor opened in 1
+        // lastb. return the inflated view
 
         // 0. inflate the main fragment layout
 
@@ -274,6 +287,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                         // 1. if there is a cursor there
                         // 1a. get the location setting
                         // 1b. pass these to the parent activity
+                        // 1last. close the cursor opened in 0
 
                         // 0. get the cursor at the given position
 
@@ -294,6 +308,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                                     WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
                                             locationSetting, cursor.getLong( COLUMN_WEATHER_DATE ) )
                             );
+
+                            // 1last. close the cursor opened in 0
+
+                            cursor.close();
 
                         } // end if there exists a cursor
 
@@ -316,7 +334,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             mCurrentScrollPosition = savedInstanceState.getInt( BUNDLE_SCROLL_POSITION );
         }
 
-        // last. return the inflated view
+        // lasta. close the cursor opened in 1
+
+        if ( cursor != null ) { cursor.close(); }
+
+        // lastb. return the inflated view
 
         return rootView;
 
@@ -473,18 +495,41 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private void updateWeather() {
 
         // 0a. get the user's preferred location
-        // 0b. fetch the weather info
+        // 0b. put an alarm to send a broadcast to fetch the weather info
+        // 0b1. alarm should go off after 5 seconds
+        // 0b2. should fire only once
+        // 0b3. should wake the phone up if it is asleep
 
         // 0a. get the user's preferred location
 
-        // 0b. fetch the weather info
+        // 0b. put an alarm to send a broadcast to fetch the weather info
 
-        Intent sunshineServiceIntent = new Intent( getActivity(), SunshineService.class )
-                .putExtra( SunshineService.ARGUMENT_LOCATION,
-                        Utility.getPreferredLocation( getActivity() )
-                );
+        mAlarmManager = ( AlarmManager ) getActivity().getSystemService( Context.ALARM_SERVICE );
 
-        getActivity().startService( sunshineServiceIntent );
+        Intent alarmReceiverIntent = new Intent( getActivity(), AlarmBroadcastReceiver.class )
+                .putExtra( SunshineService.EXTRA_LOCATION,
+                        Utility.getPreferredLocation( getActivity() ) );
+
+        // PendingIntent - A description of an Intent and target action to perform with it.
+        // getBroadcast - Retrieve a PendingIntent that will perform a broadcast,
+        //  like calling Context.sendBroadcast().
+        // FLAG_ONE_SHOT - Flag indicating that this PendingIntent can be used only once.
+        mAlarmPendingIntent = PendingIntent.getBroadcast( getActivity(), 0, alarmReceiverIntent,
+                PendingIntent.FLAG_ONE_SHOT );
+
+        // 0b1. alarm should go off after 5 seconds
+
+        long fiveSeconds = 5 * 1000;
+
+        // 0b2. should fire only once -> PendingIntent.FLAG_ONE_SHOT
+
+        // 0b3. should wake the phone up if it is asleep -> AlarmManager.RTC_WAKEUP
+
+        // set - Schedule an alarm
+        // RTC_WAKEUP - wall clock time in UTC which will wake up the device when it goes off.
+        mAlarmManager.set( AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + fiveSeconds,
+                mAlarmPendingIntent );
 
     } // end method updateWeather
 
