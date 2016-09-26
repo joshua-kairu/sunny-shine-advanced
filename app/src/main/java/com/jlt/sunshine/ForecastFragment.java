@@ -228,8 +228,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 5b. update the selected position member variable
         // 6. if there's instance state,
         // 6a. mine it for the scroll position
-        // lasta. close the cursor opened in 1
-        // lastb. return the inflated view
+        // last. return the inflated view
 
         // 0. inflate the main fragment layout
 
@@ -284,7 +283,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                         // 1. if there is a cursor there
                         // 1a. get the location setting
                         // 1b. pass these to the parent activity
-                        // 1last. close the cursor opened in 0
 
                         // 0. get the cursor at the given position
 
@@ -306,10 +304,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                                             locationSetting, cursor.getLong( COLUMN_WEATHER_DATE ) )
                             );
 
-                            // 1last. close the cursor opened in 0
-
-                            cursor.close();
-
                         } // end if there exists a cursor
 
                         // 5b. update the selected position member variable
@@ -330,10 +324,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 savedInstanceState.containsKey( BUNDLE_SCROLL_POSITION ) == true ) {
             mCurrentScrollPosition = savedInstanceState.getInt( BUNDLE_SCROLL_POSITION );
         }
-
-        // lasta. close the cursor opened in 1
-
-        if ( cursor != null ) { cursor.close(); }
 
         // lastb. return the inflated view
 
