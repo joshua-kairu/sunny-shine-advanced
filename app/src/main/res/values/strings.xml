@@ -184,4 +184,26 @@ of localizable data and its related information.
     <string name="pref_last_notification_key">last_notification
     </string>
 
+    <!-- preference key for dis/enabling notifications -->
+    <string name="pref_enable_notifications_key">enable_notifications
+    </string>
+
+    <!-- preference label for dis/enabling notifications -->
+    <string name="pref_enable_notifications_label">Weather Notifications
+    </string>
+
+    <!-- preference summary for enabling notifications -->
+    <string name="pref_enable_notifications_true_summary">Enabled
+    </string>
+
+    <!-- preference summary for disabling notifications -->
+    <string name="pref_enable_notifications_false_summary">Not Enabled
+    </string>
+
+    <!-- preference default value for dis/enabling notifications -->
+    <string name="pref_enable_notifications_default_value" translatable="false">true
+    </string>
+
+
+
 </resources>

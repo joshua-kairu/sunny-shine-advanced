@@ -613,6 +613,32 @@ public class Utility {
 
     } // end method getFormattedWindDirectionAndSpeed
 
+    /**
+     * Tells if the user wants to see notifications.
+     *
+     * @param context The {@link Context} we are working in.
+     *
+     * @return A boolean value dependent on whether or not the user wants to see notifications.
+     * */
+    // begin method isEnableNotifications
+    public static boolean isEnableNotifications ( Context context ) {
+
+        // 0. get the preferences
+        // 1. determine if we notifications are enabled or not
+
+        // 0. get the preferences
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        // 1. determine if we notifications are enabled or not
+
+        return
+                Boolean.parseBoolean( sharedPreferences.getString(
+                        context.getString( R.string.pref_enable_notifications_key ),
+                        context.getString( R.string.pref_enable_notifications_default_value ) ) );
+
+    } // end method isEnableNotifications
+
     /* INNER CLASSES */
 
 } // end class Utility

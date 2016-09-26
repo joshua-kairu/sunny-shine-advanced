@@ -912,13 +912,13 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     // begin method notifyWeather
     private void notifyWeather() {
 
-        // 0. if we have not shown a notification today
+        // 0. if we have not shown a notification today and the user is okay with seeing one
         // 0a. connect to db and get a cursor for today
         // 0b. fetch today's data from the db
         // 0c. format the text accordingly
         // 0d. put the icon to be the one that fits the weather
         // 0e. put the title to be the app name
-        // 0f. build the notification
+        // 0f. build the notification if the user is okay with it
         // 0f1. Create the Notification using NotificationCompat.builder.
         // 0f2. Create an explicit intent for what the notification should open.
         // 0f3. Create an artificial “backstack” so that when the user clicks the back button,
@@ -926,116 +926,121 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 0f4. Tell the NotificationManager to show the notification.
         // 0last. put in preferences now as the time when the notification was displayed last
 
-        // 0. if we have not shown a notification today
+        // 0. if we have not shown a notification today and the user is okay with seeing one
 
         Context context = getContext();
 
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences( context );
+        // begin if the user prefers to see notifications
+        if ( Utility.isEnableNotifications( context ) == true ) {
 
-        String lastNotificationKey = context.getString( R.string.pref_last_notification_key );
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences( context );
 
-        long timeOfLastSync = sharedPreferences.getLong( lastNotificationKey, 0 );
+            String lastNotificationKey = context.getString( R.string.pref_last_notification_key );
 
-        // begin if the current time is at least a day after the last sync
-        // since we show a notification every time we sync, if the last time we synced was at least
-        // a day ago, then the last time we showed a notification was at least a day ago.
-        if ( System.currentTimeMillis() - timeOfLastSync >= DAY_IN_MILLIS ) {
+            long timeOfLastSync = sharedPreferences.getLong( lastNotificationKey, 0 );
 
-            // 0a. connect to db and get a cursor for today
-            // 0b. fetch today's data from the db
-            // 0c. format the text accordingly
+            // begin if the current time is at least a day after the last sync
+            // since we show a notification every time we sync, if the last time we synced was at least
+            // a day ago, then the last time we showed a notification was at least a day ago.
+            if ( System.currentTimeMillis() - timeOfLastSync >= DAY_IN_MILLIS ) {
 
-            // 0a. connect to db and get a cursor for today
-
-            String locationSetting = Utility.getPreferredLocation( context );
-
-            Cursor todayCursor = context.getContentResolver().query(
-                    WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
-                            locationSetting, System.currentTimeMillis() ),
-                    NOTIFY_WEATHER_PROJECTION, null, null, null );
-
-            // 0b. fetch today's data from the db
-
-            // begin if there is a cursor and it has a row
-            if ( todayCursor != null && todayCursor.moveToFirst() == true ) {
-
-                int todayWeatherConditionId = todayCursor.getInt( COLUMN_WEATHER_CONDITION_ID );
-
-                float todayHigh = todayCursor.getFloat( COLUMN_WEATHER_MAX_TEMP );
-
-                float todayLow = todayCursor.getFloat( COLUMN_WEATHER_MIN_TEMP );
-
-                String todayWeatherDescription = todayCursor.getString( COLUMN_WEATHER_SHORT_DESCRIPTION );
-
+                // 0a. connect to db and get a cursor for today
+                // 0b. fetch today's data from the db
                 // 0c. format the text accordingly
 
-                boolean isMetric = Utility.isMetric( context );
+                // 0a. connect to db and get a cursor for today
 
-                String notificationText = context.getString( R.string.format_notification,
-                        todayWeatherConditionId,
-                        Utility.formatTemperature( context, todayHigh, isMetric ),
-                        Utility.formatTemperature( context, todayLow, isMetric ) );
+                String locationSetting = Utility.getPreferredLocation( context );
 
-                // 0d. put the icon to be the one that fits the weather
+                Cursor todayCursor = context.getContentResolver().query(
+                        WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
+                                locationSetting, System.currentTimeMillis() ),
+                        NOTIFY_WEATHER_PROJECTION, null, null, null );
 
-                int todayIconId = Utility.getIconResourceForWeatherCondition(
-                        todayWeatherConditionId );
+                // 0b. fetch today's data from the db
 
-                // 0e. put the title to be the app name
+                // begin if there is a cursor and it has a row
+                if ( todayCursor != null && todayCursor.moveToFirst() == true ) {
 
-                String notificationTitle = context.getString( R.string.app_name );
+                    int todayWeatherConditionId = todayCursor.getInt( COLUMN_WEATHER_CONDITION_ID );
 
-                // 0f. build the notification
+                    float todayHigh = todayCursor.getFloat( COLUMN_WEATHER_MAX_TEMP );
 
-                // 0f1. Create the Notification using NotificationCompat.builder.
+                    float todayLow = todayCursor.getFloat( COLUMN_WEATHER_MIN_TEMP );
 
-                NotificationCompat.Builder builder = new NotificationCompat.Builder( context )
-                        .setSmallIcon( todayIconId )
-                        .setContentTitle( notificationTitle )
-                        .setContentText( notificationText );
+                    String todayWeatherDescription = todayCursor.getString( COLUMN_WEATHER_SHORT_DESCRIPTION );
 
-                // 0f2. Create an explicit intent for what the notification should open.
+                    // 0c. format the text accordingly
 
-                Intent mainActivityIntent = new Intent( context, MainActivity.class );
+                    boolean isMetric = Utility.isMetric( context );
 
-                // 0f3. Create an artificial “backstack” so that when the user clicks the back button,
-                // it is clear to Android where the user will go.
+                    String notificationText = context.getString( R.string.format_notification,
+                            todayWeatherConditionId,
+                            Utility.formatTemperature( context, todayHigh, isMetric ),
+                            Utility.formatTemperature( context, todayLow, isMetric ) );
 
-                // TaskStackBuilder - Utility class for constructing synthetic back stacks
-                //  for cross-task navigation
-                TaskStackBuilder backStackBuilder = TaskStackBuilder.create( context )
-                        // addParentStack - Add the activity parent chain as specified by manifest
-                        //  <meta-data> elements to the task stack builder.
-                        .addParentStack( MainActivity.class )
-                        // addNextIntent - Add a new Intent to the task stack.
-                        //  Most recent one gets invoked first.
-                        .addNextIntent( mainActivityIntent );
+                    // 0d. put the icon to be the one that fits the weather
 
-                // getPendingIntent - Obtain a PendingIntent for launching the task constructed by
-                //  this builder so far.
-                // FLAG_UPDATE_CURRENT - Flag indicating that if the described PendingIntent already
-                //  exists, then keep it but replace its extra data with what is in this new Intent.
-                PendingIntent notificationPendingIntent =
-                        backStackBuilder.getPendingIntent( 0, PendingIntent.FLAG_UPDATE_CURRENT );
+                    int todayIconId = Utility.getIconResourceForWeatherCondition(
+                            todayWeatherConditionId );
 
-                builder.setContentIntent( notificationPendingIntent );
+                    // 0e. put the title to be the app name
 
-                // 0f4. Tell the NotificationManager to show the notification.
+                    String notificationTitle = context.getString( R.string.app_name );
 
-                mNotificationManager.notify( WEATHER_NOTIFICATION_ID, builder.build() );
+                    // 0f. build the notification if the user is okay with it
 
-                // 0last. put in preferences now as the time when the notification was displayed last
+                    // 0f1. Create the Notification using NotificationCompat.builder.
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder( context )
+                            .setSmallIcon( todayIconId )
+                            .setContentTitle( notificationTitle )
+                            .setContentText( notificationText );
 
-                editor.putLong( lastNotificationKey, System.currentTimeMillis() );
+                    // 0f2. Create an explicit intent for what the notification should open.
 
-                editor.apply();
+                    Intent mainActivityIntent = new Intent( context, MainActivity.class );
 
-            } // end if there is a cursor and it has a row
+                    // 0f3. Create an artificial “backstack” so that when the user clicks the back button,
+                    // it is clear to Android where the user will go.
 
-        } // end if the current time is at least a day after the last sync
+                    // TaskStackBuilder - Utility class for constructing synthetic back stacks
+                    //  for cross-task navigation
+                    TaskStackBuilder backStackBuilder = TaskStackBuilder.create( context )
+                            // addParentStack - Add the activity parent chain as specified by manifest
+                            //  <meta-data> elements to the task stack builder.
+                            .addParentStack( MainActivity.class )
+                            // addNextIntent - Add a new Intent to the task stack.
+                            //  Most recent one gets invoked first.
+                            .addNextIntent( mainActivityIntent );
+
+                    // getPendingIntent - Obtain a PendingIntent for launching the task constructed by
+                    //  this builder so far.
+                    // FLAG_UPDATE_CURRENT - Flag indicating that if the described PendingIntent already
+                    //  exists, then keep it but replace its extra data with what is in this new Intent.
+                    PendingIntent notificationPendingIntent =
+                            backStackBuilder.getPendingIntent( 0, PendingIntent.FLAG_UPDATE_CURRENT );
+
+                    builder.setContentIntent( notificationPendingIntent );
+
+                    // 0f4. Tell the NotificationManager to show the notification.
+
+                    mNotificationManager.notify( WEATHER_NOTIFICATION_ID, builder.build() );
+
+                    // 0last. put in preferences now as the time when the notification was displayed last
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    editor.putLong( lastNotificationKey, System.currentTimeMillis() );
+
+                    editor.apply();
+
+                } // end if there is a cursor and it has a row
+
+            } // end if the current time is at least a day after the last sync
+
+        } // end if the user prefers to see notifications
 
     } // end method notifyWeather
 

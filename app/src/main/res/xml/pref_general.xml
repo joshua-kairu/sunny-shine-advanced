@@ -29,6 +29,7 @@
 
     location
     units
+    notifications
 
 -->
 
@@ -76,6 +77,22 @@
         android:entryValues="@array/temperature_units_entry_values"
 
         android:defaultValue="@string/pref_temperature_unit_metric_value"
+
+        />
+
+    <!-- notifications -->
+
+    <CheckBoxPreference
+
+        android:title="@string/pref_enable_notifications_label"
+
+        android:key="@string/pref_enable_notifications_key"
+
+        android:defaultValue="@string/pref_enable_notifications_default_value"
+
+        android:summaryOff="@string/pref_enable_notifications_false_summary"
+
+        android:summaryOn="@string/pref_enable_notifications_true_summary"
 
         />
 
