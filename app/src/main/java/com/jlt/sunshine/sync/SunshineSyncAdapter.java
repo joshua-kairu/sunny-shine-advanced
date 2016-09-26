@@ -1054,7 +1054,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     private void deleteOldData() {
 
         // 0. get the date for yesterday in milliseconds
-        // 1. delete all rows in the table that have a date smaller than today's
+        // 1. delete all rows in the table that have a date smaller than yesterday's
 
         // 0. get the date for yesterday in milliseconds
 
@@ -1067,6 +1067,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         int rowsDeleted = getContext().getContentResolver().delete( WeatherEntry.CONTENT_URI,
                 WeatherEntry.COLUMN_DATE + " <= ?",
                 new String[]{ String.valueOf( yesterdayInMillis ) } );
+
+        // or
+        // Calendar cal = Calendar.getInstance(); //Get's a calendar object with the current time.
+//        cal.add(Calendar.DATE, -1); //Signifies yesterday's date
+//        String yesterdayDate = WeatherContract.getDbDateString(cal.getTime());
+//        getContext().getContentResolver().delete(WeatherEntry.CONTENT_URI,
+//                WeatherEntry.COLUMN_DATETEXT + " <= ?",
+//                new String[] {yesterdayDate});
 
     } // end method deleteOldData
 
