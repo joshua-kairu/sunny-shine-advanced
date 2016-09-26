@@ -35,13 +35,19 @@
 
     <!-- Permissions -->
 
+    <!-- Accounts -->
+
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
     <!-- Internet -->
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <!--&lt;!&ndash; Provider &ndash;&gt;-->
+    <!-- Sync -->
 
-    <!--<uses-permission android:name=".data.WeatherProvider" />-->
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <application
 
@@ -135,6 +141,7 @@
 
         <!-- Providers -->
 
+        <!-- the WeatherProvider should be syncable too. -->
         <provider
 
             android:authorities="com.jlt.sunshine.app"
@@ -144,6 +151,8 @@
             android:exported="false"
 
             android:enabled="true"
+
+            android:syncable="true"
             
             />
 
@@ -160,6 +169,72 @@
         <!-- services -->
 
         <service android:name=".services.SunshineService" />
+
+        <!-- SunshineSyncAdapter's dummy authentication service. -->
+        <service
+
+            android:name=".sync.SunshineAuthenticatorService"
+
+            >
+
+            <!-- the SunshineAuthenticatorService service is triggered by
+            the intent action AccountAuthenticator, sent by the system to run the Authenticator.
+            when SunshineAuthenticatorService is triggered, it runs the onBind method,
+            which in turn wraps the authenticator. -->
+            <intent-filter>
+
+                <action android:name="android.accounts.AccountAuthenticator" />
+
+            </intent-filter>
+
+            <!-- metadata for the authenticator -->
+
+            <!-- name - links the metadata to the authentication framework -->
+            <!-- resource - name of the authenticator metadata XML file -->
+            <meta-data
+
+                android:name="android.accounts.AccountAuthenticator"
+
+                android:resource="@xml/sunshine_authenticator"
+
+                />
+
+        </service>
+
+        <!-- The SunshineSyncAdapter service -->
+
+        <!-- exported - whether or not other processes (not the app)
+                including the system can run this service. -->
+
+        <service
+
+            android:name=".sync.SunshineSyncService"
+
+            android:exported="true"
+
+            >
+
+            <!-- the SunshineSyncAdapter service intercepts
+                    the SyncAdapter system intent action so as to start running.
+                    when this action is intercepted,
+                    SunshineSyncAdapter's onBind is called. -->
+            <intent-filter>
+
+                <action android:name="android.content.SyncAdapter" />
+
+            </intent-filter>
+
+            <!-- gives the name of the sync adapter metadata XML file. -->
+            <!-- name - this metadata is for the sync adapter framework -->
+            <!-- resource - the name of the sync adapter XML metadata file -->
+            <meta-data
+
+                android:name="android.content.SyncAdapter"
+
+                android:resource="@xml/sunshine_sync_adapter"
+
+                />
+        </service>
 
     </application>
 

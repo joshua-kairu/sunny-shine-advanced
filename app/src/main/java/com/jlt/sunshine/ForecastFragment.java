@@ -22,8 +22,6 @@ package com.jlt.sunshine;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,8 +45,7 @@ import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.data.contract.WeatherContract.LocationEntry;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
-import com.jlt.sunshine.receivers.AlarmBroadcastReceiver;
-import com.jlt.sunshine.services.SunshineService;
+import com.jlt.sunshine.sync.SunshineSyncAdapter;
 
 /** Fragment to show the weather forecast. */
 // begin fragment ForecastFragment
@@ -500,36 +497,37 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 0b2. should fire only once
         // 0b3. should wake the phone up if it is asleep
 
-        // 0a. get the user's preferred location
-
-        // 0b. put an alarm to send a broadcast to fetch the weather info
-
-        mAlarmManager = ( AlarmManager ) getActivity().getSystemService( Context.ALARM_SERVICE );
-
-        Intent alarmReceiverIntent = new Intent( getActivity(), AlarmBroadcastReceiver.class )
-                .putExtra( SunshineService.EXTRA_LOCATION,
-                        Utility.getPreferredLocation( getActivity() ) );
-
-        // PendingIntent - A description of an Intent and target action to perform with it.
-        // getBroadcast - Retrieve a PendingIntent that will perform a broadcast,
-        //  like calling Context.sendBroadcast().
-        // FLAG_ONE_SHOT - Flag indicating that this PendingIntent can be used only once.
-        mAlarmPendingIntent = PendingIntent.getBroadcast( getActivity(), 0, alarmReceiverIntent,
-                PendingIntent.FLAG_ONE_SHOT );
-
-        // 0b1. alarm should go off after 5 seconds
-
-        long fiveSeconds = 5 * 1000;
-
-        // 0b2. should fire only once -> PendingIntent.FLAG_ONE_SHOT
-
-        // 0b3. should wake the phone up if it is asleep -> AlarmManager.RTC_WAKEUP
-
-        // set - Schedule an alarm
-        // RTC_WAKEUP - wall clock time in UTC which will wake up the device when it goes off.
-        mAlarmManager.set( AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + fiveSeconds,
-                mAlarmPendingIntent );
+        SunshineSyncAdapter.syncImmediately( getActivity() );
+//        // 0a. get the user's preferred location
+//
+//        // 0b. put an alarm to send a broadcast to fetch the weather info
+//
+//        mAlarmManager = ( AlarmManager ) getActivity().getSystemService( Context.ALARM_SERVICE );
+//
+//        Intent alarmReceiverIntent = new Intent( getActivity(), AlarmBroadcastReceiver.class )
+//                .putExtra( SunshineService.EXTRA_LOCATION,
+//                        Utility.getPreferredLocation( getActivity() ) );
+//
+//        // PendingIntent - A description of an Intent and target action to perform with it.
+//        // getBroadcast - Retrieve a PendingIntent that will perform a broadcast,
+//        //  like calling Context.sendBroadcast().
+//        // FLAG_ONE_SHOT - Flag indicating that this PendingIntent can be used only once.
+//        mAlarmPendingIntent = PendingIntent.getBroadcast( getActivity(), 0, alarmReceiverIntent,
+//                PendingIntent.FLAG_ONE_SHOT );
+//
+//        // 0b1. alarm should go off after 5 seconds
+//
+//        long fiveSeconds = 5 * 1000;
+//
+//        // 0b2. should fire only once -> PendingIntent.FLAG_ONE_SHOT
+//
+//        // 0b3. should wake the phone up if it is asleep -> AlarmManager.RTC_WAKEUP
+//
+//        // set - Schedule an alarm
+//        // RTC_WAKEUP - wall clock time in UTC which will wake up the device when it goes off.
+//        mAlarmManager.set( AlarmManager.RTC_WAKEUP,
+//                System.currentTimeMillis() + fiveSeconds,
+//                mAlarmPendingIntent );
 
     } // end method updateWeather
 

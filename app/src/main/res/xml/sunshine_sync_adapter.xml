@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+ -->
+
+<!-- settings, metadata, and additional flags for the sunshine sync adapter component. -->
+
+<!-- contentAuthority - the authority of a content provider. -->
+
+<!-- accountType - account type required by the sync adapter framework.
+        Must be the same as the account type value you provided
+        when you created the authenticator metadata file -->
+
+<!-- userVisible - Sets the visibility of the sync adapter's account type
+        in the Accounts section of the system's Settings app -->
+
+<!-- supportsUploading - Allows you to upload data to the cloud.
+        True if you'll be up and downloading. False if you'll just be downloading. -->
+
+<!-- allowParallelSyncs - Set to true to tell the SyncManager that this SyncAdapter supports
+        multiple simultaneous syncs for the same account type and authority -->
+
+<!-- isAlwaysSyncable - Set to true to tell the SyncManager to automatically call
+        setIsSyncable(..., ..., 1) for the SyncAdapter instead of issuing an initialization sync
+        to the SyncAdapter. -->
+
+<sync-adapter
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:contentAuthority="@string/content_authority"
+
+    android:accountType="@string/sync_account_type"
+
+    android:userVisible="false"
+
+    android:supportsUploading="false"
+
+    android:allowParallelSyncs="false"
+
+    android:isAlwaysSyncable="true"
+
+    />

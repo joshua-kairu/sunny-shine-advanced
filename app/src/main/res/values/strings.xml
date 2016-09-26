@@ -165,4 +165,12 @@ of localizable data and its related information.
         Wind: <xliff:g id="direction">%1$s</xliff:g> <xliff:g id="speed">%2$1.0f</xliff:g> mph
     </string>/string>
 
+    <!-- SyncAdapter related -->
+
+    <!-- suggests that the account is specific to our Sunshine app. -->
+    <string name="sync_account_type">sunshine.jlt.com</string>
+
+    <!-- Uri authority for the content provider. -->
+    <string name="content_authority">com.jlt.sunshine.app</string>
+
 </resources>
