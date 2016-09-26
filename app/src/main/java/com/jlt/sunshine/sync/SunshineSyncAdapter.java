@@ -22,25 +22,32 @@ package com.jlt.sunshine.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.jlt.sunshine.BuildConfig;
+import com.jlt.sunshine.MainActivity;
 import com.jlt.sunshine.R;
 import com.jlt.sunshine.data.Utility;
-import com.jlt.sunshine.data.contract.WeatherContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +65,8 @@ import java.util.Vector;
 
 import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static com.jlt.sunshine.data.contract.WeatherContract.LocationEntry;
+import static com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
 
 /**
  * The sync adapter we will use for fetching app data.
@@ -67,6 +76,22 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     /* CONSTANTS */
     
+    /* Arrays */
+
+    /** 
+     * Projection to assist pull notification data from the db. 
+     * */
+    private static final String[] NOTIFY_WEATHER_PROJECTION = new String[]{
+            WeatherEntry.COLUMN_WEATHER_ID,
+            WeatherEntry.COLUMN_MAX_TEMP,
+            WeatherEntry.COLUMN_MIN_TEMP,
+            WeatherEntry.COLUMN_SHORT_DESCRIPTION,
+    };
+
+    /* Longs */
+
+    private static long DAY_IN_MILLIS = 24 * 60 * 60 * 1000; // ditto
+
     /* Integers */
 
     /** Interval in seconds at which to sync with the weather. */
@@ -75,6 +100,18 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     /** Flex time for weather sync. */
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
 
+    // indices for the notification projection
+    private static final int COLUMN_WEATHER_CONDITION_ID = 0;
+    private static final int COLUMN_WEATHER_MAX_TEMP = 1;
+    private static final int COLUMN_WEATHER_MIN_TEMP = 2;
+    private static final int COLUMN_WEATHER_SHORT_DESCRIPTION = 2;
+
+    /**
+     * ID matched to a notification so that the notification can be reused.
+     * Reusing a notification ID causes one more notification to be posted.
+     * */
+    private static final int WEATHER_NOTIFICATION_ID = 3004;
+
     /* Strings */
 
     /**
@@ -82,8 +119,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
      */
     private static final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
 
-    
     /* VARIABLES */
+
+    /* Notification Managers */
+
+    private NotificationManager mNotificationManager; // ditto
 
     /* CONSTRUCTOR */
 
@@ -96,10 +136,22 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
      *                       {@link AbstractThreadedSyncAdapter} by calling
      *                       {@link ContentResolver#setIsSyncable(Account, String, int)} with 1 if it
      */
-    // constructor
+    // begin constructor
     public SunshineSyncAdapter( Context context, boolean autoInitialize ) {
+
+        // 0. super stuff
+        // 1. initialize the notification manager
+
+        // 0. super stuff
+
         super( context, autoInitialize );
-    }
+
+        // 1. initialize the notification manager
+
+        mNotificationManager = ( NotificationManager ) context.getSystemService(
+                Context.NOTIFICATION_SERVICE );
+
+    } // end constructor
     
     /* METHODS */
     
@@ -533,6 +585,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 5c. put the ContentValues in the vector made in step 3
         // 6. if the vector has something,
         // 6a. bulk insert to add the weather entries in the vector to the db
+        // 6b. send a notification of the current weather
 
         // 0. initialize the names of the JSON objects we need to extract
 
@@ -725,16 +778,16 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 ContentValues contentValues = new ContentValues();
 
-                contentValues.put( WeatherContract.WeatherEntry.COLUMN_LOCATION_KEY, locationRowId );
-                contentValues.put( WeatherContract.WeatherEntry.COLUMN_MIN_TEMP, minTemperature );
-                contentValues.put( WeatherContract.WeatherEntry.COLUMN_MAX_TEMP, maxTemperature );
-                contentValues.put( WeatherContract.WeatherEntry.COLUMN_PRESSURE, pressure );
-                contentValues.put( WeatherContract.WeatherEntry.COLUMN_HUMIDITY, humidity );
-                contentValues.put( WeatherContract.WeatherEntry.COLUMN_WIND_SPEED, windSpeed );
-                contentValues.put( WeatherContract.WeatherEntry.COLUMN_WIND_DIRECTION_DEGREES, windDirectionDegrees );
-                contentValues.put( WeatherContract.WeatherEntry.COLUMN_SHORT_DESCRIPTION, description );
-                contentValues.put( WeatherContract.WeatherEntry.COLUMN_WEATHER_ID, weatherId );
-                contentValues.put( WeatherContract.WeatherEntry.COLUMN_DATE, dateTime );
+                contentValues.put( WeatherEntry.COLUMN_LOCATION_KEY, locationRowId );
+                contentValues.put( WeatherEntry.COLUMN_MIN_TEMP, minTemperature );
+                contentValues.put( WeatherEntry.COLUMN_MAX_TEMP, maxTemperature );
+                contentValues.put( WeatherEntry.COLUMN_PRESSURE, pressure );
+                contentValues.put( WeatherEntry.COLUMN_HUMIDITY, humidity );
+                contentValues.put( WeatherEntry.COLUMN_WIND_SPEED, windSpeed );
+                contentValues.put( WeatherEntry.COLUMN_WIND_DIRECTION_DEGREES, windDirectionDegrees );
+                contentValues.put( WeatherEntry.COLUMN_SHORT_DESCRIPTION, description );
+                contentValues.put( WeatherEntry.COLUMN_WEATHER_ID, weatherId );
+                contentValues.put( WeatherEntry.COLUMN_DATE, dateTime );
 
                 // 5c. put the ContentValues in the vector made in step 3
 
@@ -754,9 +807,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 ContentValues weatherContentValues[] =
                         new ContentValues[ weatherValuesVector.size() ];
                 weatherValuesVector.toArray( weatherContentValues );
+
                 numberOfInserts = getContext().getContentResolver().bulkInsert(
-                        WeatherContract.WeatherEntry.CONTENT_URI, weatherContentValues
+                        WeatherEntry.CONTENT_URI, weatherContentValues
                 );
+
+                // 6b. send a notification of the current weather
+
+                notifyWeather();
 
             } // end if the weather values vector has something
 
@@ -797,9 +855,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 0. is the location having the city name in the db
 
         Cursor locationCursor = getContext().getContentResolver().query(
-                WeatherContract.LocationEntry.CONTENT_URI,
-                new String[] { WeatherContract.LocationEntry._ID },
-                WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
+                LocationEntry.CONTENT_URI,
+                new String[] { LocationEntry._ID },
+                LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
                 new String[]{ locationSetting },
                 null
         );
@@ -809,7 +867,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // begin if there is a result in the cursor
         if ( locationCursor.moveToFirst() == true ) {
 
-            int idIndex = locationCursor.getColumnIndex( WeatherContract.LocationEntry._ID );
+            int idIndex = locationCursor.getColumnIndex( LocationEntry._ID );
 
             long locationRowId = locationCursor.getLong( idIndex );
 
@@ -827,13 +885,13 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         else {
 
             ContentValues locationContentValues = new ContentValues();
-            locationContentValues.put( WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting );
-            locationContentValues.put( WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName );
-            locationContentValues.put( WeatherContract.LocationEntry.COLUMN_COORD_LATITUDE, cityLatitude );
-            locationContentValues.put( WeatherContract.LocationEntry.COLUMN_COORD_LONGITUDE, cityLongitude );
+            locationContentValues.put( LocationEntry.COLUMN_LOCATION_SETTING, locationSetting );
+            locationContentValues.put( LocationEntry.COLUMN_CITY_NAME, cityName );
+            locationContentValues.put( LocationEntry.COLUMN_COORD_LATITUDE, cityLatitude );
+            locationContentValues.put( LocationEntry.COLUMN_COORD_LONGITUDE, cityLongitude );
 
             Uri locationUri = getContext().getContentResolver().insert(
-                    WeatherContract.LocationEntry.CONTENT_URI,
+                    LocationEntry.CONTENT_URI,
                     locationContentValues
             );
 
@@ -846,6 +904,140 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         } // end else there is no result in the cursor
 
     } // end method addLocation
+
+    /**
+     * Posts a notification about today's weather.
+     *
+     * */
+    // begin method notifyWeather
+    private void notifyWeather() {
+
+        // 0. if we have not shown a notification today
+        // 0a. connect to db and get a cursor for today
+        // 0b. fetch today's data from the db
+        // 0c. format the text accordingly
+        // 0d. put the icon to be the one that fits the weather
+        // 0e. put the title to be the app name
+        // 0f. build the notification
+        // 0f1. Create the Notification using NotificationCompat.builder.
+        // 0f2. Create an explicit intent for what the notification should open.
+        // 0f3. Create an artificial “backstack” so that when the user clicks the back button,
+        // it is clear to Android where the user will go.
+        // 0f4. Tell the NotificationManager to show the notification.
+        // 0last. put in preferences now as the time when the notification was displayed last
+
+        // 0. if we have not shown a notification today
+
+        Context context = getContext();
+
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences( context );
+
+        String lastNotificationKey = context.getString( R.string.pref_last_notification_key );
+
+        long timeOfLastSync = sharedPreferences.getLong( lastNotificationKey, 0 );
+
+        // begin if the current time is at least a day after the last sync
+        // since we show a notification every time we sync, if the last time we synced was at least
+        // a day ago, then the last time we showed a notification was at least a day ago.
+        if ( System.currentTimeMillis() - timeOfLastSync >= DAY_IN_MILLIS ) {
+
+            // 0a. connect to db and get a cursor for today
+            // 0b. fetch today's data from the db
+            // 0c. format the text accordingly
+
+            // 0a. connect to db and get a cursor for today
+
+            String locationSetting = Utility.getPreferredLocation( context );
+
+            Cursor todayCursor = context.getContentResolver().query(
+                    WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
+                            locationSetting, System.currentTimeMillis() ),
+                    NOTIFY_WEATHER_PROJECTION, null, null, null );
+
+            // 0b. fetch today's data from the db
+
+            // begin if there is a cursor and it has a row
+            if ( todayCursor != null && todayCursor.moveToFirst() == true ) {
+
+                int todayWeatherConditionId = todayCursor.getInt( COLUMN_WEATHER_CONDITION_ID );
+
+                float todayHigh = todayCursor.getFloat( COLUMN_WEATHER_MAX_TEMP );
+
+                float todayLow = todayCursor.getFloat( COLUMN_WEATHER_MIN_TEMP );
+
+                String todayWeatherDescription = todayCursor.getString( COLUMN_WEATHER_SHORT_DESCRIPTION );
+
+                // 0c. format the text accordingly
+
+                boolean isMetric = Utility.isMetric( context );
+
+                String notificationText = context.getString( R.string.format_notification,
+                        todayWeatherConditionId,
+                        Utility.formatTemperature( context, todayHigh, isMetric ),
+                        Utility.formatTemperature( context, todayLow, isMetric ) );
+
+                // 0d. put the icon to be the one that fits the weather
+
+                int todayIconId = Utility.getIconResourceForWeatherCondition(
+                        todayWeatherConditionId );
+
+                // 0e. put the title to be the app name
+
+                String notificationTitle = context.getString( R.string.app_name );
+
+                // 0f. build the notification
+
+                // 0f1. Create the Notification using NotificationCompat.builder.
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder( context )
+                        .setSmallIcon( todayIconId )
+                        .setContentTitle( notificationTitle )
+                        .setContentText( notificationText );
+
+                // 0f2. Create an explicit intent for what the notification should open.
+
+                Intent mainActivityIntent = new Intent( context, MainActivity.class );
+
+                // 0f3. Create an artificial “backstack” so that when the user clicks the back button,
+                // it is clear to Android where the user will go.
+
+                // TaskStackBuilder - Utility class for constructing synthetic back stacks
+                //  for cross-task navigation
+                TaskStackBuilder backStackBuilder = TaskStackBuilder.create( context )
+                        // addParentStack - Add the activity parent chain as specified by manifest
+                        //  <meta-data> elements to the task stack builder.
+                        .addParentStack( MainActivity.class )
+                        // addNextIntent - Add a new Intent to the task stack.
+                        //  Most recent one gets invoked first.
+                        .addNextIntent( mainActivityIntent );
+
+                // getPendingIntent - Obtain a PendingIntent for launching the task constructed by
+                //  this builder so far.
+                // FLAG_UPDATE_CURRENT - Flag indicating that if the described PendingIntent already
+                //  exists, then keep it but replace its extra data with what is in this new Intent.
+                PendingIntent notificationPendingIntent =
+                        backStackBuilder.getPendingIntent( 0, PendingIntent.FLAG_UPDATE_CURRENT );
+
+                builder.setContentIntent( notificationPendingIntent );
+
+                // 0f4. Tell the NotificationManager to show the notification.
+
+                mNotificationManager.notify( WEATHER_NOTIFICATION_ID, builder.build() );
+
+                // 0last. put in preferences now as the time when the notification was displayed last
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putLong( lastNotificationKey, System.currentTimeMillis() );
+
+                editor.apply();
+
+            } // end if there is a cursor and it has a row
+
+        } // end if the current time is at least a day after the last sync
+
+    } // end method notifyWeather
 
     /* INNER CLASSES */
 
