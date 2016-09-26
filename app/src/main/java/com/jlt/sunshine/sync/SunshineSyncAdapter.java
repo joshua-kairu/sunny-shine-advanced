@@ -585,7 +585,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 5c. put the ContentValues in the vector made in step 3
         // 6. if the vector has something,
         // 6a. bulk insert to add the weather entries in the vector to the db
-        // 6b. send a notification of the current weather
+        // 6b. delete any day-old data
+        // 6c. send a notification of the current weather
 
         // 0. initialize the names of the JSON objects we need to extract
 
@@ -812,7 +813,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                         WeatherEntry.CONTENT_URI, weatherContentValues
                 );
 
-                // 6b. send a notification of the current weather
+                // 6b. delete any day-old data
+
+                deleteOldData();
+
+                // 6c. send a notification of the current weather
 
                 notifyWeather();
 
@@ -1043,6 +1048,27 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         } // end if the user prefers to see notifications
 
     } // end method notifyWeather
+
+    /** Deletes weather data that is more than a day old. */
+    // begin method deleteOldData
+    private void deleteOldData() {
+
+        // 0. get the date for yesterday in milliseconds
+        // 1. delete all rows in the table that have a date smaller than today's
+
+        // 0. get the date for yesterday in milliseconds
+
+        long todayInMillis = Calendar.getInstance().getTimeInMillis();
+        long aDayInMillis = 24 * 60 * 60 * 1000;
+        long yesterdayInMillis = todayInMillis - aDayInMillis;
+
+        // 1. delete all rows in the table that have a date smaller than today's
+
+        int rowsDeleted = getContext().getContentResolver().delete( WeatherEntry.CONTENT_URI,
+                WeatherEntry.COLUMN_DATE + " <= ?",
+                new String[]{ String.valueOf( yesterdayInMillis ) } );
+
+    } // end method deleteOldData
 
     /* INNER CLASSES */
 
