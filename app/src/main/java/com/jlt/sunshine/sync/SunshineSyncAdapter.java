@@ -28,9 +28,11 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -66,7 +68,13 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     /* CONSTANTS */
     
     /* Integers */
-    
+
+    /** Interval in seconds at which to sync with the weather. */
+    public static final int SYNC_INTERVAL = 60 * 180;
+
+    /** Flex time for weather sync. */
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+
     /* Strings */
 
     /**
@@ -169,9 +177,10 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 2. if the account doesn't exist
         // 2a. attempt to add it
         // 2a1. if successful
-        // 2a1a. return the account created at 1
+        // 2a1a. notify the sync adapter that a new account has been created
+        // 2a1b. return the account created at 1
         // 2a2. otherwise
-        // 2a2a. report an error
+        // 2a2a. return null
         // 3. otherwise the account exists
         // 3a. return the existing account
 
@@ -201,19 +210,31 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 // 2a. attempt to add it
 
                 // 2a1. if successful
-                // 2a1a. return the account created at 1
 
+                // begin if account addition is successful
                 // addAccountExplicitly - Adds an account directly to the AccountManager.
                 //  Normally used by sign-up wizards associated with authenticators,
                 //  not directly by applications.
                 if ( accountManager.addAccountExplicitly( newAccount, "", null ) == true ) {
+
+                    // 2a1a. notify the sync adapter that a new account has been created
+                    // 2a1b. return the account created at 1
+
+                    // 2a1a. notify the sync adapter that a new account has been created
+
+                    onAccountCreated( newAccount, context );
+
+                    // 2a1b. return the account created at 1
+
                     return newAccount;
-                }
+
+                } // end if account addition is successful
 
                 // 2a2. otherwise
-                // 2a2a. report an error
 
-                else { throw new RuntimeException( "Account not added." ); }
+                // 2a2a. return null
+
+                else { return null; }
 
             } // end if the account has no password
 
@@ -235,6 +256,114 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         } // end else we have no permission to access accounts
 
     } // end method getSyncAccount
+
+    /**
+     * Helper method to schedule the sync adapter's periodic execution.
+     *
+     * @param context The {@link Context} we will be working in
+     * @param syncInterval The time interval in seconds between successive syncs
+     * @param flexTime The amount of flex time in seconds before {@param syncInterval}
+     *                 that you permit for the sync to take place. Must be less than pollFrequency.
+     * */
+    // begin method configurePeriodicSync
+    public static void configurePeriodicSync( Context context, int syncInterval, int flexTime ) {
+
+        // 0. get the account
+        // 1. get the authority
+        // 2. for Kitkat and above
+        // 2a. build a sync request using inexact timers
+        // 2b. sync using that request
+        // 3. for below Kitkat
+        // 3a. sync using the exact sync intervals
+
+        // 0. get the account
+
+        Account account = getSyncAccount( context );
+
+        // 1. get the authority
+
+        String authority = context.getString( R.string.content_authority );
+
+        // 2. for Kitkat and above
+
+        // begin if Kitkat and above
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
+
+            // 2a. build a sync request using inexact timers
+
+            SyncRequest syncRequest = new SyncRequest.Builder()
+                    .setSyncAdapter( account, authority ) // Specify authority and account for this transfer.
+                    .syncPeriodic( syncInterval, flexTime ) // Build a periodic sync with some flex time
+                    .setExtras( new Bundle() )
+                    .build();
+
+            // 2b. sync using that request
+
+            ContentResolver.requestSync( syncRequest );
+
+        } // end if Kitkat and above
+
+        // 3. for below Kitkat
+
+        // begin else below Kitkat
+        else {
+
+            // 3a. sync using the exact sync intervals
+
+            // addPeriodicSync -
+            //  Specifies that a sync should be requested with the specified the account, authority,
+            //  and extras at the given frequency. If there is already another periodic sync
+            //  scheduled with the account, authority and extras then a new periodic sync won't be
+            //  added, instead the frequency of the previous one will be updated.
+            ContentResolver.addPeriodicSync( account, authority, new Bundle(), syncInterval );
+
+        } // end else below Kitkat
+
+    } // end method configurePeriodicSync
+
+    /**
+     * Handles some things that need to be done after an account has been created.
+     *
+     * More specifically, after an account is created,
+     * a periodic sync should be configured, enabled, and started.
+     *
+     * @param newAccount The newly-created {@link Account}.
+     * @param context The {@link Context} where this method is running.
+     * */
+    // begin method onAccountCreated
+    private static void onAccountCreated( Account newAccount, Context context ) {
+
+        // 0. configure the periodic sync
+        // 1. enable the periodic sync
+        // 2. kick off a sync to get things started
+
+        // 0. configure the periodic sync
+
+        SunshineSyncAdapter.configurePeriodicSync( context, SYNC_INTERVAL, SYNC_FLEXTIME );
+
+        // 1. enable the periodic sync
+
+        // setSyncAutomatically - Set whether or not the provider is synced
+        //  when it receives a network tickle.
+        // a tickle tells the app that there is some new data.
+        // the app then decides whether or not to fetch that data.
+        // http://android-developers.blogspot.co.ke/2010/05/android-cloud-to-device-messaging.html
+        ContentResolver.setSyncAutomatically( newAccount,
+                context.getString( R.string.content_authority ), true );
+
+        // 2. kick off a sync to get things started
+
+        SunshineSyncAdapter.syncImmediately( context );
+
+    } // end method onAccountCreated
+
+    /**
+     * Helper method to initialize the sync adapter.
+     *
+     * @param context The {@link Context} we're working in
+     * */
+    // method initializeSyncAdapter
+    public static void initializeSyncAdapter( Context context ) { getSyncAccount( context ); }
 
     /* non statics */
 

@@ -144,7 +144,7 @@
         <!-- the WeatherProvider should be syncable too. -->
         <provider
 
-            android:authorities="com.jlt.sunshine.app"
+            android:authorities="@string/content_authority"
 
             android:name="com.jlt.sunshine.data.WeatherProvider"
 
@@ -155,20 +155,6 @@
             android:syncable="true"
             
             />
-
-        <!-- receivers -->
-
-        <receiver
-
-            android:name=".receivers.AlarmBroadcastReceiver"
-
-            android:enabled="true"
-
-            />
-
-        <!-- services -->
-
-        <service android:name=".services.SunshineService" />
 
         <!-- SunshineSyncAdapter's dummy authentication service. -->
         <service
