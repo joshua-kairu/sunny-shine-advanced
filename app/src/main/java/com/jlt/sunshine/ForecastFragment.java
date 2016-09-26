@@ -20,8 +20,7 @@
 
 package com.jlt.sunshine;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.jlt.sunshine.data.ForecastAdapter;
 import com.jlt.sunshine.data.ForecastCallback;
@@ -98,10 +98,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     /* VARIABLES */
 
-    /* Alarm Managers */
-
-    private AlarmManager mAlarmManager; // ditto
-
     /* Forecast Callbacks */
 
     private ForecastCallback forecastCallbackListener; // listener for any changes
@@ -114,10 +110,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     /* List Views */
 
     private ListView mForecastListView; // ditto
-
-    /* P */
-
-    private PendingIntent mAlarmPendingIntent; // ditto
 
     /* Primitives */
 
@@ -352,27 +344,61 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     // begin onOptionsItemSelected
     public boolean onOptionsItemSelected( MenuItem item ) {
 
-        // 0. if the refresh item is selected
-        // 0a. update the weather
-        // 0last. return true
+//         0. if the refresh item is selected
+//         0a. update the weather
+//         0last. return true
+        // 1. if the view location item is selected
+        // 1a. show the map if possible using the correct URI
+        // 1last. return true
         // last. return super things
 
         int selectedId = item.getItemId();
 
-        // 0. if the refresh item is selected
+//        // 0. if the refresh item is selected
+//
+//        // begin if refresh is selected
+//        if ( selectedId == R.id.action_refresh ) {
+//
+//            // 0a. update the weather
+//
+//            updateWeather();
+//
+//            // 0last. return true
+//
+//            return true;
+//
+//        } // end if refresh is selected
 
-        // begin if refresh is selected
-        if ( selectedId == R.id.action_refresh ) {
+        // 1. if the view location item is selected
 
-            // 0a. update the weather
+        // begin if view location is selected
+        if ( selectedId == R.id.action_view_location ) {
 
-            updateWeather();
+            // 1a. show the map if possible using the correct URI
 
-            // 0last. return true
+            Cursor locationCursor = mForecastAdapter.getCursor();
+
+            // begin if there is a cursor that has something
+            if ( locationCursor != null && locationCursor.moveToFirst() == true ) {
+
+                String latitudeCoordinate = String.valueOf(
+                        locationCursor.getFloat( COLUMN_COORD_LATITUDE ) );
+                String longitudeCoordinate = String.valueOf(
+                        locationCursor.getFloat( COLUMN_COORD_LONGITUDE ) );
+
+                // 1b. show the map if possible
+
+                Uri mapUri = Uri.parse( "geo:" + latitudeCoordinate + "," + longitudeCoordinate );
+
+                showMap( mapUri );
+
+            } // end if there is a cursor that has something
+
+            // 1last. return true
 
             return true;
 
-        } // end if refresh is selected
+        } // end if view location is selected
 
         // last. return super things
 
@@ -510,5 +536,46 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         getLoaderManager().restartLoader( FORECAST_LOADER_ID, null, this );
 
     } // end method onLocationChanged
+
+    /**
+     * Show a map with the passed URI
+     * @param mapUri to use to show a map
+     * */
+    // begin method showMap
+    private void showMap( Uri mapUri ) {
+
+        // 0. use an implicit view intent
+        // 1. put the Uri data in
+        // 2. if there is a map app
+        // 2a. start the activity
+        // 3. otherwise
+        // 3a. tell the user of the sadness
+
+        // 0. use an implicit view intent
+
+        Intent mapIntent = new Intent( Intent.ACTION_VIEW );
+
+        // 1. put the Uri data in
+
+        mapIntent.setData( mapUri );
+
+        // 2. if there is a map app
+
+        // 2a. start the activity
+
+        if ( mapIntent.resolveActivity( getActivity().getPackageManager() ) != null ) {
+            startActivity( mapIntent );
+        }
+
+        // 3. otherwise
+
+        // 3a. tell the user of the sadness
+
+        else {
+            Toast.makeText( getActivity(), R.string.message_error_no_maps_app, Toast.LENGTH_SHORT )
+                    .show();
+        }
+
+    } // end method showMap
 
 } // end fragment ForecastFragment

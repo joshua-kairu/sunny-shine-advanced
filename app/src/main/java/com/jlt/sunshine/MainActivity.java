@@ -1,15 +1,12 @@
 package com.jlt.sunshine;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
@@ -326,31 +323,6 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
         } // end if settings is selected
 
-        // 1. if the view location item is selected
-
-        // begin if view location is selected
-        if ( selectedId == R.id.action_view_location ) {
-
-            // 1a. get the user's preferred location
-
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
-
-            String preferredLocation = sharedPreferences.getString( getResources().getString( R.string.pref_location_key ), getResources().getString( R.string.pref_location_default ) );
-
-            // 1b. show the map if possible
-
-            Uri mapUri = Uri.parse( "geo:0,0?" ).buildUpon()
-                    .appendQueryParameter( "q", preferredLocation )
-                    .build();
-
-            showMap( mapUri );
-
-            // 1last. return true
-
-            return true;
-
-        } // end if view location is selected
-
         // last. return super things
 
         return super.onOptionsItemSelected( item );
@@ -405,41 +377,5 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
     } // end onForecastItemSelected
 
     /* Other Methods */
-
-    /**
-     * Show a map with the passed URI
-     * @param mapUri to use to show a map
-     * */
-    // begin method showMap
-    private void showMap( Uri mapUri ) {
-
-        // 0. use an implicit view intent
-        // 1. put the Uri data in
-        // 2. if there is a map app
-        // 2a. start the activity
-        // 3. otherwise
-        // 3a. tell the user of the sadness
-
-        // 0. use an implicit view intent
-
-        Intent mapIntent = new Intent( Intent.ACTION_VIEW );
-
-        // 1. put the Uri data in
-
-        mapIntent.setData( mapUri );
-
-        // 2. if there is a map app
-
-        // 2a. start the activity
-
-        if ( mapIntent.resolveActivity( getPackageManager() ) != null ) { startActivity( mapIntent ); }
-
-        // 3. otherwise
-
-        // 3a. tell the user of the sadness
-
-        else { Toast.makeText( this, R.string.message_error_no_maps_app, Toast.LENGTH_SHORT ).show(); }
-
-    } // end method showMap
 
 } // end activity MainActivity
