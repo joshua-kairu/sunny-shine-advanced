@@ -459,7 +459,7 @@ public class WeatherProvider extends ContentProvider {
 
                 // 1b1. delete all rows of location
 
-                rowsDeleted = database.delete( LocationEntry.TABLE_NAME, selection,selectionArgs );
+                rowsDeleted = database.delete( LocationEntry.TABLE_NAME, selection, selectionArgs );
 
                 // 1b2. notify any listeners
 
