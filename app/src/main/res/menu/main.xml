@@ -30,18 +30,6 @@
 
     >
 
-    <!-- View location -->
-
-    <item
-
-        android:id="@+id/action_view_location"
-
-        android:title="@string/action_view_location"
-
-        app:showAsAction="never"
-
-        />
-
     <!-- Settings -->
 
     <item
