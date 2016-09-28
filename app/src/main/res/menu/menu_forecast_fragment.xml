@@ -27,7 +27,7 @@
 
     Menu for the forecast fragment
     Contains a
-        refresh button
+        view location button
 
 -->
 
@@ -39,13 +39,13 @@
 
     >
 
-    <!-- Refresh -->
+    <!-- View location -->
 
     <item
 
-        android:id="@+id/action_refresh"
+        android:id="@+id/action_view_location"
 
-        android:title="@string/action_refresh"
+        android:title="@string/action_view_location"
 
         app:showAsAction="never"
 
