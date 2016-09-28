@@ -373,6 +373,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                             )
             );
 
+            // we make the direction and speed view invisible for wide displays
+            // and so we should make it visible when we want to show data
+            if ( mDirectionAndSpeedView.getVisibility() == View.INVISIBLE ) {
+                mDirectionAndSpeedView.setVisibility( View.VISIBLE );
+            }
+
             mDirectionAndSpeedView.setWindDirectionAndSpeedText(
                     Utility.getFormattedWindDirectionAndSpeed( getActivity(),
                             cursor.getFloat( COLUMN_WEATHER_WIND_DIRECTION_DEGREES ),

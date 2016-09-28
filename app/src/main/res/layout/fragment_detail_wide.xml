@@ -234,6 +234,8 @@
 
                 app:radiusDifference="@dimen/text_baseline"
 
+                android:visibility="invisible"
+
                 />
 
         </LinearLayout>
