@@ -230,18 +230,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     } // end onCreateOptionsMenu
 
-//    @Override
-//    // begin onOptionsItemSelected
-//    public boolean onOptionsItemSelected( MenuItem item ) {
-//
-//        // 0. if the share action provider is selected
-//        // 0a. show the map if possible using the correct URI
-//        // 0last. return true
-//        // last. return super things
-//        return super.onOptionsItemSelected( item );
-//
-//    } // end onOptionsItemSelected
-
     @Override
     // begin onCreateView
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
