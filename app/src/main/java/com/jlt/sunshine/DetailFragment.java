@@ -111,7 +111,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     /* Strings */
 
-    private String weatherDetailString; // the string to hold this detail's weather
+    private String mWeatherDetailShareString; // the string to hold this detail's weather
 
     /* Text Views */
 
@@ -203,14 +203,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     // begin onCreateOptionsMenu
     public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
 
-        // 0. use the details menu
+        // 0. use the details fragment menu
         // 1. get the share menu item
         // 2. store the share action provider
         // 3. create an intent that should allow users to send the weather detail
 
-        // 0. use the details menu
+        // 0. use the details fragment menu
 
-        inflater.inflate( R.menu.detail, menu );
+        inflater.inflate( R.menu.menu_detail_fragment, menu );
 
         // 1. get the share menu item
 
@@ -223,12 +223,24 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         // 3. create an intent that should allow users to send the weather detail
 
-        if ( weatherDetailString != null ) {
+        if ( mWeatherDetailShareString != null ) {
             mWeatherDetailShareActionProvider.setShareIntent(
                     setWeatherDetailShareIntent() );
         }
 
     } // end onCreateOptionsMenu
+
+//    @Override
+//    // begin onOptionsItemSelected
+//    public boolean onOptionsItemSelected( MenuItem item ) {
+//
+//        // 0. if the share action provider is selected
+//        // 0a. show the map if possible using the correct URI
+//        // 0last. return true
+//        // last. return super things
+//        return super.onOptionsItemSelected( item );
+//
+//    } // end onOptionsItemSelected
 
     @Override
     // begin onCreateView
@@ -304,6 +316,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoadFinished( Loader< Cursor > cursorLoader, Cursor cursor ) {
 
         // 0. bind the needed details data to the text view
+        // 0a. initialize the sharing text
+        // 0b. if possible set the share action provider to use the shared text
+        // 0a and 0b ensure that a sensible share happens regardless of
+        // which among onCreateOptionsMenu and onLoadFinished is called first
 
         // 0. bind the needed details data to the text view
 
@@ -376,6 +392,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     )
             );
 
+            // 0a. initialize the sharing text
+
+            mWeatherDetailShareString = convertCursorRowToUXFormat( cursor );
+
+            // 0b. if possible set the share action provider to use the shared text
+
+            if ( mWeatherDetailShareActionProvider != null ) {
+                mWeatherDetailShareActionProvider.setShareIntent(
+                        setWeatherDetailShareIntent()
+                );
+            }
+
         } // end if there is a row in the cursor
 
     } // end onLoadFinished
@@ -406,16 +434,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     /* Other Methods */
 
-    /*
-
-    * Sets the Intent that will be used to share weather detail
-    *
-    * @param The detail to be shared. Shared details should have the format <Detail> #SunshineApp,
-    * for example "Tue 6/24 - Foggy - 21/8 #SunshineApp" - without double quotes of course.
-    *
-    * @return The share intent
-    *
-    * */
+    /**
+     * Sets the Intent that will be used to share weather detail
+     *
+     * @return The share intent
+     * */
     // begin method setWeatherDetailShareIntent
     private Intent setWeatherDetailShareIntent() {
 
@@ -436,7 +459,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // 0b. should have the detail in the appropriate format
 
         shareWeatherDetailIntent.putExtra( Intent.EXTRA_TEXT,
-                weatherDetailString + " " + FORECAST_SHARE_HASHTAG );
+                mWeatherDetailShareString + " " + FORECAST_SHARE_HASHTAG );
 
         // 0c. called activity should clear when we leave our app
 

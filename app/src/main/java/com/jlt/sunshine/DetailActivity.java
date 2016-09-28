@@ -3,6 +3,7 @@ package com.jlt.sunshine;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 
 /*
@@ -71,6 +72,22 @@ public class DetailActivity extends AppCompatActivity {
 
     } // end onCreate
 
+    @Override
+    // begin onCreateOptionsMenu
+    public boolean onCreateOptionsMenu( Menu menu ) {
+
+        // 0. use the detail activity menu
+        // 1. return true
+
+        // 0. use the detail activity menu
+
+        getMenuInflater().inflate( R.menu.detail, menu );
+
+        // 1. return true
+
+        return true;
+
+    } // end onCreateOptionsMenu
 
     @Override
     // begin onOptionsItemSelected
