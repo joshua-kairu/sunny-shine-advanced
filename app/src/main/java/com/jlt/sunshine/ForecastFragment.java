@@ -344,37 +344,19 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     // begin onOptionsItemSelected
     public boolean onOptionsItemSelected( MenuItem item ) {
 
-//         0. if the refresh item is selected
-//         0a. update the weather
-//         0last. return true
-        // 1. if the view location item is selected
-        // 1a. show the map if possible using the correct URI
-        // 1last. return true
+        // 0. if the view location item is selected
+        // 0a. show the map if possible using the correct URI
+        // 0last. return true
         // last. return super things
 
         int selectedId = item.getItemId();
 
-//        // 0. if the refresh item is selected
-//
-//        // begin if refresh is selected
-//        if ( selectedId == R.id.action_refresh ) {
-//
-//            // 0a. update the weather
-//
-//            updateWeather();
-//
-//            // 0last. return true
-//
-//            return true;
-//
-//        } // end if refresh is selected
-
-        // 1. if the view location item is selected
+        // 0. if the view location item is selected
 
         // begin if view location is selected
         if ( selectedId == R.id.action_view_location ) {
 
-            // 1a. show the map if possible using the correct URI
+            // 0a. show the map if possible using the correct URI
 
             Cursor locationCursor = mForecastAdapter.getCursor();
 
@@ -386,7 +368,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 String longitudeCoordinate = String.valueOf(
                         locationCursor.getFloat( COLUMN_COORD_LONGITUDE ) );
 
-                // 1b. show the map if possible
+                // 0b. show the map if possible
 
                 Uri mapUri = Uri.parse( "geo:" + latitudeCoordinate + "," + longitudeCoordinate );
 
@@ -394,7 +376,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
             } // end if there is a cursor that has something
 
-            // 1last. return true
+            // 0last. return true
 
             return true;
 
