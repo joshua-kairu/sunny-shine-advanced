@@ -41,6 +41,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.IntDef;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
@@ -59,6 +60,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
@@ -114,6 +117,20 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
      * */
     private static final int WEATHER_NOTIFICATION_ID = 3004;
 
+    /* location statuses */
+
+    /** Everything is fine. */
+    public static final int LOCATION_STATUS_OK = 0;
+
+    /** The server is down. */
+    public static final int LOCATION_STATUS_SERVER_DOWN = 1;
+
+    /** The server is invalid, such as when behind a captive web portal. */
+    public static final int LOCATION_STATUS_SERVER_INVALID = 2;
+
+    /** The server's status is unknown. */
+    public static final int LOCATION_STATUS_SERVER_UNKNOWN = 3;
+
     /* Strings */
 
     /**
@@ -122,6 +139,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
 
     /* VARIABLES */
+
+    /* Annotations */
+
+    @Retention( RetentionPolicy.SOURCE )
+    @IntDef( { LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID,
+            LOCATION_STATUS_SERVER_UNKNOWN } )
+    /** Enumeration of possible location statuses. */
+    public @interface LocationStatus {}
 
     /* Notification Managers */
 
