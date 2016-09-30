@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jlt.sunshine.data.ForecastAdapter;
@@ -213,7 +214,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // and get a cursor
         // 2. initialize the adapter
         // 2a. tell it if to use the special today layout
-        // 3. find reference to the list view
+        // 3. the list view
+        // 3a. find reference to it
+        // 3b. set its empty view
         // 4. set adapter to the list
         // 5. when an item in the list view is clicked
         // 5a. notify the parent activity
@@ -248,9 +251,16 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         mForecastAdapter.setUseTodayLayout( mUseTodayLayout );
 
-        // 3. find reference to the list view
+        // 3. the list view
+
+        // 3a. find reference to it
 
         mForecastListView = ( ListView ) rootView.findViewById( R.id.fm_lv_forecast );
+
+        // 3b. set its empty view
+
+        TextView emptyTextView = ( TextView ) rootView.findViewById( R.id.fm_tv_empty );
+        mForecastListView.setEmptyView( emptyTextView );
 
         // 4. set adapter to the list
 

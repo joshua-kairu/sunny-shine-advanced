@@ -51,5 +51,22 @@
         android:divider="@null"
 
         />
+    
+    <!-- TextView for when there is no info available -->
+    <TextView
+
+        android:id="@+id/fm_tv_empty"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:padding="@dimen/layout_padding"
+
+        android:text="@string/message_error_no_weather_info"
+
+        android:gravity="center_horizontal"
+
+        />
 
 </FrameLayout>

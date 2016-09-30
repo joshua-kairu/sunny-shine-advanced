@@ -51,6 +51,8 @@ of localizable data and its related information.
 
     <string name="message_error_no_maps_app">Please install a Maps app.</string>
 
+    <string name="message_error_no_weather_info">No Weather Information Available</string>
+
     <!-- Preference strings -->
 
     <!-- Key for storing location preference in SharedPreferences [CHAR LIMIT = NONE]-->
