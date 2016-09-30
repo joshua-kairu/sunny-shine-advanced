@@ -53,6 +53,10 @@ of localizable data and its related information.
 
     <string name="message_error_no_weather_info">No Weather Information Available</string>
 
+    <string name="message_error_no_weather_info_no_connectivity">
+        No weather information available. The network is not available to fetch data.
+    </string>
+
     <!-- Preference strings -->
 
     <!-- Key for storing location preference in SharedPreferences [CHAR LIMIT = NONE]-->

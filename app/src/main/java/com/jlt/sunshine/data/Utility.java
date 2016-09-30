@@ -22,6 +22,8 @@ package com.jlt.sunshine.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -35,7 +37,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
- * Class to provide utility methods for preference and date and time use.
+ * Class to provide utility methods for preference, date and time use, and connectivity checking.
  * */
 // begin class Utility
 public class Utility {
@@ -638,6 +640,41 @@ public class Utility {
                         context.getString( R.string.pref_enable_notifications_default_value ) ) );
 
     } // end method isEnableNotifications
+
+    /**
+     * Checks if the device has an active internet connection.
+     *
+     * @param context The {@link Context} we are working in.
+     *
+     * @return A boolean value dependent on whether or not
+     *         the device has an active internet connection.
+     * */
+    // begin method isNetworkAvailable
+    public static boolean isNetworkAvailable( Context context ) {
+
+        // 0. get the connectivity manager
+        // 1. get the current active network's information
+        // 2. There is connectivity if the active network is available and
+        // is either connected or connecting
+
+        // 0. get the connectivity manager
+
+        ConnectivityManager connectivityManager = ( ConnectivityManager )
+                context.getSystemService( Context.CONNECTIVITY_SERVICE );
+
+        // 1. get the current active network's information
+
+        // getActiveNetworkInfo - Returns details about the currently active default data network.
+        //  May return null when there is no default network.
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        // 2. There is connectivity if the active network is available and
+        // is either connected or connecting
+
+        return activeNetworkInfo != null &&
+                activeNetworkInfo.isConnectedOrConnecting() == true;
+
+    } // end method isNetworkAvailable
 
     /* INNER CLASSES */
 

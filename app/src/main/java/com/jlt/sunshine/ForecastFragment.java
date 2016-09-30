@@ -120,6 +120,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private boolean mUseTodayLayout = true; // ditto
 
+    /* Text Views */
+
+    private TextView mEmptyTextView; // ditto
+
     /*
      * CONSTRUCTOR
      */
@@ -259,8 +263,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 3b. set its empty view
 
-        TextView emptyTextView = ( TextView ) rootView.findViewById( R.id.fm_tv_empty );
-        mForecastListView.setEmptyView( emptyTextView );
+        mEmptyTextView = ( TextView ) rootView.findViewById( R.id.fm_tv_empty );
+        mForecastListView.setEmptyView( mEmptyTextView );
 
         // 4. set adapter to the list
 
@@ -439,6 +443,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 0. refresh the list view
         // 1. if there is an valid list scroll position
         // 1a. scroll to it
+        // 2. update the empty view
 
         // 0. refresh the list view
 
@@ -451,6 +456,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         if ( mCurrentScrollPosition != ListView.INVALID_POSITION ) {
             mForecastListView.smoothScrollToPosition( mCurrentScrollPosition );
         }
+
+        // 2. update the empty view
+
+        updateEmptyView();
 
     } // end onLoadFinished
 
@@ -569,5 +578,53 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         }
 
     } // end method showMap
+
+    /**
+     * Updates the empty list view with information
+     * to help the user determine why the list is empty. */
+    // begin method updateEmptyView
+    private void updateEmptyView() {
+
+        // 0. if our adapter's cursor has nothing in it
+        // 0a. get the empty view
+        // 0a1. if we get the empty view successfully
+        // 0a1a. tell the user the list can be empty either because there
+        // simply is no info available or because there
+        // is a network problem
+
+        // 0. if our adapter's cursor has nothing in it
+
+        // begin if the adapter cursor is empty
+        if ( mForecastAdapter.getCount() == 0 ) {
+
+            // 0a. get the empty view
+
+            TextView emptyTextView = null;
+            if ( getView() != null ) {
+                 emptyTextView = ( TextView ) getView().findViewById( R.id.fm_tv_empty );
+            }
+
+            // 0a1. if we get the empty view successfully
+
+            // begin if the empty view exists
+            if ( emptyTextView != null ) {
+
+                // 0a1a. tell the user the list can be empty either because there
+                // simply is no info available or because there
+                // is a network problem
+
+                int message = R.string.message_error_no_weather_info;
+
+                if ( Utility.isNetworkAvailable( getActivity() ) == false ) {
+                    message = R.string.message_error_no_weather_info_no_connectivity;
+                }
+
+                emptyTextView.setText( message );
+
+            } // end if the empty view exists
+
+        } // end if the adapter cursor is empty
+
+    }  // end method updateEmptyView
 
 } // end fragment ForecastFragment

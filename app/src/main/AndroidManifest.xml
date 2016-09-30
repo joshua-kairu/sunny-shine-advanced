@@ -44,6 +44,10 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Network -->
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <!-- Sync -->
 
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
