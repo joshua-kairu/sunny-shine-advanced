@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sunshine.iml" filepath="$PROJECT_DIR$/sunshine.iml" />
+      <module fileurl="file:///run/media/joshua/DATA/Documents/Coding/Android/AndroidStudioProjects/udacity-2-advanced-android-app-development-sunshine/sunshine-advanced/app/app.iml" filepath="/run/media/joshua/DATA/Documents/Coding/Android/AndroidStudioProjects/udacity-2-advanced-android-app-development-sunshine/sunshine-advanced/app/app.iml" />
+      <module fileurl="file:///run/media/joshua/DATA/Documents/Coding/Android/AndroidStudioProjects/udacity-2-advanced-android-app-development-sunshine/sunshine-advanced/sunshine-advanced.iml" filepath="/run/media/joshua/DATA/Documents/Coding/Android/AndroidStudioProjects/udacity-2-advanced-android-app-development-sunshine/sunshine-advanced/sunshine-advanced.iml" />
     </modules>
   </component>
 </project>
