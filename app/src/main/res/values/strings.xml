@@ -177,7 +177,7 @@ of localizable data and its related information.
 
     <!-- format -->
     <string name="format_notification">
-        Forecast <xliff:g id="condition">%1$s</xliff:g> High: <xliff:g id="high">%2$s</xliff:g> Low: <xliff:g id="low">%3$s</xliff:g>
+        Forecast: <xliff:g id="condition">%1$s</xliff:g> High: <xliff:g id="high">%2$s</xliff:g> Low: <xliff:g id="low">%3$s</xliff:g>
     </string>
 
     <!-- preference for the last time a notification was made -->
