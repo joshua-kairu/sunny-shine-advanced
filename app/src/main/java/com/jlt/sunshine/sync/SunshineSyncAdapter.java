@@ -104,7 +104,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final int COLUMN_WEATHER_CONDITION_ID = 0;
     private static final int COLUMN_WEATHER_MAX_TEMP = 1;
     private static final int COLUMN_WEATHER_MIN_TEMP = 2;
-    private static final int COLUMN_WEATHER_SHORT_DESCRIPTION = 2;
+    private static final int COLUMN_WEATHER_SHORT_DESCRIPTION = 3;
 
     /**
      * ID matched to a notification so that the notification can be reused.
@@ -923,7 +923,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 0c. format the text accordingly
         // 0d. put the icon to be the one that fits the weather
         // 0e. put the title to be the app name
-        // 0f. build the notification if the user is okay with it
+        // 0f. build the notification
         // 0f1. Create the Notification using NotificationCompat.builder.
         // 0f2. Create an explicit intent for what the notification should open.
         // 0f3. Create an artificial “backstack” so that when the user clicks the back button,
@@ -981,7 +981,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                     boolean isMetric = Utility.isMetric( context );
 
                     String notificationText = context.getString( R.string.format_notification,
-                            todayWeatherConditionId,
+                            todayWeatherDescription,
                             Utility.formatTemperature( context, todayHigh, isMetric ),
                             Utility.formatTemperature( context, todayLow, isMetric ) );
 
@@ -994,7 +994,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     String notificationTitle = context.getString( R.string.app_name );
 
-                    // 0f. build the notification if the user is okay with it
+                    // 0f. build the notification
 
                     // 0f1. Create the Notification using NotificationCompat.builder.
 
