@@ -35,6 +35,8 @@ import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -921,7 +923,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 0a. connect to db and get a cursor for today
         // 0b. fetch today's data from the db
         // 0c. format the text accordingly
-        // 0d. put the icon to be the one that fits the weather
+        // 0d. put the needed images
+        // 0d1. a small icon to show the weather in the status bar
+        // 0d2. a large art to show the weather in the actual notification
         // 0e. put the title to be the app name
         // 0f. build the notification
         // 0f1. Create the Notification using NotificationCompat.builder.
@@ -985,10 +989,19 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                             Utility.formatTemperature( context, todayHigh, isMetric ),
                             Utility.formatTemperature( context, todayLow, isMetric ) );
 
-                    // 0d. put the icon to be the one that fits the weather
+                    // 0d. put the needed images
+
+                    // 0d1. a small icon to show the weather in the status bar
 
                     int todayIconId = Utility.getIconResourceForWeatherCondition(
                             todayWeatherConditionId );
+
+                    // 0d2. a large art to show the weather in the actual notification
+
+                    Bitmap todayArt = BitmapFactory.decodeResource(
+                            context.getResources(),
+                            Utility.getArtResourceForWeatherCondition( todayWeatherConditionId )
+                    );
 
                     // 0e. put the title to be the app name
 
@@ -1000,6 +1013,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     NotificationCompat.Builder builder = new NotificationCompat.Builder( context )
                             .setSmallIcon( todayIconId )
+                            .setLargeIcon( todayArt )
                             .setContentTitle( notificationTitle )
                             .setContentText( notificationText );
 
