@@ -28,6 +28,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.jlt.sunshine.R;
+import com.jlt.sunshine.sync.SunshineSyncAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -675,6 +676,84 @@ public class Utility {
                 activeNetworkInfo.isConnectedOrConnecting() == true;
 
     } // end method isNetworkAvailable
+
+    /**
+     * Sets the location status in the preferences.
+     *
+     * @param context   The {@link Context} we are working in.
+     * @param locationStatus A {@link com.jlt.sunshine.sync.SunshineSyncAdapter.LocationStatus}
+     *                       constant defining the current location.
+     * */
+    // begin method setLocationStatus
+    public static void setLocationStatus( Context context,
+                                          @SunshineSyncAdapter.LocationStatus int locationStatus ) {
+
+        // 0. get the preferences
+        // 1. get the location status key
+        // 2. put the location status parameter into the preferences
+
+        // 0. get the preferences
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        // 1. get the location status key
+
+        String locationStatusKey = context.getString( R.string.pref_location_status_key );
+
+        // 2. put the location status parameter into the preferences
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt( locationStatusKey, locationStatus );
+
+        editor.apply();
+
+    } // end method setLocationStatus
+
+    /**
+     * Gets the location status stored in the preferences.
+     *
+     * @param context The {@link Context} we are working in.
+     *
+     * @return The {@link com.jlt.sunshine.sync.SunshineSyncAdapter.LocationStatus} that is in the
+     *         preferences.
+     * */
+    // begin method getLocationStatus
+    @SunshineSyncAdapter.LocationStatus
+    public static int getLocationStatus( Context context ) {
+
+        // 0. get the shared preferences
+        // 1. return the location status from the preferences
+
+        // 0. get the shared preferences
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        // 1. return the location status from the preferences
+
+        int locationStatus = sharedPreferences.getInt(
+                context.getString( R.string.pref_location_status_key ),
+                SunshineSyncAdapter.LOCATION_STATUS_SERVER_UNKNOWN
+        );
+
+        // begin switching the location status
+        switch ( locationStatus ) {
+
+            case SunshineSyncAdapter.LOCATION_STATUS_OK:
+                return SunshineSyncAdapter.LOCATION_STATUS_OK;
+
+            case SunshineSyncAdapter.LOCATION_STATUS_SERVER_DOWN:
+                return SunshineSyncAdapter.LOCATION_STATUS_SERVER_DOWN;
+
+            case SunshineSyncAdapter.LOCATION_STATUS_SERVER_INVALID:
+                return SunshineSyncAdapter.LOCATION_STATUS_SERVER_INVALID;
+
+            default:
+                return SunshineSyncAdapter.LOCATION_STATUS_SERVER_UNKNOWN;
+
+        } // end switching the location status
+
+    } // end method getLocationStatus
 
     /* INNER CLASSES */
 

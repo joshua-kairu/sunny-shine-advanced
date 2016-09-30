@@ -464,7 +464,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 3. connect to the url
         // 4. buffer read from the url
         // 5. store the read JSON in a string
-        // 6. return a string of the resultant forecasts
+        // 6. get a string of the resultant forecasts which will be inserted into the db
+        // 7. put the server OK status in the preferences
 
         // 0. null initialize
 
@@ -541,6 +542,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
             if ( stringBuffer.length() == 0 ) {
                 // Stream was empty.  No point in parsing.
+                Utility.setLocationStatus( getContext(), LOCATION_STATUS_SERVER_DOWN );
                 return;
             }
 
@@ -548,32 +550,61 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
             forecastJsonStr = stringBuffer.toString();
 
-            // 6. return a string of the resultant forecasts
+            // 6. get a string of the resultant forecasts which will be inserted into the db
 
             getWeatherDataFromJson( forecastJsonStr, locationQuery );
 
-        } catch ( IOException e ) {
-            Log.e( LOG_TAG, "Error ", e );
+            // 7. put the server OK status in the preferences
+
+            Utility.setLocationStatus( getContext(), LOCATION_STATUS_OK );
+
+        } // end method fetchWeather
+
+        // begin catch IO issues
+        catch ( IOException e ) {
+
+            // 0. log the error
+            // 1. put the server down status in preferences
+            // last. terminate
+
+            // 0. log the error
+
+            Log.e( LOG_TAG, "Error: ", e );
+
+            // 1. put the server down status in preferences
+
+            Utility.setLocationStatus( getContext(), LOCATION_STATUS_SERVER_DOWN );
+
+            // last. terminate
+
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
             return;
-        }
 
-        // catch JSON issues
+        } // end catch IO issues
+
+        // begin catch JSON issues
         catch ( JSONException e ) {
 
             // 0. log the error
-            // 1. terminate
+            // 1. put the server invalid status in preferences
+            // last. terminate
 
             // 0. log the error
 
             Log.e( LOG_TAG, "Error ", e );
 
-            // 1. terminate
+            // 1. put the server invalid status in preferences
+
+            Utility.setLocationStatus( getContext(), LOCATION_STATUS_SERVER_INVALID );
+
+            // last. terminate
 
             return;
 
-        } finally{
+        } // end catch JSON issues
+
+        finally{
             if ( urlConnection != null ) { urlConnection.disconnect(); }
 
             if ( bufferedReader != null ) {
@@ -856,11 +887,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
         } // end trying to work on the JSON
 
-        // catch JSON issues
+        // begin catch JSON issues
         catch ( JSONException e ) {
+
             Log.e( LOG_TAG, e.getMessage(), e );
             e.printStackTrace();
-        }
+            Log.e( LOG_TAG, "Location status = " + Utility.getLocationStatus( getContext() ), e );
+
+        } // end catch JSON issues
 
     } // end method getWeatherDataFromJson
 

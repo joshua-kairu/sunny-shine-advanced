@@ -210,6 +210,7 @@ of localizable data and its related information.
     <string name="pref_enable_notifications_default_value" translatable="false">true
     </string>
 
-
+    <!-- preference key for storing location status -->
+    <string name="pref_location_status_key">location_status_storage</string>
 
 </resources>
