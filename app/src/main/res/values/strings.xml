@@ -57,6 +57,14 @@ of localizable data and its related information.
         No weather information available. The network is not available to fetch data.
     </string>
 
+    <string name="message_error_no_weather_info_server_down">
+        No weather information available. The server is not returning data.
+    </string>
+
+    <string name="message_error_no_weather_info_server_error">
+        No weather information available. The server is not returning valid data. Please check for an updated version of Sunshine.
+    </string>
+
     <!-- Preference strings -->
 
     <!-- Key for storing location preference in SharedPreferences [CHAR LIMIT = NONE]-->

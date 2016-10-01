@@ -719,6 +719,7 @@ public class Utility {
      *         preferences.
      * */
     // begin method getLocationStatus
+    @SuppressWarnings( "ResourceType" ) // suppress any warnings due to the gotten IntDef being out of range
     @SunshineSyncAdapter.LocationStatus
     public static int getLocationStatus( Context context ) {
 

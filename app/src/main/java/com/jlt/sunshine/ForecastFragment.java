@@ -21,9 +21,11 @@
 package com.jlt.sunshine;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -48,9 +50,15 @@ import com.jlt.sunshine.data.contract.WeatherContract.LocationEntry;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
 import com.jlt.sunshine.sync.SunshineSyncAdapter;
 
-/** Fragment to show the weather forecast. */
+/**
+ * Fragment to show the weather forecast.
+ *
+ * It gets informed of changes in the preferences so that
+ * it can tell the user reasons for empty lists.
+ * */
 // begin fragment ForecastFragment
-public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks< Cursor > {
+public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks< Cursor >,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     /* CONSTANTS */
 
@@ -355,6 +363,42 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     } // end onActivityCreated
 
     @Override
+    // begin onResume
+    public void onResume() {
+
+        // 0. super stuff
+        // 1. register this class as a shared preference listener
+
+        // 0. super stuff
+
+        super.onResume();
+
+        // 1. register this class as a shared preference listener
+
+        PreferenceManager.getDefaultSharedPreferences( getActivity() )
+                .registerOnSharedPreferenceChangeListener( this );
+
+    } // end onResume
+
+    @Override
+    // begin onPause
+    public void onPause() {
+
+        // 0. super stuff
+        // 1. unregister this class as a shared preference listener
+
+        // 0. super stuff
+
+        super.onPause();
+
+        // 1. unregister this class as a shared preference listener
+
+        PreferenceManager.getDefaultSharedPreferences( getActivity() )
+                .unregisterOnSharedPreferenceChangeListener( this );
+
+    } // end onPause
+
+    @Override
     // begin onOptionsItemSelected
     public boolean onOptionsItemSelected( MenuItem item ) {
 
@@ -502,6 +546,31 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     } // end onSaveInstanceState
 
+    /**
+     * Called when a shared preference is changed, added, or removed. This
+     * may be called even if a preference is set to its existing value.
+     * This callback will be run on your main thread.
+     *
+     * @param sharedPreferences The {@link SharedPreferences} that received
+     *                          the change.
+     * @param key               The key of the preference that was changed, added, or
+     */
+    @Override
+    // begin onSharedPreferenceChanged
+    public void onSharedPreferenceChanged( SharedPreferences sharedPreferences, String key ) {
+
+        // 0. if the changed preference is the location status one
+        // 0a. update the empty view based on the location status
+
+        // 0. if the changed preference is the location status one
+        // 0a. update the empty view based on the location status
+
+        if ( key.equals( getString( R.string.pref_location_status_key ) ) == true ) {
+            updateEmptyView();
+        }
+
+    } // end onSharedPreferenceChanged
+
     /* Other Methods */
 
     // begin method updateWeather
@@ -588,9 +657,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 0. if our adapter's cursor has nothing in it
         // 0a. get the empty view
         // 0a1. if we get the empty view successfully
-        // 0a1a. tell the user the list can be empty either because there
-        // simply is no info available or because there
-        // is a network problem
+        // 0a1a. tell the user why the list is empty - it can be empty due to
+        // 0a1a0. there simply being no info available or
+        // 0a1a1. the server being down or
+        // 0a1a2. the server having returned an error or
+        // 0a1a3. there is a network problem
 
         // 0. if our adapter's cursor has nothing in it
 
@@ -609,15 +680,39 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             // begin if the empty view exists
             if ( emptyTextView != null ) {
 
-                // 0a1a. tell the user the list can be empty either because there
-                // simply is no info available or because there
-                // is a network problem
+                // 0a1a. tell the user why the list is empty - it can be empty due to
+
+                // 0a1a0. there simply being no info available or
 
                 int message = R.string.message_error_no_weather_info;
 
-                if ( Utility.isNetworkAvailable( getActivity() ) == false ) {
-                    message = R.string.message_error_no_weather_info_no_connectivity;
-                }
+                @SunshineSyncAdapter.LocationStatus int locationStatus = Utility.getLocationStatus(
+                        getActivity() );
+
+                // begin switch to know about the status
+                switch ( locationStatus ) {
+
+                    // 0a1a1. the server being down or
+
+                    case SunshineSyncAdapter.LOCATION_STATUS_SERVER_DOWN:
+                        message = R.string.message_error_no_weather_info_server_down;
+                        break;
+
+                    // 0a1a2. the server having returned an error or
+
+                    case SunshineSyncAdapter.LOCATION_STATUS_SERVER_INVALID:
+                        message = R.string.message_error_no_weather_info_server_error;
+                        break;
+
+                    default:
+
+                        // 0a1a3. there is a network problem
+
+                        if ( Utility.isNetworkAvailable( getActivity() ) == false ) {
+                            message = R.string.message_error_no_weather_info_no_connectivity;
+                        }
+
+                } // end switch to know about the status
 
                 emptyTextView.setText( message );
 

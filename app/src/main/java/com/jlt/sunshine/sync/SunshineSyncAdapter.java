@@ -465,7 +465,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 4. buffer read from the url
         // 5. store the read JSON in a string
         // 6. get a string of the resultant forecasts which will be inserted into the db
-        // 7. put the server OK status in the preferences
 
         // 0. null initialize
 
@@ -540,11 +539,22 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 stringBuffer.append( line + "\n" );
             }
 
+            // begin if the read string has nothing
             if ( stringBuffer.length() == 0 ) {
                 // Stream was empty.  No point in parsing.
+
+                // 0. put the server down status in preferences
+                // 1. terminate
+
+                // 0. put the server down status in preferences
+
                 Utility.setLocationStatus( getContext(), LOCATION_STATUS_SERVER_DOWN );
+
+                // 1. terminate
+
                 return;
-            }
+
+            } // end if the read string has nothing
 
             // 5. store the read JSON in a string
 
@@ -553,10 +563,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             // 6. get a string of the resultant forecasts which will be inserted into the db
 
             getWeatherDataFromJson( forecastJsonStr, locationQuery );
-
-            // 7. put the server OK status in the preferences
-
-            Utility.setLocationStatus( getContext(), LOCATION_STATUS_OK );
 
         } // end method fetchWeather
 
@@ -645,6 +651,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 6a. bulk insert to add the weather entries in the vector to the db
         // 6b. delete any day-old data
         // 6c. send a notification of the current weather
+        // 7. put the server OK status in the preferences
 
         // 0. initialize the names of the JSON objects we need to extract
 
@@ -881,6 +888,10 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
             } // end if the weather values vector has something
 
+            // 7. put the server OK status in the preferences
+
+            Utility.setLocationStatus( getContext(), LOCATION_STATUS_OK );
+
             Log.d( LOG_TAG,
                     "FetchWeatherTask completed successfully. " + numberOfInserts +
                             " added to the database." );
@@ -889,6 +900,15 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // begin catch JSON issues
         catch ( JSONException e ) {
+
+            // 0. put the invalid server status in preferences
+            // 1. log the problem
+
+            // 0. put the invalid server status in preferences
+
+            Utility.setLocationStatus( getContext(), LOCATION_STATUS_SERVER_INVALID );
+
+            // 1. log the problem
 
             Log.e( LOG_TAG, e.getMessage(), e );
             e.printStackTrace();
