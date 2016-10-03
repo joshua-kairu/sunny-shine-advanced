@@ -21,11 +21,18 @@
 
 package com.jlt.sunshine.view;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.jlt.sunshine.R;
 
@@ -34,7 +41,9 @@ import com.jlt.sunshine.R;
  * 3 character minimum length for preferred location.
  * */
 // begin class LocationEditTextPreference
-public class LocationEditTextPreference extends EditTextPreference {
+// TextWatcher - When an object of a type is attached to an Editable,
+// its methods will be called when the text is changed. Kind of like a text change listener
+public class LocationEditTextPreference extends EditTextPreference implements TextWatcher {
 
     /* CONSTANTS */
     
@@ -51,6 +60,11 @@ public class LocationEditTextPreference extends EditTextPreference {
     private static final String LOG_TAG = LocationEditTextPreference.class.getSimpleName();
         
     /* VARIABLES */
+
+    /* Edit Texts */
+
+    /** The {@link EditText} used by this preference for displaying the text. */
+    private EditText mEditText;
 
     /* Primitives */
 
@@ -97,7 +111,94 @@ public class LocationEditTextPreference extends EditTextPreference {
     /* Getters and Setters */
     
     /* Overrides */
-    
+
+    @Override
+    /** Shows the dialog associated with this Preference. */
+    // begin showDialog
+    protected void showDialog( Bundle state ) {
+
+        // 0. super stuff
+        // 1. get the preference edit text
+        // 2. disable the positive button if the text in it is less than the minimum
+        // 3. register a listener for changes in the preference edit text
+
+        // 0. super stuff
+
+        super.showDialog( state );
+
+        // 1. get the preference edit text
+
+        // getEditText - Returns the EditText widget that will be shown in the dialog.
+        // This works because at this time, we have called super so
+        // the edit text has already been created.
+        mEditText = getEditText();
+
+        int editTextLength = mEditText.getText().length();
+
+        // 2. disable the positive button if the text in it is less than the minimum
+
+        Dialog d = getDialog();
+
+        // begin if the dialog is an alert dialog
+        if ( d instanceof AlertDialog && editTextLength < mMinLength ) {
+
+            ( ( AlertDialog ) d ).getButton( AlertDialog.BUTTON_POSITIVE ).setEnabled( false );
+
+        } // end if the dialog is an alert dialog
+
+        // 3. register a listener for changes in the preference edit text
+
+        mEditText.addTextChangedListener( this );
+
+    } // end showDialog
+
+    @Override
+    public void beforeTextChanged( CharSequence s, int start, int count, int after ) { }
+
+    @Override
+    public void onTextChanged( CharSequence s, int start, int before, int count ) { }
+
+    @Override
+    // begin afterTextChanged
+    public void afterTextChanged( Editable s ) {
+
+        // -1. if the dialog is an alert dialog
+        // 0. get the length of the input text
+        // 1. if the length of the text is at least the minimum length
+        // 1a. enable the positive button
+        // 2. if the length of the text is less than the minimum length
+        // 2a. disable the positive button
+
+        // -1. if the dialog is an alert dialog
+
+        Dialog d = getDialog();
+
+        // begin if the dialog is an alert dialog
+        if ( d instanceof AlertDialog ) {
+
+            AlertDialog alertDialog = ( AlertDialog ) d;
+
+            Button positiveButton = alertDialog.getButton( AlertDialog.BUTTON_POSITIVE );
+
+            // 0. get the length of the input text
+
+            int textLength = mEditText.getText().length();
+
+            // 1. if the length of the text is at least the minimum length
+
+            // 1a. enable the positive button
+
+            if ( textLength >= mMinLength ) { positiveButton.setEnabled( true ); }
+
+            // 2. if the length of the text is less than the minimum length
+            // 2a. disable the positive button
+
+            else { positiveButton.setEnabled( false ); }
+
+        } // end if the dialog is an alert dialog
+
+    } // end afterTextChanged
+
     /* Other Methods */
     
     /* INNER CLASSES */
