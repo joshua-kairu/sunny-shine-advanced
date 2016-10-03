@@ -749,12 +749,42 @@ public class Utility {
             case SunshineSyncAdapter.LOCATION_STATUS_SERVER_INVALID:
                 return SunshineSyncAdapter.LOCATION_STATUS_SERVER_INVALID;
 
+            case SunshineSyncAdapter.LOCATION_STATUS_INVALID:
+                return SunshineSyncAdapter.LOCATION_STATUS_INVALID;
+
             default:
                 return SunshineSyncAdapter.LOCATION_STATUS_SERVER_UNKNOWN;
 
         } // end switching the location status
 
     } // end method getLocationStatus
+
+    /**
+     * Resets the location status in the preferences to an unknown status.
+     *
+     * @param context The {@link Context} we are working in.
+     * */
+    // begin method resetLocationStatus
+    public static void resetLocationStatus( Context context ) {
+
+        // 0. get the preferences
+        // 1. put the unknown location status in the preferences
+
+        // 0. get the preferences
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        // 1. put the unknown location status in the preferences
+
+        String locationStatusKey = context.getString( R.string.pref_location_status_key );
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt( locationStatusKey, SunshineSyncAdapter.LOCATION_STATUS_SERVER_UNKNOWN );
+
+        editor.apply();
+
+    } // end method resetLocationStatus
 
     /* INNER CLASSES */
 

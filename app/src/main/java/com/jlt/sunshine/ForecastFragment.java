@@ -661,7 +661,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 0a1a0. there simply being no info available or
         // 0a1a1. the server being down or
         // 0a1a2. the server having returned an error or
-        // 0a1a3. there is a network problem
+        // 0a1a3. the location is invalid or
+        // 0a1a4. there is a network problem
 
         // 0. if our adapter's cursor has nothing in it
 
@@ -688,7 +689,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
                 @SunshineSyncAdapter.LocationStatus int locationStatus = Utility.getLocationStatus(
                         getActivity() );
-
+                Log.e( LOG_TAG, "updateEmptyView: locationStatus = " + locationStatus );
                 // begin switch to know about the status
                 switch ( locationStatus ) {
 
@@ -704,9 +705,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                         message = R.string.message_error_no_weather_info_server_error;
                         break;
 
+                    // 0a1a3. the location is invalid or
+
+                    case SunshineSyncAdapter.LOCATION_STATUS_INVALID:
+                        message = R.string.message_error_no_weather_info_invalid_location;
+                        break;
+
                     default:
 
-                        // 0a1a3. there is a network problem
+                        // 0a1a4. there is a network problem
 
                         if ( Utility.isNetworkAvailable( getActivity() ) == false ) {
                             message = R.string.message_error_no_weather_info_no_connectivity;

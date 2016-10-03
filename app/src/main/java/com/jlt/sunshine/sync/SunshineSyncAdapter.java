@@ -131,6 +131,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     /** The server's status is unknown. */
     public static final int LOCATION_STATUS_SERVER_UNKNOWN = 3;
 
+    /** The location the user entered in the preferences is invalid. */
+    public static final int LOCATION_STATUS_INVALID = 4;
+
     /* Strings */
 
     /**
@@ -144,7 +147,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Retention( RetentionPolicy.SOURCE )
     @IntDef( { LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID,
-            LOCATION_STATUS_SERVER_UNKNOWN } )
+            LOCATION_STATUS_SERVER_UNKNOWN, LOCATION_STATUS_INVALID } )
     /** Enumeration of possible location statuses. */
     public @interface LocationStatus {}
 
@@ -179,11 +182,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 Context.NOTIFICATION_SERVICE );
 
     } // end constructor
-    
+
     /* METHODS */
-    
+
     /* Getters and Setters */
-    
+
     /* Overrides */
 
     @Override
@@ -200,7 +203,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         fetchWeather();
 
     } // end onPerformSync
-    
+
     /* Other Methods */
 
     /* statics */
@@ -637,21 +640,29 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 0a. location information
         // 0b. location coordinates
         // 0c. weather information
-        // 1. extract the data from the JSON objects for location
-        // 1a. location information
-        // 1b. location coordinates
-        // 2. insert the location information to the db and get the row ID
-        // 3. initialize the ContentValues vector where we will put the weather data
-        // 4. get the weather JSON array
-        // 5. for each weather JSON item in the weather JSON array
-        // 5a. get the relevant weather information
-        // 5b. put the information in a ContentValues
-        // 5c. put the ContentValues in the vector made in step 3
-        // 6. if the vector has something,
-        // 6a. bulk insert to add the weather entries in the vector to the db
-        // 6b. delete any day-old data
-        // 6c. send a notification of the current weather
-        // 7. put the server OK status in the preferences
+        // 0d. location status code
+        // 1. extract the location status code
+        // 2. if the location status code is OK
+        // 2a. get data from the JSON objects for location
+        // 2a1. location information
+        // 2a2. location coordinates
+        // 2a3. location status code
+        // 2b. insert the location information to the db and get the row ID
+        // 2c. initialize the ContentValues vector where we will put the weather data
+        // 2d. get the weather JSON array
+        // 2e. for each weather JSON item in the weather JSON array
+        // 2e1. get the relevant weather information
+        // 2e2. put the information in a ContentValues
+        // 2e3. put the ContentValues in the vector made in step 2c
+        // 2f. if the vector has something,
+        // 2f1. bulk insert to add the weather entries in the vector to the db
+        // 2f2. delete any day-old data
+        // 2f3. send a notification of the current weather
+        // 2g. put the server OK status in the preferences
+        // 3. otherwise if the location is not found
+        // 3a. put the invalid location status in the preferences
+        // 4. otherwise if there is any other error
+        // 4a. assume server failure and put the server down status in preferences
 
         // 0. initialize the names of the JSON objects we need to extract
 
@@ -758,48 +769,105 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         final String OWM_DESCRIPTION = "main";
         final String OWM_WEATHER_ID = "id";
 
-        // 1. extract the data from the JSON objects for location
+        // 0d. location status code
 
-        JSONObject forecastJsonObject = null;
+        // the error JSON looks like this:
+        // {
+        //      "cod":"404",
+        //      "message":
+        //      "Error: Not found city"
+        // }
+
+        final String OWM_MESSAGE_CODE = "cod";
+
+        JSONObject forecastJsonObject;
 
         // begin trying to work on the JSON
         try {
 
-            // 1a. location information
-
             forecastJsonObject = new JSONObject( forecastJSONString );
+
+            // 1. extract the location status code
+
+            int locationStatusCode = -1;
+
+            if ( forecastJsonObject.has( OWM_MESSAGE_CODE ) == true ) {
+                locationStatusCode = forecastJsonObject.getInt( OWM_MESSAGE_CODE );
+            }
+
+            // begin switch to know the location status
+            switch ( locationStatusCode ) {
+
+                // 2. if the location status code is OK
+                // 3. otherwise if the location is not found
+                // 3a. put the invalid location status in the preferences
+                // 4. otherwise if there is any other error
+                // 4a. assume server failure and put the server down status in preferences
+
+                // 2. if the location status code is OK -> proceed like nothing happened
+
+                case HttpURLConnection.HTTP_OK:
+                    break;
+
+                // 3. otherwise if the location is not found
+
+                case HttpURLConnection.HTTP_NOT_FOUND:
+
+                    // 3a. put the invalid location status in the preferences
+
+                    Utility.setLocationStatus( getContext(), LOCATION_STATUS_INVALID );
+
+                    return;
+
+                // 4. otherwise if there is any other error
+
+                default:
+
+                    // 4a. assume server failure and put the server down status in preferences
+
+                    Utility.setLocationStatus( getContext(), LOCATION_STATUS_SERVER_DOWN );
+
+                    return;
+
+            } // end switch to know the location status
+
+            // 2. if the location status code is OK
+
+            // 2a. get data from the JSON objects for location
+
+            // 2a1. location information
 
             JSONObject cityJsonObject = forecastJsonObject.getJSONObject( OWM_CITY );
 
             String cityName = cityJsonObject.getString( OWM_CITY_NAME );
 
-            // 1b. location coordinates
+            // 2a2. location coordinates
 
             JSONObject coordinatesJsonObject = cityJsonObject.getJSONObject( OWM_COORD );
 
             double cityLongitude = coordinatesJsonObject.getDouble( OWM_LONGITUDE );
             double cityLatitude = coordinatesJsonObject.getDouble( OWM_LATITUDE );
 
-            // 2. insert the location information to the db and get the row ID
+            // 2b. insert the location information to the db and get the row ID
 
             long locationRowId = addLocation( locationSetting, cityName, cityLatitude, cityLongitude );
 
-            // 3. initialize the ContentValues vector where we will put the weather data
+            // 2c. initialize the ContentValues vector where we will put the weather data
 
-            // 4. get the weather JSON array
+            // 2d. get the weather JSON array
 
             JSONArray weatherJsonArray = forecastJsonObject.getJSONArray( OWM_LIST );
 
             Vector< ContentValues > weatherValuesVector = new Vector<>( weatherJsonArray.length() );
 
-            // 5. for each weather JSON item in the weather JSON array
+            // 2e. for each weather JSON item in the weather JSON array
 
             // begin for through the weather items in the JSON array
             for ( int i = 0; i < weatherJsonArray.length(); i++ ) {
 
                 JSONObject currentWeatherJsonObject = weatherJsonArray.getJSONObject( i );
 
-                // 5a. get the relevant weather information
+                // 2e1. get the relevant weather information
 
 //                final String OWM_TEMPERATURE = "temp";
 //                final String OWM_MIN = "min";
@@ -863,38 +931,31 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
             // 6. if the vector has something,
 
-            // 6a. bulk insert to add the weather entries in the vector to the db
-
-            int numberOfInserts = 0;
-
             // begin if the weather values vector has something
             if ( weatherValuesVector.size() > 0 ) {
+
+                // 2f1. bulk insert to add the weather entries in the vector to the db
 
                 ContentValues weatherContentValues[] =
                         new ContentValues[ weatherValuesVector.size() ];
                 weatherValuesVector.toArray( weatherContentValues );
 
-                numberOfInserts = getContext().getContentResolver().bulkInsert(
-                        WeatherEntry.CONTENT_URI, weatherContentValues
-                );
+                getContext().getContentResolver().bulkInsert( WeatherEntry.CONTENT_URI,
+                        weatherContentValues );
 
-                // 6b. delete any day-old data
+                // 2f2. delete any day-old data
 
                 deleteOldData();
 
-                // 6c. send a notification of the current weather
+                // 2f3. send a notification of the current weather
 
                 notifyWeather();
 
             } // end if the weather values vector has something
 
-            // 7. put the server OK status in the preferences
+            // 2g. put the server OK status in the preferences
 
             Utility.setLocationStatus( getContext(), LOCATION_STATUS_OK );
-
-            Log.d( LOG_TAG,
-                    "FetchWeatherTask completed successfully. " + numberOfInserts +
-                            " added to the database." );
 
         } // end trying to work on the JSON
 

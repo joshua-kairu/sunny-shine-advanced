@@ -2,6 +2,7 @@ package com.jlt.sunshine;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -9,6 +10,10 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+
+import com.jlt.sunshine.data.Utility;
+import com.jlt.sunshine.data.contract.WeatherContract;
+import com.jlt.sunshine.sync.SunshineSyncAdapter;
 
 /*
  *  Sunshine
@@ -32,7 +37,8 @@ import android.support.annotation.Nullable;
 
 /** The settings manager. */
 // begin preference activity SettingsActivity
-public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
+public class SettingsActivity extends PreferenceActivity
+        implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     /* CONSTANTS */
 
@@ -70,7 +76,46 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     } // end onCreate
 
     @Override
+    // begin onResume
+    protected void onResume() {
+
+        // 0. register this as a listener for preference change
+        // last. super stuff
+
+        // 0. register this as a listener for preference change
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener( this );
+
+        // last. super stuff
+
+        super.onResume();
+
+    } // end onResume
+
+    @Override
+    // begin onPause
+    protected void onPause() {
+
+        // 0. unregister this as a listener for preference change
+        // last. super stuff
+
+        // 0. unregister this as a listener for preference change
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
+
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener( this );
+
+        // last. super stuff
+
+        super.onPause();
+
+    } // end onPause
+
+    @Override
     // begin onPreferenceChange
+    // this is called BEFORE the preference is CHANGEd.
     // newValue - the new value of the preference
     public boolean onPreferenceChange( Preference changedPreference, Object newValue ) {
 
@@ -112,6 +157,50 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         return true;
 
     } // end onPreferenceChange
+
+    @Override
+    // begin onSharedPreferenceChanged
+    // This is called AFTER the preference is CHANGEd
+    // Very important since we start our sync here
+    public void onSharedPreferenceChanged( SharedPreferences changedSharedPreferences,
+                                           String changedSharedPreferenceKey ) {
+
+        // 1. if the changed preference was the location status
+        // 1a. reset the location status preference
+        // 1b. resync
+        // 2. if the changed preference is the units one
+        // 2a. update the weather entry list with the new units
+
+        // begin if it was location status changed
+        if ( changedSharedPreferenceKey
+                .equals( getString( R.string.pref_location_status_key ) ) == true ) {
+
+            // 1a. reset the location status preference
+            // 1b. resync
+
+            // 1a. reset the location status preference
+
+            Utility.resetLocationStatus( this );
+
+            // 1b. resync
+
+            SunshineSyncAdapter.syncImmediately( this );
+
+        } // end else if it was location status changed
+
+        // 2. if the changed preference is the units one
+
+        // begin else if its the units that have changed
+        else if ( changedSharedPreferenceKey
+                .equals( getString( R.string.pref_temperature_unit_key ) ) == true ) {
+
+            // 2a. update the weather entry list with the new units
+
+            getContentResolver().notifyChange( WeatherContract.WeatherEntry.CONTENT_URI, null );
+
+        } // end else if its the units that have changed
+
+    } // end onSharedPreferenceChanged
 
     /**
      * Obtain an {@link Intent} that will launch an explicit target activity specified by

@@ -65,6 +65,10 @@ of localizable data and its related information.
         No weather information available. The server is not returning valid data. Please check for an updated version of Sunshine.
     </string>
 
+    <string name="message_error_no_weather_info_invalid_location">
+        No weather information available. The location in settings is not recognized by the weather server.
+    </string>
+
     <!-- Preference strings -->
 
     <!-- Key for storing location preference in SharedPreferences [CHAR LIMIT = NONE]-->
