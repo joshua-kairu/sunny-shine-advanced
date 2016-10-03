@@ -636,9 +636,12 @@ public class Utility {
         // 1. determine if we notifications are enabled or not
 
         return
-                Boolean.parseBoolean( sharedPreferences.getString(
+                sharedPreferences.getBoolean(
                         context.getString( R.string.pref_enable_notifications_key ),
-                        context.getString( R.string.pref_enable_notifications_default_value ) ) );
+                        Boolean.parseBoolean(
+                                context.getString( R.string.pref_enable_notifications_default_value )
+                        )
+                );
 
     } // end method isEnableNotifications
 

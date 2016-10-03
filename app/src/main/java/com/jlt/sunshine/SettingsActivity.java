@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -13,7 +14,12 @@ import android.support.annotation.Nullable;
 
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.data.contract.WeatherContract;
-import com.jlt.sunshine.sync.SunshineSyncAdapter;
+import com.jlt.sunshine.sync.SunshineSyncAdapter.LocationStatus;
+
+import static com.jlt.sunshine.sync.SunshineSyncAdapter.LOCATION_STATUS_INVALID;
+import static com.jlt.sunshine.sync.SunshineSyncAdapter.LOCATION_STATUS_OK;
+import static com.jlt.sunshine.sync.SunshineSyncAdapter.LOCATION_STATUS_SERVER_UNKNOWN;
+import static com.jlt.sunshine.sync.SunshineSyncAdapter.syncImmediately;
 
 /*
  *  Sunshine
@@ -122,8 +128,14 @@ public class SettingsActivity extends PreferenceActivity
         // 0. get the new preference value in string form
         // 1. if the changed preference was a list
         // 1a. check the correct value to display from the list's entries
-        // 2. for other prefs
-        // 2a. use the new pref value string for the summary
+        // 2. if the changed preference was the location
+        // 2a. get the edit text preference for the location
+        // 2b. put a summary based on location status
+        // 2b1. location invalid
+        // 2b2. location unknown
+        // 2b3. location OK
+        // 3. for other prefs
+        // 3a. use the new pref value string for the summary
         // last. terminate
 
         // 0. get the new preference value in string form
@@ -142,13 +154,30 @@ public class SettingsActivity extends PreferenceActivity
             // findIndexOfValue - find the index of passed value in the entry values array
             int preferenceIndex = listPreference.findIndexOfValue( preferenceString );
 
-            if ( preferenceIndex >= 0 ) { changedPreference.setSummary( listPreference.getEntries()[ preferenceIndex ] ); }
+            if ( preferenceIndex >= 0 ) {
+                changedPreference.setSummary( listPreference.getEntries()[ preferenceIndex ] );
+            }
 
         } // end if the changed preference was list
 
-        // 2. for other prefs
+        // 2. if the changed preference was the location
 
-        // 2a. use the new pref value string for the summary
+        // begin else if the changed preference is the location status
+        else if ( changedPreference instanceof EditTextPreference ) {
+
+            // 2a. get the edit text preference for the location
+
+            EditTextPreference locationPreference = ( EditTextPreference ) changedPreference;
+
+            // 2b. put a summary based on location status
+
+            locationPreference.setSummary( getLocationSummary( preferenceString ) );
+
+        } // end else if the changed preference is the location status
+
+        // 3. for other prefs
+
+        // 3a. use the new pref value string for the summary
 
         else { changedPreference.setSummary( preferenceString ); }
 
@@ -168,8 +197,10 @@ public class SettingsActivity extends PreferenceActivity
         // 1. if the changed preference was the location status
         // 1a. reset the location status preference
         // 1b. resync
-        // 2. if the changed preference is the units one
+        // 2. if the changed preference was the units one
         // 2a. update the weather entry list with the new units
+        // 3. if the changed preference was the location one
+        // 3a. update the summary to show that we are in the process of refreshing
 
         // begin if it was location status changed
         if ( changedSharedPreferenceKey
@@ -184,7 +215,7 @@ public class SettingsActivity extends PreferenceActivity
 
             // 1b. resync
 
-            SunshineSyncAdapter.syncImmediately( this );
+            syncImmediately( this );
 
         } // end else if it was location status changed
 
@@ -199,6 +230,23 @@ public class SettingsActivity extends PreferenceActivity
             getContentResolver().notifyChange( WeatherContract.WeatherEntry.CONTENT_URI, null );
 
         } // end else if its the units that have changed
+
+        // 3. if the changed preference was the location one
+
+        // begin else if its the location that changed
+        else if ( changedSharedPreferenceKey.equals( getString( R.string.pref_location_key ) ) ) {
+
+            // 3a. update the summary to show that we are in the process of refreshing
+
+            Preference locationPreference = findPreference( changedSharedPreferenceKey );
+
+            String preferredLocation = Utility.getPreferredLocation( this );
+
+            locationPreference.setSummary(
+                    getString( R.string.pref_location_summary_unknown, preferredLocation )
+            );
+
+        } // end else if its the location that changed
 
     } // end onSharedPreferenceChanged
 
@@ -262,5 +310,50 @@ public class SettingsActivity extends PreferenceActivity
         );
 
     } // end method bindPreferenceSummaryToValue
+
+
+    /**
+     * Returns the location summary based on the location status.
+     *
+     * @param preferenceString The string representing
+     *                         what is currently input as location preference.
+     *
+     * @return Returns a summary based on the location status.
+     * */
+    // begin method getLocationSummary
+    private String getLocationSummary( String preferenceString ) {
+
+        // 0. summary based on location status
+        // 0a. location invalid
+        // 0b. location unknown
+        // 0c. location OK
+        // 1. return the summary
+
+        // 0. summary based on location status
+
+        @LocationStatus int locationStatus = Utility.getLocationStatus( this );
+
+        // begin switching the location status
+        switch ( locationStatus ) {
+
+            // 0a. location invalid
+
+            case LOCATION_STATUS_INVALID:
+                return getString( R.string.pref_location_summary_invalid, preferenceString );
+
+            // 0b. location unknown
+
+            case LOCATION_STATUS_SERVER_UNKNOWN:
+                return getString( R.string.pref_location_summary_unknown, preferenceString );
+
+            // 0c. location OK
+
+            case LOCATION_STATUS_OK:
+            default:
+                return preferenceString;
+
+        } // end switching the location status
+
+    } // end method updateLocationSummary
 
 } // end preference activity SettingsActivity
