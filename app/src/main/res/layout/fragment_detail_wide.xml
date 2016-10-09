@@ -270,7 +270,7 @@
 
                 android:layout_height="wrap_content"
 
-                android:contentDescription="@string/description_detail_weather_icon"
+                android:contentDescription="@string/a11y_detail_weather_art_format"
 
                 android:id="@+id/detail_iv_weather_icon"
 

@@ -114,7 +114,7 @@ public class WindDirectionAndSpeedView extends View {
 
     private String mSpeedText; // ditto
 
-    private String mWindDirectionAndSpeedText; // ditto, for accessibility
+    private String mWindDirectionAndSpeedTextForAccessibility; // ditto, for accessibility
 
     /* Text Paints */
 
@@ -1200,6 +1200,10 @@ public class WindDirectionAndSpeedView extends View {
         // 1. initialize member variables from the XML
         // 2. initialize the animation duration we will use to be the smallest possible
         // since we are just starting
+        // 3. make the view focusable for accessibility by making it
+        // 3a. focusable
+        // 3b. focusable in touch mode
+        // 3c. clickable
 
         // 0. initialize things
 
@@ -1299,6 +1303,24 @@ public class WindDirectionAndSpeedView extends View {
 
         setAnimationDurationToUse( -1, -1, -1 );
 
+        // 3. make the view focusable for accessibility by making it
+
+        // 3a. focusable
+
+        // Set whether this view can receive the focus.
+        setFocusable( true );
+
+        // 3b. focusable in touch mode
+
+        // Set whether this view can receive focus while in touch mode.
+        setFocusableInTouchMode( true );
+
+        // 3c. clickable
+
+        // Enables or disables click events for this view.
+        // Visually reacts to user's clicks.
+        setClickable( true );
+
     } // end method initView
 
     /** Installs the accessibility delegate into this view. */
@@ -1363,14 +1385,14 @@ public class WindDirectionAndSpeedView extends View {
 
     } // begin method installAccessibilityDelegate
 
-    // getter for the wind direction and speed text
+    // getter for the wind direction and speed text for accessibility
     public String getWindDirectionAndSpeedText() {
-        return mWindDirectionAndSpeedText;
+        return mWindDirectionAndSpeedTextForAccessibility;
     }
 
-    // setter for the wind direction and speed text
-    public void setWindDirectionAndSpeedText( String windDirectionAndSpeedText ) {
-        this.mWindDirectionAndSpeedText = windDirectionAndSpeedText;
+    // setter for the wind direction and speed text for accessibility
+    public void setWindDirectionAndSpeedTextForAccessibility( String windDirectionAndSpeedTextForAccessibility ) {
+        this.mWindDirectionAndSpeedTextForAccessibility = windDirectionAndSpeedTextForAccessibility;
     }
 
     /* INNER CLASSES */

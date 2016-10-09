@@ -1,3 +1,23 @@
+/**
+ *  Sunshine
+ *
+ * A simple weather app
+ *
+ * Copyright (C) 2016 Kairu Joshua Wambugu
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p/>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p/>
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see http://www.gnu.org/licenses/.
+ */
+
 package com.jlt.sunshine;
 
 import android.content.Intent;
@@ -25,29 +45,8 @@ import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
 import com.jlt.sunshine.view.WindDirectionAndSpeedView;
 
 /**
- *  Sunshine
- *
- * A simple weather app
- *
- * Copyright (C) 2016 Kairu Joshua Wambugu
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p/>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p/>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see http://www.gnu.org/licenses/.
- */
-
-/*
-* This Fragment shows the details of a selected day in the week of weather
-*
-* */
+ * This Fragment shows the details of a selected day in the week of weather
+ * */
 // begin fragment DetailFragment
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks< Cursor > {
 
@@ -128,7 +127,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private Uri mDataUri; // uri that we will use to fetch the data we will need for this fragment
 
-    /*  */
+    /* Wind Direction And Speed Views */
 
     private WindDirectionAndSpeedView mDirectionAndSpeedView; // ditto
 
@@ -322,30 +321,46 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     Utility.getFormattedMonthDay( cursor.getLong( COLUMN_WEATHER_DATE ) )
             );
 
-            mHighTempTextView.setText(
-                    Utility.formatTemperature( getActivity(),
-                            cursor.getFloat( COLUMN_WEATHER_MAX_TEMP ),
-                            Utility.isMetric( getActivity() ) )
+            String highString = Utility.formatTemperature( getActivity(),
+                    cursor.getFloat( COLUMN_WEATHER_MAX_TEMP ),
+                    Utility.isMetric( getActivity() ) );
+
+            mHighTempTextView.setText( highString );
+
+            mHighTempTextView.setContentDescription(
+                    getString( R.string.a11y_high_temperature_format, highString )
             );
 
-            mLowTempTextView.setText(
-                    Utility.formatTemperature( getActivity(),
-                            cursor.getFloat( COLUMN_WEATHER_MIN_TEMP ),
-                            Utility.isMetric( getActivity() ) )
+            String lowString = Utility.formatTemperature( getActivity(),
+                    cursor.getFloat( COLUMN_WEATHER_MIN_TEMP ),
+                    Utility.isMetric( getActivity() ) );
+
+            mLowTempTextView.setText( lowString );
+
+            mLowTempTextView.setContentDescription(
+                    getString( R.string.a11y_low_temperature_format, lowString )
             );
+
+            int weatherIconId = cursor.getInt( COLUMN_WEATHER_WEATHER_ID );
 
             mWeatherIconImageView.setImageResource(
-                    Utility.getArtResourceForWeatherCondition(
-                            cursor.getInt( COLUMN_WEATHER_WEATHER_ID )
-                    )
+                    Utility.getArtResourceForWeatherCondition( weatherIconId )
             );
+
+            // since the weather icon here is independently focusable, give it a content description
+            String descriptionString = Utility.getStringForWeatherCondition( getActivity(),
+                    weatherIconId );
 
             // content description for accessibility
             mWeatherIconImageView.setContentDescription(
-                    cursor.getString( COLUMN_WEATHER_SHORT_DESCRIPTION )
+                    getString( R.string.a11y_detail_weather_art_format, descriptionString )
             );
 
-            mDescriptionTextView.setText( cursor.getString( COLUMN_WEATHER_SHORT_DESCRIPTION ) );
+            mDescriptionTextView.setText( descriptionString );
+
+            mDescriptionTextView.setContentDescription(
+                    getString( R.string.a11y_detail_weather_description_format, descriptionString )
+            );
 
             mHumidityTextView.setText(
                     getActivity().getString( R.string.format_humidity,
@@ -379,7 +394,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 mDirectionAndSpeedView.setVisibility( View.VISIBLE );
             }
 
-            mDirectionAndSpeedView.setWindDirectionAndSpeedText(
+            mDirectionAndSpeedView.setWindDirectionAndSpeedTextForAccessibility(
                     Utility.getFormattedWindDirectionAndSpeed( getActivity(),
                             cursor.getFloat( COLUMN_WEATHER_WIND_DIRECTION_DEGREES ),
                             cursor.getFloat( COLUMN_WEATHER_WIND_SPEED )

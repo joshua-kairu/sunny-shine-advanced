@@ -157,7 +157,7 @@
 
             android:id="@+id/list_item_icon"
 
-            android:contentDescription="@string/description_today_weather_icon"
+            android:contentDescription="@null"
 
             />
 

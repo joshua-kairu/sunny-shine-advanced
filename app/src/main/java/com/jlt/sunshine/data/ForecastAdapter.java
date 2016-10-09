@@ -168,7 +168,9 @@ public class ForecastAdapter extends CursorAdapter {
         // 3. read forecast from cursor and display it using view holder data
         // 3a. also make the forecast the content description for the image shown in 1a
         // 4. read high temperature from cursor and display it in appropriate units using view holder data
+        // 4a. provide content description for the high temperature
         // 5. read low temperature from cursor and display it in appropriate units using view holder data
+        // 5a. provide content description for the low temperature
 
         // 0. get the view holder from the tag
 
@@ -208,13 +210,13 @@ public class ForecastAdapter extends CursorAdapter {
 
         long date = cursor.getLong( COLUMN_WEATHER_DATE );
 
-        String dateString = Utility.getFriendlyDateString( mContext, date );
+        String dateString = Utility.getFriendlyDateString( context, date );
 
         weatherViewHolder.dateTextView.setText( dateString );
 
         // 3. read forecast from cursor and display it using view holder data
 
-        String forecastString = cursor.getString( COLUMN_WEATHER_SHORT_DESCRIPTION );
+        String forecastString = Utility.getStringForWeatherCondition( context, weatherIconId );
 
         weatherViewHolder.descriptionTextView.setText( forecastString );
 
@@ -226,9 +228,15 @@ public class ForecastAdapter extends CursorAdapter {
 
         float high = cursor.getFloat( COLUMN_WEATHER_MAX_TEMP );
 
-        String highString = Utility.formatTemperature( mContext, high, Utility.isMetric( mContext ) );
+        String highString = Utility.formatTemperature( context, high, Utility.isMetric( mContext ) );
 
         weatherViewHolder.highTempTextView.setText( highString );
+
+        // 4a. provide content description for the high temperature
+
+        weatherViewHolder.highTempTextView.setContentDescription(
+                context.getString( R.string.a11y_high_temperature_format, highString )
+        );
 
         // 5. read low temperature from cursor and display it in appropriate units using view holder data
 
@@ -237,6 +245,12 @@ public class ForecastAdapter extends CursorAdapter {
         String lowString = Utility.formatTemperature( mContext, low, Utility.isMetric( mContext ) );
 
         weatherViewHolder.lowTempTextView.setText( lowString );
+
+        // 5a. provide content description for the high temperature
+
+        weatherViewHolder.lowTempTextView.setContentDescription(
+                context.getString( R.string.a11y_low_temperature_format, lowString )
+        );
 
     } // end bindView
 

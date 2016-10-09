@@ -67,7 +67,7 @@
 
             android:id="@+id/list_item_icon"
 
-            android:contentDescription="@string/description_future_weather_icon"
+            android:contentDescription="@null"
 
             android:layout_gravity="center_horizontal"
 
@@ -121,8 +121,6 @@
 
             android:textAppearance="?android:textAppearanceSmall"
 
-            android:textSize="@dimen/list_item_forecast_text_size"
-
             />
 
     </LinearLayout>
@@ -174,8 +172,6 @@
             android:fontFamily="sans-serif-condensed"
 
             android:textAppearance="?android:textAppearanceSmall"
-
-            android:textSize="@dimen/list_item_low_temperature_text_size"
 
             />
 
