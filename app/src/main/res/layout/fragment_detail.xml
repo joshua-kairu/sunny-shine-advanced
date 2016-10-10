@@ -105,6 +105,10 @@
 
             android:paddingRight="@dimen/layout_padding"
 
+            android:paddingStart="@dimen/layout_padding"
+
+            android:paddingEnd="@dimen/layout_padding"
+
             android:gravity="center_horizontal"
 
             >
@@ -241,7 +245,7 @@
 
             <TextView
 
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
 
@@ -253,13 +257,15 @@
 
                 android:textAppearance="?android:textAppearanceLarge"
 
+                android:gravity="start"
+
                 />
 
             <!-- TextView to hold pressure -->
 
             <TextView
 
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
 
@@ -273,13 +279,15 @@
 
                 android:layout_marginBottom="@dimen/text_baseline"
 
+                android:layout_gravity="start"
+
                 />
 
             <!-- TextView to hold wind -->
 
             <TextView
 
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
 
@@ -290,6 +298,8 @@
                 android:fontFamily="sans-serif-light"
 
                 android:textAppearance="?android:textAppearanceLarge"
+
+                android:gravity="start"
 
                 />
 
