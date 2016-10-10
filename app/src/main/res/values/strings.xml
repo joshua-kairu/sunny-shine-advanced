@@ -77,8 +77,8 @@ of localizable data and its related information.
     <!-- Label, or title, for the location preference [CHAR LIMIT = 30] -->
     <string name="pref_location_label">Location</string>
 
-    <!-- The default location ID - the City ID for Mountain View, CA [CHAR LIMIT = NONE] -->
-    <string name="pref_location_default" translatable="false">94043</string>
+    <!-- The default location ID - Nairobi [CHAR LIMIT = NONE] -->
+    <string name="pref_location_default" translatable="false">Nairobi</string>
 
     <!-- Key for storing temperature unit preference in SharedPreferences [CHAR LIMIT = NONE]-->
     <string name="pref_temperature_unit_key" translatable="false">temperature unit</string>
