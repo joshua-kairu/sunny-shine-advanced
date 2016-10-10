@@ -34,6 +34,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -47,6 +48,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
 import com.jlt.sunshine.BuildConfig;
 import com.jlt.sunshine.MainActivity;
 import com.jlt.sunshine.R;
@@ -67,6 +69,7 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -1138,10 +1141,56 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     // 0d2. a large art to show the weather in the actual notification
 
-                    Bitmap todayArt = BitmapFactory.decodeResource(
-                            context.getResources(),
-                            Utility.getArtResourceForWeatherCondition( todayWeatherConditionId )
-                    );
+                    Uri artUri = Utility.getArtUriForWeatherCondition( context,
+                            todayWeatherConditionId );
+
+                    Resources resources = context.getResources();
+
+                    int defaultArtResourceId =
+                            Utility.getArtResourceForWeatherCondition( todayWeatherConditionId );
+
+                    int largeIconWidth = Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB
+                            ? resources.getDimensionPixelSize( android.R.dimen.notification_large_icon_width )
+                            : resources.getDimensionPixelSize( R.dimen.notification_large_icon_default );
+
+                    int largeIconHeight = Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB
+                            ? resources.getDimensionPixelSize( android.R.dimen.notification_large_icon_height )
+                            : resources.getDimensionPixelSize( R.dimen.notification_large_icon_default );
+
+                    // use Glide for this
+                    Bitmap todayIconLarge = null;
+
+                    // begin trying to glide the bitmap
+                    try {
+
+                        todayIconLarge = Glide.with( context )
+                                .load( artUri )
+                                .asBitmap()
+                                .error( defaultArtResourceId )
+                                .into( largeIconWidth, largeIconHeight )
+                                .get();
+
+                    } // end trying to glide the bitmap
+
+                    // begin catch interrupts and execution issues
+                    catch ( InterruptedException | ExecutionException e ) {
+
+                        // 0. log
+                        // 1. fall back to resourcesstyr
+
+                        // 0. log
+
+                        Log.e( LOG_TAG,
+                                "notifyWeather: Error getting the large notification icon.", e );
+
+                        // 1. fall back to resources
+
+                        todayIconLarge = BitmapFactory.decodeResource(
+                                context.getResources(),
+                                Utility.getArtResourceForWeatherCondition( todayWeatherConditionId )
+                        );
+
+                    } // end catch interrupts and execution issues
 
                     // 0e. put the title to be the app name
 
@@ -1153,7 +1202,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     NotificationCompat.Builder builder = new NotificationCompat.Builder( context )
                             .setSmallIcon( todayIconId )
-                            .setLargeIcon( todayArt )
+                            .setLargeIcon( todayIconLarge )
                             .setContentTitle( notificationTitle )
                             .setContentText( notificationText );
 

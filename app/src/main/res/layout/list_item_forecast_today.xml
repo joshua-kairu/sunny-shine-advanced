@@ -159,6 +159,8 @@
 
             android:contentDescription="@null"
 
+            android:adjustViewBounds="true"
+
             />
 
         <!-- TextView for the forecast -->

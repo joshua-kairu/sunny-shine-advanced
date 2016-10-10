@@ -40,6 +40,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
 import com.jlt.sunshine.view.WindDirectionAndSpeedView;
@@ -343,9 +344,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
             int weatherIconId = cursor.getInt( COLUMN_WEATHER_WEATHER_ID );
 
-            mWeatherIconImageView.setImageResource(
-                    Utility.getArtResourceForWeatherCondition( weatherIconId )
-            );
+            // use Glide to load images from net
+            Glide.with( this )
+                    .load( Utility.getArtUriForWeatherCondition( getActivity(), weatherIconId ) )
+                    .error( Utility.getArtResourceForWeatherCondition( weatherIconId ) )
+                    .crossFade()
+                    .into( mWeatherIconImageView );
 
             // since the weather icon here is independently focusable, give it a content description
             String descriptionString = Utility.getStringForWeatherCondition( getActivity(),

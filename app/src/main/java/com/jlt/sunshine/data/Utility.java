@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -810,6 +811,50 @@ public class Utility {
         return context.getString( windFormat, direction, windSpeed );
 
     } // end method getFormattedWindDirectionAndSpeed
+
+    /**
+     * Helper method to get the art uri for a given weather condition based on the
+     * OpenWeatherMap response.
+     *
+     * @param context The {@link Context} we're working in
+     * @param weatherConditionId The weatherId attribute from the OpenWeatherMap API response
+     *
+     * @return A {@link android.net.Uri} pointing to the location of art for the given weather.
+     * */
+    // begin method getArtUriForWeatherCondition
+    public static Uri getArtUriForWeatherCondition( Context context, int weatherConditionId ) {
+
+        // 0. return a Uri based on the weather condition, or null if the weather condition doesn't match
+
+        // 0. return a Uri based on the weather condition, or null if the weather condition doesn't match
+
+        if ( weatherConditionId >= 200 && weatherConditionId <= 232 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "storm" ) );
+        } else if ( weatherConditionId >= 300 && weatherConditionId <= 321 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "light_rain" ) );
+        } else if (weatherConditionId >= 500 && weatherConditionId <= 504 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "rain" ) );
+        } else if ( weatherConditionId == 511 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "snow" ) );
+        } else if ( weatherConditionId >= 520 && weatherConditionId <= 531 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "rain" ) );
+        } else if ( weatherConditionId >= 600 && weatherConditionId <= 622 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "snow" ) );
+        } else if ( weatherConditionId >= 701 && weatherConditionId <= 761 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "fog" ) );
+        } else if ( weatherConditionId == 761 || weatherConditionId == 781 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "storm" ) );
+        } else if ( weatherConditionId == 800 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "clear" ) );
+        } else if ( weatherConditionId == 801 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "light_clouds" ) );
+        } else if ( weatherConditionId >= 802 && weatherConditionId <= 804 ) {
+            return Uri.parse( context.getString( R.string.format_art_url, "clouds" ) );
+        }
+
+        return null;
+
+    } // end method getArtUriForWeatherCondition
 
     /**
      * Tells if the user wants to see notifications.

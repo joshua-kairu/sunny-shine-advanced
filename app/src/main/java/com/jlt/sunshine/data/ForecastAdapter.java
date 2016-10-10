@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.jlt.sunshine.R;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
 import com.jlt.sunshine.ui.WeatherViewHolder;
@@ -163,7 +164,7 @@ public class ForecastAdapter extends CursorAdapter {
 
         // 0. get the view holder from the tag
         // 1. read weather icon ID from cursor and display appropriate icon using view holder data
-        // 1a. show art for today's weather and an icon for future weather
+        // 1a. show art for both today's and the future's weather
         // 2. read date from cursor and display it appropriately using view holder data
         // 3. read forecast from cursor and display it using view holder data
         // 3a. also make the forecast the content description for the image shown in 1a
@@ -179,32 +180,14 @@ public class ForecastAdapter extends CursorAdapter {
 
         // 1. read weather icon ID from cursor and display appropriate icon using view holder data
 
-        // 1a. show art for today's weather and an icon for future weather
+        // 1a. show art for both today's and the future's weather
 
         int weatherIconId = cursor.getInt( COLUMN_WEATHER_CONDITION_ID );
 
-        // begin switch to know which view type we are to use
-        switch ( getItemViewType( cursor.getPosition() ) ) {
-
-            case VIEW_TYPE_TODAY:
-
-                weatherViewHolder.iconImageView
-                        .setImageResource(
-                                Utility.getArtResourceForWeatherCondition( weatherIconId )
-                        );
-
-                break;
-
-            case VIEW_TYPE_FUTURE_DAY:
-
-                weatherViewHolder.iconImageView
-                        .setImageResource(
-                                Utility.getIconResourceForWeatherCondition( weatherIconId )
-                                );
-
-                break;
-
-        } // end switch to know which view type we are to use
+        Glide.with( context )
+                .load( Utility.getArtUriForWeatherCondition( context, weatherIconId ) )
+                .error( Utility.getArtResourceForWeatherCondition( weatherIconId ) )
+                .into( weatherViewHolder.iconImageView );
 
         // 2. read date from cursor and display it appropriately using view holder data
 

@@ -193,6 +193,11 @@
                 transparent background added because
                 there was a default grey background that didn't look good.
                 -->
+
+                <!--
+                 adjustViewBounds - Lets the ImageView adjust its bounds to preserve
+                 the aspect ratio of its drawable. Good for when we are loading images from net
+                -->
                 <ImageView
 
                     android:layout_width="wrap_content"
@@ -204,6 +209,8 @@
                     android:id="@+id/detail_iv_weather_icon"
 
                     android:background="@android:color/transparent"
+
+                    android:adjustViewBounds="true"
 
                     />
 

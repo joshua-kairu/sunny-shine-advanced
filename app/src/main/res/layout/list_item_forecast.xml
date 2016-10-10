@@ -71,6 +71,8 @@
 
             android:layout_gravity="center_horizontal"
 
+            android:adjustViewBounds="true"
+
             />
 
     </FrameLayout>

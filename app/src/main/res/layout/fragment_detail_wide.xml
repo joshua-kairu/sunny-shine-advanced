@@ -260,11 +260,7 @@
 
             <!-- ImageButton to show the forecast icon -->
 
-            <!--
-            transparent background added because
-            there was a default grey background that didn't look good.
-            -->
-            <ImageButton
+            <ImageView
 
                 android:layout_width="wrap_content"
 
@@ -275,6 +271,8 @@
                 android:id="@+id/detail_iv_weather_icon"
 
                 android:background="@android:color/transparent"
+
+                android:adjustViewBounds="true"
 
                 />
 

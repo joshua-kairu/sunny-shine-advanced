@@ -313,4 +313,8 @@ of localizable data and its related information.
     <string name="condition_962">Hurricane</string>
 
     <string name="condition_unknown">Unknown (<xliff:g id="weather_condition">%1$d</xliff:g>)</string>
+
+    <!-- Format for retrieving art from an external source [CHAR LIMIT=NONE] -->
+    <string name="format_art_url" translatable="false">https://raw.githubusercontent.com/udacity/Sunshine-Version-2/sunshine_master/app/src/main/res/drawable-xxhdpi/art_<xliff:g id="description">%s</xliff:g>.png</string>
+
 </resources>
