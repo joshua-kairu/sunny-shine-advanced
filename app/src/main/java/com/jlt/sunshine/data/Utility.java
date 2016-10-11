@@ -813,6 +813,31 @@ public class Utility {
     } // end method getFormattedWindDirectionAndSpeed
 
     /**
+     * Helper method to get the preferred icon pack.
+     *
+     * @param context The {@link Context} we're working in
+     *
+     * @return A string containing the value of the preferred icon pack
+     * (which should be a URL pointing to the location of the preferred icon pack -
+     * look at strings.xml for more details)
+     * */
+    // begin getPreferredIconPack
+    private static String getPreferredIconPack( Context context ) {
+
+        // 0. return a string having the link to the preferred icon pack
+
+        // 0. return a string having the link to the preferred icon pack
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        return sharedPreferences.getString(
+                context.getString( R.string.pref_icon_pack_key ),
+                context.getString( R.string.pref_icon_pack_colored_value )
+        );
+
+    } // end getPreferredIconPack
+
+    /**
      * Helper method to get the art uri for a given weather condition based on the
      * OpenWeatherMap response.
      *
@@ -824,32 +849,39 @@ public class Utility {
     // begin method getArtUriForWeatherCondition
     public static Uri getArtUriForWeatherCondition( Context context, int weatherConditionId ) {
 
-        // 0. return a Uri based on the weather condition, or null if the weather condition doesn't match
+        // 0. get the preferred icon pack
+        // 1. return a Uri based on the weather condition and the preferred icon pack,
+        // or null if the weather condition doesn't match
 
-        // 0. return a Uri based on the weather condition, or null if the weather condition doesn't match
+        // 0. get the preferred icon pack
+
+        String preferredIconPackString = getPreferredIconPack( context );
+
+        // 1. return a Uri based on the weather condition and the preferred icon pack,
+        // or null if the weather condition doesn't match
 
         if ( weatherConditionId >= 200 && weatherConditionId <= 232 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "storm" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "storm" ) );
         } else if ( weatherConditionId >= 300 && weatherConditionId <= 321 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "light_rain" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "light_rain" ) );
         } else if (weatherConditionId >= 500 && weatherConditionId <= 504 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "rain" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "rain" ) );
         } else if ( weatherConditionId == 511 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "snow" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "snow" ) );
         } else if ( weatherConditionId >= 520 && weatherConditionId <= 531 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "rain" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "rain" ) );
         } else if ( weatherConditionId >= 600 && weatherConditionId <= 622 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "snow" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "snow" ) );
         } else if ( weatherConditionId >= 701 && weatherConditionId <= 761 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "fog" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "fog" ) );
         } else if ( weatherConditionId == 761 || weatherConditionId == 781 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "storm" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "storm" ) );
         } else if ( weatherConditionId == 800 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "clear" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "clear" ) );
         } else if ( weatherConditionId == 801 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "light_clouds" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "light_clouds" ) );
         } else if ( weatherConditionId >= 802 && weatherConditionId <= 804 ) {
-            return Uri.parse( context.getString( R.string.format_art_url, "clouds" ) );
+            return Uri.parse( String.format( Locale.getDefault(), preferredIconPackString, "clouds" ) );
         }
 
         return null;

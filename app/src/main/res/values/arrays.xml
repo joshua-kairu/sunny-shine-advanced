@@ -45,4 +45,20 @@
         <item>@string/pref_temperature_unit_imperial_value</item>
     </string-array>
 
+    <!-- Icon packs -->
+
+    <!-- entries, aka labels -->
+
+    <string-array name="icon_packs_entries">
+        <item>@string/pref_icon_pack_colored_label</item>
+        <item>@string/pref_icon_pack_mono_label</item>
+    </string-array>
+
+    <!-- values -->
+
+    <string-array name="icon_packs_entry_values">
+        <item>@string/pref_icon_pack_colored_value</item>
+        <item>@string/pref_icon_pack_mono_value</item>
+    </string-array>
+
 </resources>

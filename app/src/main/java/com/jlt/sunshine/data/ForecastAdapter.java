@@ -22,7 +22,9 @@ package com.jlt.sunshine.data;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +39,7 @@ import static com.jlt.sunshine.ForecastFragment.COLUMN_WEATHER_DATE;
 import static com.jlt.sunshine.ForecastFragment.COLUMN_WEATHER_MAX_TEMP;
 import static com.jlt.sunshine.ForecastFragment.COLUMN_WEATHER_MIN_TEMP;
 import static com.jlt.sunshine.ForecastFragment.COLUMN_WEATHER_SHORT_DESCRIPTION;
+import static com.jlt.sunshine.ForecastFragment.LOG_TAG;
 import static com.jlt.sunshine.data.contract.WeatherContract.LocationEntry;
 
 /**
@@ -183,7 +186,9 @@ public class ForecastAdapter extends CursorAdapter {
         // 1a. show art for both today's and the future's weather
 
         int weatherIconId = cursor.getInt( COLUMN_WEATHER_CONDITION_ID );
+Uri uri = Utility.getArtUriForWeatherCondition( context, weatherIconId );
 
+        Log.e( LOG_TAG, "bindView: uri " + uri.toString() );
         Glide.with( context )
                 .load( Utility.getArtUriForWeatherCondition( context, weatherIconId ) )
                 .error( Utility.getArtResourceForWeatherCondition( weatherIconId ) )

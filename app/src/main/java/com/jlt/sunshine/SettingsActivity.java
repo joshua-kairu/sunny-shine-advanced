@@ -78,6 +78,7 @@ public class SettingsActivity extends PreferenceActivity
 
         bindPreferenceSummaryToValue( findPreference( getString( R.string.pref_location_key ) ) );
         bindPreferenceSummaryToValue( findPreference( getString( R.string.pref_temperature_unit_key ) ) );
+        bindPreferenceSummaryToValue( findPreference( getString( R.string.pref_icon_pack_key ) ) );
 
     } // end onCreate
 
@@ -201,6 +202,8 @@ public class SettingsActivity extends PreferenceActivity
         // 2a. update the weather entry list with the new units
         // 3. if the changed preference was the location one
         // 3a. update the summary to show that we are in the process of refreshing
+        // 4. if the changed preference was the icon pack one
+        // 4a. update lists of weather entries accordingly
 
         // begin if it was location status changed
         if ( changedSharedPreferenceKey
@@ -247,6 +250,17 @@ public class SettingsActivity extends PreferenceActivity
             );
 
         } // end else if its the location that changed
+
+        // 4. if the changed preference was the icon pack one
+
+        // begin else if it's icon pack that's changed
+        else if ( changedSharedPreferenceKey.equals( getString( R.string.pref_icon_pack_key ) ) ) {
+
+            // 4a. update lists of weather entries accordingly
+
+            getContentResolver().notifyChange( WeatherContract.WeatherEntry.CONTENT_URI, null );
+
+        } // end else if it's icon pack that's changed
 
     } // end onSharedPreferenceChanged
 

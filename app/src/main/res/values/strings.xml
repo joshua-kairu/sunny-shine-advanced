@@ -109,6 +109,28 @@ of localizable data and its related information.
     <string name="pref_location_summary_unknown">Validating location. . . (<xliff:g id="location_setting">%1$s</xliff:g>)
     </string>
 
+    <!-- Key for storing icon pack preference in SharedPreferences [CHAR LIMIT = NONE]-->
+    <string name="pref_icon_pack_key" translatable="false">icon_pack</string>
+
+    <!-- Label, or title, for the icon pack preference [CHAR LIMIT = 40] -->
+    <string name="pref_icon_pack_label">Icon Pack</string>
+
+    <!-- The colored icon pack value. This will be a URL from which we fetch the colored icons [CHAR LIMIT = NONE] -->
+    <string name="pref_icon_pack_colored_value" translatable="false">
+        https://raw.githubusercontent.com/udacity/sunshine_icons/master/Archive/Colored/art_<xliff:g id="description">%s</xliff:g>.png
+    </string>
+
+    <!-- The mono icon pack value. This will be a URL from which we fetch the mono icons [CHAR LIMIT = NONE] -->
+    <string name="pref_icon_pack_mono_value" translatable="false">
+        https://raw.githubusercontent.com/udacity/sunshine_icons/master/Archive/Mono/art_<xliff:g id="description">%s</xliff:g>.png
+    </string>
+
+    <!-- The colored icon pack label [CHAR LIMIT = 25] -->
+    <string name="pref_icon_pack_colored_label">Colored</string>
+
+    <!-- The mono icon pack label [CHAR LIMIT = 25] -->
+    <string name="pref_icon_pack_mono_label">Mono</string>
+
     <!-- Titles -->
 
     <string name="title_activity_detail">Details</string>

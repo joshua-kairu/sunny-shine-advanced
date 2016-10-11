@@ -208,8 +208,6 @@
 
                     android:id="@+id/detail_iv_weather_icon"
 
-                    android:background="@android:color/transparent"
-
                     android:adjustViewBounds="true"
 
                     />
