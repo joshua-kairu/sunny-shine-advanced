@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.sync.SunshineSyncAdapter;
@@ -36,7 +38,11 @@ import com.jlt.sunshine.sync.SunshineSyncAdapter;
 // begin activity MainActivity
 public class MainActivity extends AppCompatActivity implements ForecastCallback {
 
-    /** CONSTANTS */
+    /* CONSTANTS */
+
+    /* Integers */
+
+    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     /* Strings */
 
@@ -44,9 +50,9 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
     public static final String DETAILFRAGMENT_TAG = "DFTAG"; // ditto
 
-    /** VARIABLES */
+    /* VARIABLES */
 
-    /** Primitives */
+    /* Primitives */
 
     private boolean mTwoPane; // checks if we are dealing with a one or two pane (phone or tab) UI
 
@@ -54,11 +60,11 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
     private String mCurrentLocation; // stores our current known location
 
-    /** METHODS */
+    /* METHODS */
 
-    /** Getters and Setters */
+    /* Getters and Setters */
 
-    /** Overrides */
+    /* Overrides */
 
     @Override
     // begin onCreate
@@ -332,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
     /**
      * {@link DetailFragment} callback for when an item has been selected.
      *
-     * @param dateUri
+     * @param dateUri The Uri of the date of the item that has been selected
      */
     @Override
     // begin onForecastItemSelected
@@ -375,6 +381,78 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
         } // end else we are single pane
 
     } // end onForecastItemSelected
+
+    /**
+     * Helper method to check if Google Play Services are enabled on the device.
+     *
+     * If there is no available Google Play Services APK, display a dialog that allows users to
+     * download it from Google Play Store or enable it from system settings.
+     *
+     * @return boolean dependent on if Google Play Services are enabled
+     * */
+    // begin method checkPlayServices
+    private boolean checkPlayServices() {
+
+        // 0. get an availability checker
+        // 1. get a result code for the availability
+        // 2. if the service is not available
+        // 2a. if there is something the user can do about it,
+        // 2a1. tell them
+        // 2b. otherwise
+        // 2b1. log
+        // 2b2. terminate the activity
+        // 2c. return false
+        // 3. return true since the service must be available by this point
+
+        // 0. get an availability checker
+
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+
+        // 1. get a result code for the availability
+
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable( this );
+
+        // 2. if the service is not available
+
+        // begin if the services are not in the device
+        if ( resultCode != ConnectionResult.SUCCESS ) {
+
+            // 2a. if there is something the user can do about it,
+            // 2a1. tell them
+
+            // if there is something the user can do
+            if ( apiAvailability.isUserResolvableError( resultCode ) ) {
+                apiAvailability.getErrorDialog( this, resultCode,
+                        PLAY_SERVICES_RESOLUTION_REQUEST ).show();
+            }
+
+            // 2b. otherwise
+
+            // begin else nothing the user can do
+            else {
+
+                // 2b1. log
+
+                Log.i( LOG_TAG, "checkPlayServices: This device is not supported." );
+
+                // 2b2. terminate the activity
+
+                finish();
+
+            } // end else nothing the user can do
+
+
+            // 2c. return false
+
+            return false;
+
+        } // end if the services are not in the device
+
+        // 3. return true since the service must be available by this point
+
+        return true;
+
+    } // end method checkPlayServices
 
     /* Other Methods */
 
