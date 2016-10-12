@@ -441,7 +441,6 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
             } // end else nothing the user can do
 
-
             // 2c. return false
 
             return false;
