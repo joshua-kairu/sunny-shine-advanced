@@ -1,19 +1,3 @@
-package com.jlt.sunshine;
-
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.jlt.sunshine.data.ForecastCallback;
-import com.jlt.sunshine.data.Utility;
-import com.jlt.sunshine.sync.SunshineSyncAdapter;
-
 /*
  *  Sunshine
  *
@@ -34,6 +18,25 @@ import com.jlt.sunshine.sync.SunshineSyncAdapter;
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
+package com.jlt.sunshine;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.jlt.sunshine.data.ForecastCallback;
+import com.jlt.sunshine.data.Utility;
+import com.jlt.sunshine.gcm.RegistrationIntentService;
+import com.jlt.sunshine.sync.SunshineSyncAdapter;
+
 /** The landing activity. */
 // begin activity MainActivity
 public class MainActivity extends AppCompatActivity implements ForecastCallback {
@@ -46,9 +49,12 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
     /* Strings */
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName(); // the logoger
+    private static final String LOG_TAG = MainActivity.class.getSimpleName(); // the logger
 
     public static final String DETAILFRAGMENT_TAG = "DFTAG"; // ditto
+
+    /** Key to use to store boolean informing whether or not the GCM token has been sent. */
+    public static final String PREF_SENT_TOKEN_KEY = "PREF_SENT_TOKEN_KEY";
 
     /* VARIABLES */
 
@@ -84,6 +90,10 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
         // 4b. we should use the today layout in one pane mode
         // 4c. we should make the action bar as high as the today section
         // 5. start the sync
+        // 6. start Google Play Services if possible
+        // 6a. know if we have the token
+        // 6b. if we don't have the token
+        // 6b1. start the registration service
 
         // 0. super things
 
@@ -170,6 +180,31 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
         // 5. start the sync
 
         SunshineSyncAdapter.initializeSyncAdapter( this );
+
+        // 6. start Google Play Services if possible
+
+        // begin if Play Services are enabled
+        if ( checkPlayServices() ) {
+
+            // 6a. know if we have the token
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
+
+            boolean haveToken = sharedPreferences.getBoolean( PREF_SENT_TOKEN_KEY, false );
+
+            // 6b. if we don't have the token
+
+            // begin if we have not the token
+            if ( ! haveToken ) {
+
+                // 6b1. start the registration service
+
+                Intent registrationIntent = new Intent( this, RegistrationIntentService .class );
+                startService( registrationIntent );
+
+            } // end if we have not the token
+
+        } // end if Play Services are enabled
 
         Log.e( LOG_TAG, "onCreate: " );
 
