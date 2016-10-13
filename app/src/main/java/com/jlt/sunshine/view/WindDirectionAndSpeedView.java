@@ -1249,7 +1249,7 @@ public class WindDirectionAndSpeedView extends View {
         try {
 
             mOuterCircleColor = a.getColor( R.styleable.WindDirectionAndSpeedView_outerCircleColor,
-                    getResources().getColor( R.color.sunshine_blue )
+                    getResources().getColor( R.color.primary )
             );
 
             mInnerCircleColor = a.getColor( R.styleable.WindDirectionAndSpeedView_innerCircleColor,
@@ -1271,7 +1271,7 @@ public class WindDirectionAndSpeedView extends View {
             );
 
             mArrowColor = a.getColor( R.styleable.WindDirectionAndSpeedView_arrowColor,
-                    getResources().getColor( R.color.sunshine_dark_blue )
+                    getResources().getColor( R.color.primary_dark )
             );
 
             mArrowAngle = a.getFloat( R.styleable.WindDirectionAndSpeedView_arrowAngle, 0f );

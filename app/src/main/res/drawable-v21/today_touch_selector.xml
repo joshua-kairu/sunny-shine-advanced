@@ -44,14 +44,14 @@
     <!-- color the selected item's background light blue. -->
     <item android:state_activated="true"
 
-        android:drawable="@color/sunshine_light_blue" />
+        android:drawable="@color/primary_light" />
 
     <item android:state_selected="true"
 
-        android:drawable="@color/sunshine_light_blue" />
+        android:drawable="@color/primary_light" />
 
     <!-- Default state -->
     <!-- it is still blue here. -->
-    <item android:drawable="@color/sunshine_light_blue" />
+    <item android:drawable="@color/primary_light" />
 
 </selector>

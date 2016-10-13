@@ -34,21 +34,21 @@
     <!-- when a row is pressed but not yet activated; finger down mode. -->
     <!-- use a blue background. -->
     <item android:state_pressed="true"
-        android:drawable="@color/sunshine_light_blue" />
+        android:drawable="@color/primary_light" />
 
     <!-- when a row is activated. In SINGLE_CHOICE_MODE,
          it flags the active row of a ListView. -->
     <!-- color the selected item's background light blue. -->
     <item android:state_activated="true"
 
-        android:drawable="@color/sunshine_light_blue" />
+        android:drawable="@color/primary_light" />
 
     <item android:state_selected="true"
 
-        android:drawable="@color/sunshine_light_blue" />
+        android:drawable="@color/primary_light" />
 
     <!-- Default state -->
     <!-- it is still blue here. -->
-    <item android:drawable="@color/sunshine_light_blue" />
+    <item android:drawable="@color/primary_light" />
 
 </selector>
