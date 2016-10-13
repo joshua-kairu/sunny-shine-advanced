@@ -49,6 +49,6 @@
 
     <!-- Default state -->
     <!-- it is still blue here. -->
-    <item android:drawable="@color/primary_light" />
+    <item android:drawable="@color/primary" />
 
 </selector>
