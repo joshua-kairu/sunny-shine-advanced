@@ -33,10 +33,8 @@ import com.jlt.sunshine.R;
 
 import java.io.IOException;
 
-import static com.jlt.sunshine.ForecastFragment.LOG_TAG;
-
 /**
- *
+ * An {@link IntentService} to allow one to register for GCM
  * */
 // begin class RegistrationIntentService
 public class RegistrationIntentService extends IntentService {
@@ -46,18 +44,18 @@ public class RegistrationIntentService extends IntentService {
     /* Integers */
     
     /* Strings */
+
+    /**
+     * The logger.
+     */
+    private static final String LOG_TAG = RegistrationIntentService.class.getSimpleName();
         
     /* VARIABLES */
 
     /* CONSTRUCTOR */
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
-    // default constructor
-    public RegistrationIntentService( String name ) {
+    // default empty constructor
+    public RegistrationIntentService() {
         super( LOG_TAG );
     }
     

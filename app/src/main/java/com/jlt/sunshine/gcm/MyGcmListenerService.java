@@ -1,24 +1,21 @@
 /*
- * 
- * com.jlt.sunshine.gcm
- * 
- * <one line to give the program's name and a brief idea of what it does.>
- * 
+ *  Sunshine
+ *
+ * A simple weather app
+ *
  * Copyright (C) 2016 Kairu Joshua Wambugu
- * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
- *
  */
 
 package com.jlt.sunshine.gcm;
@@ -30,15 +27,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.gcm.GcmListenerService;
 import com.jlt.sunshine.MainActivity;
 import com.jlt.sunshine.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * A {@link com.google.android.gms.gcm.GcmListenerService} to listen for downstream messages.
@@ -79,7 +72,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         // 0. if the incoming bundle has something
         // 0a. if the something is meant for us
-        // 0a1. decode it from JSON
+        // 0a1. decode it from the bundle
         // 0a2. display it as a notification
 
         // 0. if the incoming bundle has something
@@ -99,31 +92,17 @@ public class MyGcmListenerService extends GcmListenerService {
             // begin if the sender id is similar to our sender id
             if ( senderIdString.equals( getString( R.string.gcm_defaultSenderId ) ) ) {
 
-                // begin trying to read JSON from the incoming data
-                try {
+                // 0a1. decode it from the bundle
 
-                    // 0a1. decode it from JSON
+                String weather = data.getString( EXTRA_WEATHER );
 
-                    JSONObject dataJsonObject = new JSONObject( data.getString( EXTRA_DATA ) );
+                String location = data.getString( EXTRA_LOCATION );
 
-                    String weather = dataJsonObject.getString( EXTRA_WEATHER );
+                String alert = getString( R.string.gcm_weather_alert, weather, location );
 
-                    String location = dataJsonObject.getString( EXTRA_LOCATION );
+                // 0a2. display it as a notification
 
-                    String alert = getString( R.string.gcm_weather_alert, weather, location );
-
-                    // 0a2. display it as a notification
-
-                    sendNotification( alert );
-
-                } // end trying to read JSON from the incoming data
-
-                // catch JSON issues
-                catch ( JSONException e ) {
-                    // since GCM isn't critical in our app, we can let this exception slide
-                }
-
-                Log.i( LOG_TAG, "onMessageReceived: data = " + data.toString() );
+                sendNotification( alert );
 
             } // end if the sender id is similar to our sender id
 

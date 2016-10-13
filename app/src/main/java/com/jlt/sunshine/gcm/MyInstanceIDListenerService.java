@@ -36,11 +36,6 @@ public class MyInstanceIDListenerService extends InstanceIDListenerService {
     
     /* Strings */
 
-    /**
-     * The logger.
-     */
-    private static final String LOG_TAG = MyInstanceIDListenerService.class.getSimpleName();
-        
     /* VARIABLES */
     
     /* CONSTRUCTOR */
@@ -65,6 +60,7 @@ public class MyInstanceIDListenerService extends InstanceIDListenerService {
         // 0. fetch updated InstanceID token via registration service
 
         Intent intent = new Intent( this, RegistrationIntentService.class );
+        startService( intent );
 
     } // end onTokenRefresh
 
