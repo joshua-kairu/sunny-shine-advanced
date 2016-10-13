@@ -2,7 +2,9 @@ package com.jlt.sunshine;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -30,15 +32,15 @@ import android.view.MenuItem;
 // begin activity DetailActivity
 public class DetailActivity extends AppCompatActivity {
 
-    /** CONSTANTS */
+    /* CONSTANTS */
 
-    /** VARIABLES */
+    /* VARIABLES */
 
-    /** METHODS */
+    /* METHODS */
 
-    /** Getters and Setters */
+    /* Getters and Setters */
 
-    /** Overrides */
+    /* Overrides */
 
     @Override
     // begin onCreate
@@ -46,7 +48,11 @@ public class DetailActivity extends AppCompatActivity {
 
         // 0. super stuff
         // 1. use the detail layout
-        // 2. add the detail fragment with the date uri argument
+        // 2. set up toolbar
+        // 2a. set it as action bar
+        // 2b. should go home on up
+        // 2c. should not show a title
+        // 3. add the detail fragment with the date uri argument
         // passed into the intent that started this activity
 
         // 0. super stuff
@@ -57,7 +63,30 @@ public class DetailActivity extends AppCompatActivity {
 
         setContentView( R.layout.activity_detail );
 
-        // 2. add the detail fragment with the date uri argument
+        // 2. set up toolbar
+
+        Toolbar toolbar = ( Toolbar ) findViewById( R.id.ad_toolbar );
+
+        // 2a. set it as action bar
+
+        setSupportActionBar( toolbar );
+
+        ActionBar actionBar = getSupportActionBar();
+
+        // begin if there is an action bar
+        if ( actionBar != null ){
+
+            // 2b. should go home on up
+
+            actionBar.setDisplayHomeAsUpEnabled( true );
+
+            // 2c. should not show a title
+
+            actionBar.setDisplayShowTitleEnabled( false );
+
+        } // end if there is an action bar
+
+        // 3. add the detail fragment with the date uri argument
         // passed into the intent that started this activity
 
         // begin if this is first run
@@ -123,6 +152,6 @@ public class DetailActivity extends AppCompatActivity {
 
     } // end onOptionsItemSelected
 
-    /** Other Methods */
+    /* Other Methods */
 
 } // end activity DetailActivity

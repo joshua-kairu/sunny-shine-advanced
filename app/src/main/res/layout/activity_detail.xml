@@ -25,20 +25,46 @@
 
 <!-- The details layout for phones. -->
 
-<FrameLayout
+<LinearLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:id="@+id/am_f_weather_detail_container"
-
     android:layout_width="match_parent"
 
     android:layout_height="match_parent"
 
-    tools:context=".DetailActivity"
+    android:orientation="vertical"
 
-    tools:ignore="MergeRootFrame"
+    >
 
-    />
+    <!-- toolbar -->
+
+    <android.support.v7.widget.Toolbar
+
+        android:layout_width="match_parent"
+
+        android:layout_height="?attr/actionBarSize"
+
+        android:id="@+id/ad_toolbar"
+
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+
+        />
+
+    <FrameLayout
+
+        android:id="@+id/am_f_weather_detail_container"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+
+        tools:context=".DetailActivity"
+
+        tools:ignore="MergeRootFrame"
+
+        />
+
+</LinearLayout>

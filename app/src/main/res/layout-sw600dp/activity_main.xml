@@ -31,7 +31,6 @@ such as 7" and 10" tablets.
 
 <!-- uses a two-pane layout for a master/detail flow. -->
 
-<!-- android:divider - Drawable to use as a vertical divider between buttons. -->
 <LinearLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -42,46 +41,90 @@ such as 7" and 10" tablets.
 
     android:layout_height="match_parent"
 
-    android:baselineAligned="false"
-
-    android:divider="?android:attr/dividerHorizontal"
-
-    android:orientation="horizontal"
-
-    tools:context=".MainActivity"
+    android:orientation="vertical"
 
     >
 
-    <!-- the forecast fragment - is static since we know it will be there before run time. -->
+    <!-- toolbar -->
 
-    <!-- list_content - layout that displays a list of individual "item-subitem"s -->
-    <fragment
+    <android.support.v7.widget.Toolbar
 
-        android:id="@+id/am_f_forecast"
+        android:layout_width="match_parent"
 
-        android:name="com.jlt.sunshine.ForecastFragment"
+        android:layout_height="?attr/actionBarSize"
 
-        android:layout_width="0dp"
+        android:id="@+id/am_toolbar"
+
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+
+        >
+
+        <!-- the logo inside it -->
+
+        <ImageView
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:src="@drawable/ic_logo"
+
+            android:contentDescription="@string/a11y_toolbar_icon"
+
+            android:scaleType="center"
+
+            />
+
+    </android.support.v7.widget.Toolbar>
+
+    <!-- android:divider - Drawable to use as a vertical divider between buttons. -->
+    <LinearLayout
+
+        android:layout_width="match_parent"
 
         android:layout_height="match_parent"
 
-        android:layout_weight="2"
+        android:baselineAligned="false"
 
-        tools:layout="@android:layout/list_content"
+        android:divider="?android:attr/dividerHorizontal"
 
-        />
+        android:orientation="horizontal"
 
-    <!-- the detail fragment - is dynamic since it should change based on the forecast chosen. -->
-    <FrameLayout
+        tools:context=".MainActivity"
 
-        android:id="@+id/am_f_weather_detail_container"
+        >
 
-        android:layout_width="0dp"
+        <!-- the forecast fragment - is static since we know it will be there before run time. -->
 
-        android:layout_height="match_parent"
+        <!-- list_content - layout that displays a list of individual "item-subitem"s -->
+        <fragment
 
-        android:layout_weight="4"
+            android:id="@+id/am_f_forecast"
 
-        />
+            android:name="com.jlt.sunshine.ForecastFragment"
 
+            android:layout_width="0dp"
+
+            android:layout_height="match_parent"
+
+            android:layout_weight="2"
+
+            tools:layout="@android:layout/list_content"
+
+            />
+
+        <!-- the detail fragment - is dynamic since it should change based on the forecast chosen. -->
+        <FrameLayout
+
+            android:id="@+id/am_f_weather_detail_container"
+
+            android:layout_width="0dp"
+
+            android:layout_height="match_parent"
+
+            android:layout_weight="4"
+
+            />
+
+    </LinearLayout>
 </LinearLayout>

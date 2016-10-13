@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,21 +80,24 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
         // 0. super things
         // 1. get the current location
         // 2. use the main activity layout
-        // 3. if this is a two pane UI
-        // 3a. set the two pane flag to true
-        // 3b. if this is the first run,
-        // 3b1. replace the detail fragment in the second pane
+        // 3. set up toolbar
+        // 3a. set it as action bar
+        // 3b. should not show a title
+        // 4. if this is a two pane UI
+        // 4a. set the two pane flag to true
+        // 4b. if this is the first run,
+        // 4b1. replace the detail fragment in the second pane
         // (the forecast fragment is added to the first pane in xml way before runtime)
-        // 3c. we shouldn't use the today layout in two pane mode
-        // 4. otherwise this is not a two pane UI
-        // 4a. set the two pane flag to false
-        // 4b. we should use the today layout in one pane mode
-        // 4c. we should make the action bar as high as the today section
-        // 5. start the sync
-        // 6. start Google Play Services if possible
-        // 6a. know if we have the token
-        // 6b. if we don't have the token
-        // 6b1. start the registration service
+        // 4c. we shouldn't use the today layout in two pane mode
+        // 5. otherwise this is not a two pane UI
+        // 5a. set the two pane flag to false
+        // 5b. we should use the today layout in one pane mode
+        // 5c. we should make the action bar as high as the today section
+        // 6. start the sync
+        // 7. start Google Play Services if possible
+        // 7a. know if we have the token
+        // 7b. if we don't have the token
+        // 7b1. start the registration service
 
         // 0. super things
 
@@ -107,18 +111,30 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
         setContentView( R.layout.activity_main );
 
-        // 3. if this is a two pane UI
+        // 3. set up toolbar
+
+        Toolbar toolbar = ( Toolbar ) findViewById( R.id.am_toolbar );
+
+        // 3a. set it as action bar
+
+        setSupportActionBar( toolbar );
+
+        // 3b. should not show a title
+
+        getSupportActionBar().setDisplayShowTitleEnabled( false );
+
+        // 4. if this is a two pane UI
 
         // we know two pane status by checking status of the existence of the detail container view
 
         // begin if there is a detail container view
         if ( findViewById( R.id.am_f_weather_detail_container ) != null ) {
 
-            // 3a. set the two pane flag to true
+            // 4a. set the two pane flag to true
 
             mTwoPane = true;
 
-            // 3b. if this is the first run,
+            // 4b. if this is the first run,
 
             // in the first run the saved instance state is null since
             // no state, including fragment state,  has been put in there.
@@ -131,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
             // begin if the saved instance is null
             if ( savedInstanceState == null ) {
 
-                // 3b1. replace the detail fragment in the second pane
+                // 4b1. replace the detail fragment in the second pane
                 // (the forecast fragment is added to the first pane in xml way before runtime)
 
                 getSupportFragmentManager()
@@ -146,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
             } // end if the saved instance is null
 
-            // 3c. we shouldn't use the today layout in two pane mode
+            // 4c. we shouldn't use the today layout in two pane mode
 
             ForecastFragment forecastFragment = ( ForecastFragment )
                     getSupportFragmentManager().findFragmentById( R.id.am_f_forecast );
@@ -155,49 +171,49 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
         } // end if there is a detail container view
 
-        // 4. otherwise this is not a two pane UI
+        // 5. otherwise this is not a two pane UI
 
         // begin else there's no detail container
         else {
 
-            // 4a. set the two pane flag to false
+            // 5a. set the two pane flag to false
 
             mTwoPane = false;
 
-            // 4b. we should use the today layout in one pane mode
+            // 5b. we should use the today layout in one pane mode
 
             ForecastFragment forecastFragment = ( ForecastFragment )
                     getSupportFragmentManager().findFragmentById( R.id.am_f_forecast );
 
             if ( forecastFragment != null ) { forecastFragment.setUseTodayLayout( true ); }
 
-            // 4c. we should make the action bar as high as the today section
+            // 5c. we should make the action bar as high as the today section
 
             if ( getSupportActionBar() != null ) { getSupportActionBar().setElevation( 0f ); }
 
         } // end else there's no detail container
 
-        // 5. start the sync
+        // 6. start the sync
 
         SunshineSyncAdapter.initializeSyncAdapter( this );
 
-        // 6. start Google Play Services if possible
+        // 7. start Google Play Services if possible
 
         // begin if Play Services are enabled
         if ( checkPlayServices() ) {
 
-            // 6a. know if we have the token
+            // 7a. know if we have the token
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
 
             boolean haveToken = sharedPreferences.getBoolean( PREF_SENT_TOKEN_KEY, false );
 
-            // 6b. if we don't have the token
+            // 7b. if we don't have the token
 
             // begin if we have not the token
             if ( ! haveToken ) {
 
-                // 6b1. start the registration service
+                // 7b1. start the registration service
 
                 Intent registrationIntent = new Intent( this, RegistrationIntentService .class );
                 startService( registrationIntent );

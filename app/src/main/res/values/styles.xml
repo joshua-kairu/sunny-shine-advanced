@@ -26,7 +26,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
         <!-- Customize your theme here. -->
 
@@ -34,19 +34,10 @@
 
         <item name="colorPrimaryDark">@color/primary_dark</item>
 
-    </style>
+        <item name="colorAccent">@color/accent</item>
 
-    <!-- Main activity theme. -->
-    <!-- Puts a custom app bar having the app's name and a sunny logo. -->
-    <style name="ForecastTheme" parent="AppTheme">
+        <item name="toolbarStyle">@style/Toolbar</item>
 
-        <item name="actionBarStyle">@style/ActionBar.Solid.Sunshine.NoTitle</item>
-
-    </style>
-
-    <!-- Settings activity theme. -->
-    <!-- Puts a custom app bar having the app's name and a sunny logo. -->
-    <style name="SettingsTheme" parent="AppTheme">
     </style>
 
     <!-- style for using a list item selector drawable.
@@ -54,12 +45,15 @@
     <style name="ForecastListStyle">
     </style>
 
-    <!-- custom theme to make an action bar with a logo -->
-    <style name="ActionBar.Solid.Sunshine.NoTitle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+    <!-- main activity toolbar style -->
+    <!-- extends from the widget toolbar -->
+    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
 
-        <item name="displayOptions">useLogo|showHome</item>
+        <!-- have a primary color background, since toolbars have a default transparent background -->
+        <item name="android:background">?attr/colorPrimary</item>
 
-        <item name="logo">@drawable/ic_logo</item>
+        <!-- pop up light since the main activity has a dark theme -->
+        <item name="popupTheme">@style/Theme.AppCompat.Light</item>
 
     </style>
 
