@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+-->
+
+<!-- Grid for detail showing temperatures and forecast -->
+
+<android.support.v7.widget.GridLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+
+
+
+    android:background="@android:color/white"
+
+    app:columnCount="2"
+
+    >
+
+    <!-- space -->
+
+    <android.support.v4.widget.Space
+
+        app:layout_columnSpan="2"
+
+        app:layout_columnWeight="1"
+
+        app:layout_rowWeight="1"
+
+        />
+
+    <!-- TextView to show the day and date -->
+
+    <TextView
+
+        android:id="@+id/detail_tv_date"
+
+        android:layout_marginBottom="@dimen/layout_padding"
+
+        android:layout_marginTop="@dimen/layout_padding"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:fontFamily="sans-serif"
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+
+        android:gravity="center_horizontal"
+
+        android:textColor="@color/secondary_text"
+
+        android:textSize="@dimen/detail_date_text_size"
+
+        app:layout_columnSpan="2"
+
+        app:layout_columnWeight="1"
+
+        app:layout_gravity="fill_horizontal"
+
+        tools:text="Tomorrow, May 09"
+
+        />
+
+    <!-- ImageView to show the forecast icon -->
+
+    <!--
+     adjustViewBounds - Lets the ImageView adjust its bounds to preserve
+     the aspect ratio of its drawable. Good for when we are loading images from net
+    -->
+    <ImageView
+
+        android:id="@+id/detail_iv_weather_icon"
+
+        android:layout_width="0dp"
+
+        android:maxWidth="@dimen/today_weather_icon_length"
+
+        android:maxHeight="@dimen/today_weather_icon_length"
+
+        android:contentDescription="@null"
+
+        android:adjustViewBounds="true"
+
+        app:layout_columnWeight="1"
+
+        app:layout_gravity="fill_horizontal"
+
+        tools:src="@drawable/art_clouds"
+
+        />
+
+    <!-- TextView for the high temperature -->
+
+    <TextView
+
+        android:layout_width="0dp"
+
+        android:id="@+id/detail_tv_high_temperature"
+
+        android:fontFamily="sans-serif-light"
+
+        android:gravity="center_horizontal"
+
+        android:textColor="@color/secondary_text"
+
+        android:textSize="@dimen/detail_high_temperature_text_size"
+
+        app:layout_columnWeight="1"
+
+        app:layout_gravity="fill_horizontal"
+
+        tools:text="19"
+
+        />
+
+    <!-- TextView to show the forecast description -->
+
+    <TextView
+
+        android:id="@+id/detail_tv_description"
+
+        android:layout_width="0dp"
+
+        android:fontFamily="sans-serif-condensed"
+
+        android:gravity="center_horizontal"
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+
+        android:textColor="@color/secondary_text"
+
+        app:layout_columnWeight="1"
+
+        tools:text="Rainy"
+
+        />
+
+    <!-- TextView for the low temperature -->
+
+    <TextView
+
+        android:id="@+id/detail_tv_low_temperature"
+
+        android:layout_width="0dp"
+
+        android:layout_marginBottom="@dimen/layout_padding"
+
+        android:fontFamily="sans-serif-light"
+
+        android:gravity="center_horizontal"
+
+        android:textColor="@color/secondary_text"
+
+        android:textSize="@dimen/detail_low_temperature_text_size"
+
+        app:layout_columnWeight="1"
+
+        tools:text="10"
+
+        />
+
+    <!-- space after the grid -->
+
+    <android.support.v4.widget.Space
+
+        app:layout_columnSpan="2"
+
+        app:layout_columnWeight="1"
+
+        app:layout_rowWeight="1"
+
+        />
+
+</android.support.v7.widget.GridLayout>

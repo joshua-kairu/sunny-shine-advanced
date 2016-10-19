@@ -128,10 +128,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private boolean mUseTodayLayout = true; // ditto
 
-    /* Text Views */
-
-    private TextView mEmptyTextView; // ditto
-
     /*
      * CONSTRUCTOR
      */
@@ -271,8 +267,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 3b. set its empty view
 
-        mEmptyTextView = ( TextView ) rootView.findViewById( R.id.fm_tv_empty );
-        mForecastListView.setEmptyView( mEmptyTextView );
+        TextView emptyTextView = ( TextView ) rootView.findViewById( R.id.fm_tv_empty );
+        mForecastListView.setEmptyView( emptyTextView );
 
         // 4. set adapter to the list
 

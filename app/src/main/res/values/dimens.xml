@@ -136,12 +136,14 @@
 
     <dimen name="detail_date_text_size">16sp</dimen>
 
-    <dimen name="detail_high_temperature_text_size">96sp</dimen>
+    <dimen name="detail_high_temperature_text_size">72sp</dimen>
 
-    <dimen name="detail_low_temperature_text_size">48sp</dimen>
+    <dimen name="detail_low_temperature_text_size">36sp</dimen>
 
     <dimen name="detail_wide_day_minimum_width">120dp</dimen>
 
     <dimen name="notification_large_icon_default">48dp</dimen>
+
+    <dimen name="forecast_detail_horizontal_padding">32dp</dimen>
 
 </resources>

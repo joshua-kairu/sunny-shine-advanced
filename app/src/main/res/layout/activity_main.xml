@@ -38,6 +38,7 @@
     android:layout_width="match_parent"
 
     android:orientation="vertical"
+
     >
 
     <!-- toolbar -->
@@ -50,6 +51,8 @@
 
         android:id="@+id/am_toolbar"
 
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+
         >
 
         <!-- the logo inside it -->
@@ -58,11 +61,13 @@
 
             android:layout_width="wrap_content"
 
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
 
             android:src="@drawable/ic_logo"
 
             android:contentDescription="@string/a11y_toolbar_icon"
+
+            android:scaleType="center"
 
             />
 

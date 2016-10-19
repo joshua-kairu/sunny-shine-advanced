@@ -73,7 +73,7 @@
 
             android:id="@+id/list_item_date_textview"
 
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
 
             android:layout_height="wrap_content"
 
@@ -91,7 +91,7 @@
 
             android:id="@+id/list_item_high_textview"
 
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
 
             android:layout_height="wrap_content"
 
@@ -109,7 +109,7 @@
 
             android:id="@+id/list_item_low_textview"
 
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
 
             android:layout_height="wrap_content"
 
@@ -119,9 +119,9 @@
 
             android:textSize="@dimen/today_low_temperature_text_size"
 
-            android:layout_marginLeft="@dimen/text_baseline"
+            android:layout_marginLeft="@dimen/space_between_content_areas"
 
-            android:layout_marginStart="@dimen/text_baseline"
+            android:layout_marginStart="@dimen/space_between_content_areas"
 
             />
 
@@ -139,9 +139,11 @@
 
         android:layout_weight="5"
 
-        android:gravity="center_horizontal"
+        android:gravity="center_horizontal|bottom"
 
-        android:layout_gravity="bottom"
+        android:layout_marginRight="@dimen/layout_padding"
+
+        android:layout_marginEnd="@dimen/layout_padding"
 
         android:baselineAligned="false"
 
@@ -151,11 +153,13 @@
 
         <ImageView
 
-            android:layout_width="@dimen/today_weather_icon_length"
+            android:layout_width="wrap_content"
 
-            android:layout_height="@dimen/today_weather_icon_length"
+            android:layout_height="wrap_content"
 
             android:id="@+id/list_item_icon"
+
+            android:layout_gravity="center_horizontal"
 
             android:contentDescription="@null"
 
@@ -173,7 +177,7 @@
 
             android:layout_height="wrap_content"
 
-            android:layout_marginBottom="@dimen/text_baseline"
+            android:layout_gravity="center_horizontal"
 
             android:fontFamily="sans-serif-condensed"
 

@@ -23,306 +23,211 @@
 
 -->
 
-<ScrollView
+<!-- detail fragment layout -->
+
+<LinearLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
 
     android:layout_height="match_parent"
 
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-
-    android:fillViewport="true"
+    android:orientation="vertical"
 
     >
 
-    <LinearLayout
+    <!-- toolbar -->
+
+    <android.support.v7.widget.Toolbar
+
+        android:id="@+id/fd_toolbar"
 
         android:layout_width="match_parent"
 
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
 
-        android:padding="@dimen/layout_padding"
+        android:background="@android:color/white"
 
-        android:orientation="vertical"
+        />
 
-        android:gravity="center_vertical"
+    <!-- the detail grid showing the day's forecast and temperatures -->
+
+    <include layout="@layout/detail_today_grid"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="0dp"
+
+        android:layout_weight="3"
+
+        />
+
+    <!-- the detail grid showing humidity, pressure, and wind -->
+
+    <android.support.v7.widget.GridLayout
+
+        android:layout_width="match_parent"
+
+        android:layout_height="0dp"
+
+        android:layout_weight="2"
+
+        android:paddingTop="@dimen/layout_padding"
+
+        android:paddingBottom="@dimen/layout_padding"
+
+        android:paddingLeft="@dimen/forecast_detail_horizontal_padding"
+
+        android:paddingStart="@dimen/forecast_detail_horizontal_padding"
+
+        android:paddingRight="@dimen/forecast_detail_horizontal_padding"
+
+        android:paddingEnd="@dimen/forecast_detail_horizontal_padding"
+
+        android:background="@color/detail_accent_pane_background"
+
+        app:columnCount="2"
 
         >
 
-        <!-- TextView to show the day -->
+        <!-- TextView to hold humidity label -->
 
         <TextView
 
-            android:id="@+id/detail_tv_day"
-
-            android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
 
-            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/detail_tv_humidity_label"
 
-            android:textSize="@dimen/detail_day_text_size"
+            android:fontFamily="sans-serif"
+
+            android:gravity="center_vertical"
+
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+
+            android:textColor="@color/detail_accent_label"
+
+            android:text="@string/humidity_label"
+
+            app:layout_columnWeight="1"
+
+            app:layout_rowWeight="1"
+
+            app:layout_gravity="fill"
 
             />
 
-        <!-- TextView to show the date -->
+        <!-- TextView to hold humidity value -->
 
         <TextView
 
-            android:id="@+id/detail_tv_date"
+            android:id="@+id/detail_tv_humidity_value"
 
-            android:layout_width="wrap_content"
+            android:gravity="center_vertical"
 
-            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
 
-            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/white"
 
-            android:textColor="@color/grey_700"
+            tools:text="38%"
 
-            android:textSize="@dimen/detail_date_text_size"
+            app:layout_columnWeight="1"
+
+            app:layout_gravity="fill"
 
             />
 
-        <!-- LinearLayout to hold the temperatures and the forecast icon and description -->
+        <!-- TextView to hold pressure label -->
 
-        <LinearLayout
+        <TextView
 
-            android:layout_width="match_parent"
+            android:id="@+id/detail_tv_pressure_label"
 
-            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
 
-            android:orientation="horizontal"
+            android:gravity="center_vertical"
 
-            android:layout_marginTop="@dimen/layout_padding"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
 
-            android:layout_marginBottom="@dimen/layout_padding"
+            android:text="@string/pressure_label"
 
-            android:baselineAligned="false"
+            android:textColor="@color/detail_accent_label"
 
-            android:paddingLeft="@dimen/layout_padding"
+            app:layout_gravity="fill"
 
-            android:paddingRight="@dimen/layout_padding"
+            app:layout_columnWeight="1"
 
-            android:paddingStart="@dimen/layout_padding"
+            app:layout_rowWeight="1"
 
-            android:paddingEnd="@dimen/layout_padding"
+            />
 
-            android:gravity="center_horizontal"
+        <!-- TextView to hold pressure value -->
 
-            >
+        <TextView
 
-            <!-- LinearLayout to hold the high and low temperatures -->
+            android:id="@+id/detail_tv_pressure_value"
 
-            <LinearLayout
+            android:gravity="center_vertical"
 
-                android:layout_width="wrap_content"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
 
-                android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
 
-                android:orientation="vertical"
+            app:layout_gravity="fill"
 
-                android:baselineAligned="false"
+            tools:text="995 hPa"
 
-                android:layout_marginLeft="@dimen/layout_padding"
+            />
 
-                android:layout_marginStart="@dimen/layout_padding"
+        <!-- TextView to hold wind label -->
 
-                android:gravity="start"
+        <TextView
 
-                >
+            android:id="@+id/detail_tv_wind_label"
 
-                <!-- TextView for the high temperature -->
+            android:fontFamily="sans-serif"
 
-                <TextView
+            android:gravity="center_vertical"
 
-                    android:layout_width="wrap_content"
+            android:textColor="@color/detail_accent_label"
 
-                    android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
 
-                    android:id="@+id/detail_tv_high_temperature"
+            android:text="@string/wind_label"
 
-                    android:fontFamily="sans-serif-light"
+            app:layout_columnWeight="1"
 
-                    android:textSize="@dimen/detail_high_temperature_text_size"
+            app:layout_rowWeight="1"
 
-                    />
+            app:layout_gravity="fill"
 
-                <!-- TextView for the low temperature -->
+            />
 
-                <TextView
+        <!-- TextView to hold wind value -->
 
-                    android:layout_width="wrap_content"
+        <TextView
 
-                    android:layout_height="wrap_content"
+            android:id="@+id/detail_tv_wind_value"
 
-                    android:id="@+id/detail_tv_low_temperature"
+            android:gravity="center_vertical"
 
-                    android:fontFamily="sans-serif-light"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
 
-                    android:textColor="@color/grey_700"
+            android:textColor="@android:color/white"
 
-                    android:textSize="@dimen/detail_low_temperature_text_size"
+            tools:text="4km/h NW"
 
-                    android:layout_gravity="center_horizontal"
+            app:layout_columnWeight="1"
 
-                    />
+            app:layout_gravity="fill"
 
-            </LinearLayout>
+            />
 
-            <!-- LinearLayout to hold the forecast icon and description -->
+    </android.support.v7.widget.GridLayout>
 
-            <LinearLayout
-
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-
-                android:orientation="vertical"
-
-                android:gravity="center_horizontal"
-
-                android:layout_gravity="center"
-
-                >
-
-                <!-- ImageView to show the forecast icon -->
-
-                <!--
-                transparent background added because
-                there was a default grey background that didn't look good.
-                -->
-
-                <!--
-                 adjustViewBounds - Lets the ImageView adjust its bounds to preserve
-                 the aspect ratio of its drawable. Good for when we are loading images from net
-                -->
-                <ImageView
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-
-                    android:contentDescription="@null"
-
-                    android:id="@+id/detail_iv_weather_icon"
-
-                    android:adjustViewBounds="true"
-
-                    />
-
-                <!-- TextView to show the forecast description -->
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-
-                    android:id="@+id/detail_tv_description"
-
-                    android:fontFamily="sans-serif-condensed"
-
-                    android:textAppearance="?android:textAppearanceLarge"
-
-                    android:textColor="@color/grey_700"
-
-                    />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- LinearLayout to hold the humidity, wind, and pressure -->
-
-        <LinearLayout
-
-            android:layout_width="match_parent"
-
-            android:layout_height="wrap_content"
-
-            android:orientation="vertical"
-
-            >
-
-            <!-- TextView to hold humidity -->
-
-            <TextView
-
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-
-                android:id="@+id/detail_tv_humidity"
-
-                android:layout_marginBottom="@dimen/text_baseline"
-
-                android:fontFamily="sans-serif-light"
-
-                android:textAppearance="?android:textAppearanceLarge"
-
-                android:gravity="start"
-
-                />
-
-            <!-- TextView to hold pressure -->
-
-            <TextView
-
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-
-                android:id="@+id/detail_tv_pressure"
-
-                android:paddingBottom="@dimen/text_baseline"
-
-                android:fontFamily="sans-serif-light"
-
-                android:textAppearance="?android:textAppearanceLarge"
-
-                android:layout_marginBottom="@dimen/text_baseline"
-
-                android:layout_gravity="start"
-
-                />
-
-            <!-- TextView to hold wind -->
-
-            <TextView
-
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-
-                android:id="@+id/detail_tv_wind"
-
-                android:paddingBottom="@dimen/text_baseline"
-
-                android:fontFamily="sans-serif-light"
-
-                android:textAppearance="?android:textAppearanceLarge"
-
-                android:gravity="start"
-
-                />
-
-            <com.jlt.sunshine.view.WindDirectionAndSpeedView
-
-                android:id="@+id/detail_wdasv_direction_and_speed"
-
-                android:layout_width="match_parent"
-
-                android:layout_height="wrap_content"
-
-                app:northIndicatorText="@string/north_indicator_text"
-
-                />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>
 

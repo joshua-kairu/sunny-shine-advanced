@@ -161,6 +161,10 @@ of localizable data and its related information.
         Low: <xliff:g id="low">%1$s</xliff:g>
     </string>
 
+    <string name="a11y_humidity_format">Humidity: <xliff:g id="humidity">%1$s</xliff:g></string>
+    <string name="a11y_pressure_format">Barometric Pressure: <xliff:g id="pressure">%1$s</xliff:g></string>
+    <string name="a11y_wind_format">Wind speed and direction: <xliff:g id="wind">%1$s</xliff:g></string>
+
     <!-- Date labels -->
 
     <!-- Date label when displaying today's weather forecast [CHAR LIMIT=20] -->
@@ -183,54 +187,31 @@ of localizable data and its related information.
 
      <!-- Wind in mph [CHAR LIMIT=25] -->
     <string name="format_wind_mph">
-        Wind: <xliff:g id="speed">%1$1.0f</xliff:g> mph <xliff:g id="direction">%2$s</xliff:g>
+        <xliff:g id="speed">%1$1.0f</xliff:g> mph <xliff:g id="direction">%2$s</xliff:g>
     </string>
 
      <!-- Wind in kmh [CHAR LIMIT=25] -->
     <string name="format_wind_kmh">
-        Wind: <xliff:g id="speed">%1$1.0f</xliff:g> km/h <xliff:g id="direction">%2$s</xliff:g>
+        <xliff:g id="speed">%1$1.0f</xliff:g> km/h <xliff:g id="direction">%2$s</xliff:g>
     </string>
 
     <!-- Pressure format [CHAR LIMIT=25] -->
-    <string name="format_pressure">Pressure: <xliff:g id="pressure">%1.0f</xliff:g> hPa</string>
+    <string name="format_pressure"><xliff:g id="pressure">%1.0f</xliff:g> hPa</string>
 
     <!-- Humidity format [CHAR LIMIT=25] -->
     <!-- %% shows a % -->
-    <string name="format_humidity">Humidity: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
+    <string name="format_humidity"><xliff:g id="humidity">%1.0f</xliff:g> %%</string>
 
-    <!-- Mock data -->
+    <!-- Detail labels -->
 
-    <string name="mock_date">Today, September 03</string>
-    <string name="mock_high_temp">21\u00B0</string>
-    <string name="mock_low_temp">8\u00B0</string>
-    <string name="mock_description">Clear</string>
-    <string name="mock_humidity">Humidity: 84%</string>
-    <string name="mock_wind">Wind: 6 km/H NW</string>
-    <string name="mock_pressure">Pressure: 986 hPA</string>
+    <!-- The label for the humidity in the details [CHAR LIMIT = 15] -->
+    <string name="humidity_label">Humidity</string>
 
-    <!-- Custom view strings -->
+    <!-- The label for the pressure in the details [CHAR LIMIT = 15] -->
+    <string name="pressure_label">Pressure</string>
 
-    <string name="north_indicator_text">N</string>
-
-    <!-- Wind in mph without direction [CHAR LIMIT=25] -->
-    <string name="format_wind_mph_sans_direction">
-        <xliff:g id="speed">%1.0f</xliff:g> mph
-    </string>
-
-    <!-- Wind in kmh without direction [CHAR LIMIT=25] -->
-    <string name="format_wind_kmh_sans_direction">
-        <xliff:g id="speed">%1.0f</xliff:g> km/h
-    </string>/string>
-
-    <!-- Wind direction and speed in km/h for accessibility -->
-    <string name="format_wind_direction_speed_kmh_a11y">
-        Wind is moving in the <xliff:g id="direction">%1$s</xliff:g> direction at <xliff:g id="speed">%2$1.0f</xliff:g> km/h
-    </string>/string>
-
-    <!-- Wind direction and speed in mph -->
-    <string name="format_wind_direction_speed_mph_a11y">
-        Wind is moving in the <xliff:g id="direction">%1$s</xliff:g> direction at <xliff:g id="speed">%2$1.0f</xliff:g> mph
-    </string>/string>
+    <!-- The label for the wind in the details [CHAR LIMIT = 15] -->
+    <string name="wind_label">Wind</string>
 
     <!-- SyncAdapter related -->
 

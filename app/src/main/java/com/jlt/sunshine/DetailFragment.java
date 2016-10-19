@@ -29,8 +29,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,7 +44,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
-import com.jlt.sunshine.view.WindDirectionAndSpeedView;
 
 /**
  * This Fragment shows the details of a selected day in the week of weather
@@ -115,22 +115,24 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     /* Text Views */
 
-    private TextView mDayTextView; // ditto
     private TextView mDateTextView; // ditto
     private TextView mHighTempTextView; // ditto
     private TextView mLowTempTextView; // ditto
     private TextView mDescriptionTextView; // ditto
-    private TextView mHumidityTextView; // ditto
-    private TextView mPressureTextView; // ditto
-    private TextView mWindTextView; // ditto
+    private TextView mHumidityLabelTextView; // ditto
+    private TextView mPressureLabelTextView; // ditto
+    private TextView mWindLabelTextView; // ditto
+    private TextView mHumidityValueTextView; // ditto
+    private TextView mPressureValueTextView; // ditto
+    private TextView mWindValueTextView; // ditto
+
+    /* Toolbars */
+
+    private Toolbar mToolbar; // ditto
 
     /* Uris */
 
     private Uri mDataUri; // uri that we will use to fetch the data we will need for this fragment
-
-    /* Wind Direction And Speed Views */
-
-    private WindDirectionAndSpeedView mDirectionAndSpeedView; // ditto
 
     /*
      * CONSTRUCTOR
@@ -203,30 +205,24 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     // begin onCreateOptionsMenu
     public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
 
-        // 0. use the details fragment menu
-        // 1. get the share menu item
-        // 2. store the share action provider
-        // 3. create an intent that should allow users to send the weather detail
+        // 0. if we're in the detail activity
+        // 0a. use the details fragment menu
+        // 0b. finish creating the share menu
 
-        // 0. use the details fragment menu
+        // 0. if we're in the detail activity
 
-        inflater.inflate( R.menu.menu_detail_fragment, menu );
+        // begin if we are in the detail activity
+        if ( getActivity() instanceof DetailActivity ) {
 
-        // 1. get the share menu item
+            // 0a. use the details fragment menu
 
-        MenuItem menuItem = menu.findItem( R.id.action_share );
+            inflater.inflate( R.menu.menu_detail_fragment, menu );
 
-        // 2. store the share action provider
+            // 0b. finish creating the share menu
 
-        mWeatherDetailShareActionProvider =
-                ( ShareActionProvider ) MenuItemCompat.getActionProvider( menuItem );
+            finishCreatingMenu( menu );
 
-        // 3. create an intent that should allow users to send the weather detail
-
-        if ( mWeatherDetailShareString != null ) {
-            mWeatherDetailShareActionProvider.setShareIntent(
-                    setWeatherDetailShareIntent() );
-        }
+        } // end if we are in the detail activity
 
     } // end onCreateOptionsMenu
 
@@ -251,17 +247,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         // 2. get the needed views
 
-        mDayTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_day );
         mDateTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_date );
         mHighTempTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_high_temperature );
         mLowTempTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_low_temperature );
         mWeatherIconImageView = ( ImageView ) rootView.findViewById( R.id.detail_iv_weather_icon );
         mDescriptionTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_description );
-        mHumidityTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_humidity );
-        mWindTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_wind );
-        mPressureTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_pressure );
-        mDirectionAndSpeedView = ( WindDirectionAndSpeedView )
-                rootView.findViewById( R.id.detail_wdasv_direction_and_speed );
+        mHumidityLabelTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_humidity_label );
+        mPressureLabelTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_pressure_label );
+        mWindLabelTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_wind_label );
+        mHumidityValueTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_humidity_value );
+        mPressureValueTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_pressure_value );
+        mWindValueTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_wind_value );
+        mToolbar = ( Toolbar ) rootView.findViewById( R.id.fd_toolbar );
 
         // last. return the inflated detail layout
 
@@ -308,19 +305,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // 0b. if possible set the share action provider to use the shared text
         // 0a and 0b ensure that a sensible share happens regardless of
         // which among onCreateOptionsMenu and onLoadFinished is called first
+        // 0c. set up the toolbar
+        // 0c1. set it as the action bar
+        // 0c2. no title
+        // 0c3. yes up
+        // 0c4. put the menu in
 
         // 0. bind the needed details data to the text view
 
         // begin if there is a row in the cursor
         if ( cursor != null && cursor.moveToFirst() == true )  {
 
-            mDayTextView.setText(
-                    Utility.getDayName( getActivity(), cursor.getLong( COLUMN_WEATHER_DATE ) )
-            );
-
-            mDateTextView.setText(
-                    Utility.getFormattedMonthDay( cursor.getLong( COLUMN_WEATHER_DATE ) )
-            );
+            long dateInMillis = cursor.getLong( COLUMN_WEATHER_DATE );
+            mDateTextView.setText( Utility.getFullFriendlyDayString( getActivity(), dateInMillis ) );
 
             String highString = Utility.formatTemperature( getActivity(),
                     cursor.getFloat( COLUMN_WEATHER_MAX_TEMP ),
@@ -366,44 +363,35 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     getString( R.string.a11y_detail_weather_description_format, descriptionString )
             );
 
-            mHumidityTextView.setText(
-                    getActivity().getString( R.string.format_humidity,
-                            cursor.getFloat( COLUMN_WEATHER_HUMIDITY ) )
-            );
+            float humidity = cursor.getFloat( COLUMN_WEATHER_HUMIDITY );
+            mHumidityValueTextView.setText(
+                    getActivity().getString( R.string.format_humidity, humidity ) );
 
-            mWindTextView.setText(
-                    Utility.getFormattedWind( getActivity(),
-                            cursor.getFloat( COLUMN_WEATHER_WIND_SPEED ),
-                            cursor.getFloat( COLUMN_WEATHER_WIND_DIRECTION_DEGREES ) )
-            );
+            mHumidityValueTextView.setContentDescription( getString(
+                    R.string.a11y_humidity_format, mHumidityValueTextView.getText() ) );
 
-            mPressureTextView.setText(
-                  getActivity().getString( R.string.format_pressure,
-                          cursor.getFloat( COLUMN_WEATHER_PRESSURE ) )
-            );
+            mHumidityLabelTextView.setContentDescription( mHumidityValueTextView.getContentDescription() );
 
-            mDirectionAndSpeedView.setArrowAngle(
-                    cursor.getFloat( COLUMN_WEATHER_WIND_DIRECTION_DEGREES )
-            );
+            float pressure = cursor.getFloat( COLUMN_WEATHER_PRESSURE );
 
-            mDirectionAndSpeedView.setSpeedText(
-                    Utility.getFormattedWindSpeed( getActivity(),
-                            cursor.getFloat( COLUMN_WEATHER_WIND_SPEED )
-                            )
-            );
+            mPressureValueTextView.setText( getString( R.string.format_pressure, pressure ) );
 
-            // we make the direction and speed view invisible for wide displays
-            // and so we should make it visible when we want to show data
-            if ( mDirectionAndSpeedView.getVisibility() == View.INVISIBLE ) {
-                mDirectionAndSpeedView.setVisibility( View.VISIBLE );
-            }
+            mPressureValueTextView.setContentDescription(  getString(
+                    R.string.a11y_pressure_format, mPressureValueTextView.getText() ) );
 
-            mDirectionAndSpeedView.setWindDirectionAndSpeedTextForAccessibility(
-                    Utility.getFormattedWindDirectionAndSpeed( getActivity(),
-                            cursor.getFloat( COLUMN_WEATHER_WIND_DIRECTION_DEGREES ),
-                            cursor.getFloat( COLUMN_WEATHER_WIND_SPEED )
-                    )
-            );
+            mPressureLabelTextView.setContentDescription( mPressureValueTextView.getContentDescription() );
+
+            float windSpeed = cursor.getFloat( COLUMN_WEATHER_WIND_SPEED );
+            float windDirection = cursor.getFloat( COLUMN_WEATHER_WIND_DIRECTION_DEGREES );
+            String windSpeedAndDirectionStr = Utility.getFormattedWind( getActivity(),
+                    windSpeed, windDirection );
+
+            mWindValueTextView.setText( windSpeedAndDirectionStr );
+
+            mWindValueTextView.setContentDescription( getString(
+                    R.string.a11y_wind_format, mWindLabelTextView.getText() ) );
+
+            mWindLabelTextView.setContentDescription( mWindValueTextView.getContentDescription() );
 
             // 0a. initialize the sharing text
 
@@ -418,6 +406,44 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             }
 
         } // end if there is a row in the cursor
+
+        // 0c. set up the toolbar
+
+        AppCompatActivity activity = ( AppCompatActivity ) getActivity();
+
+        // begin if the activity is a detail one
+        if ( activity instanceof DetailActivity ) {
+
+            // begin if there is a toolbar
+            if ( mToolbar != null ) {
+
+                // 0c1. set it as the action bar
+
+                activity.setSupportActionBar( mToolbar );
+
+                // 0c2. no title
+
+                activity.getSupportActionBar().setDisplayShowTitleEnabled( false );
+
+                // 0c3. yes up
+
+                activity.getSupportActionBar().setDisplayHomeAsUpEnabled( true );
+
+                // 0c4. put the menu in
+
+                Menu menu = mToolbar.getMenu();
+
+                // clear - Remove all existing items from the menu,
+                //  leaving it empty as if it had just been created.
+                if ( menu != null ) { menu.clear(); }
+
+                mToolbar.inflateMenu( R.menu.menu_detail_fragment );
+
+                finishCreatingMenu( menu );
+
+            } // end if there is a toolbar
+
+        } // end if the activity is a detail one
 
     } // end onLoadFinished
 
@@ -574,6 +600,27 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // TODO: 9/9/16 But how will the detail fragment get the information to display if the location information is not in the database?
 
     } // end onLocationChanged
+
+    /**
+     * Helper method to finish creating the {@link Menu}.
+     *
+     * @param menu The menu
+     * */
+    // begin method finishCreatingMenu
+    private void finishCreatingMenu( Menu menu ) {
+
+        // 0. get the share menu item
+        // 1. set the share intent
+
+        // 0. get the share menu item
+
+        MenuItem menuItem = menu.findItem( R.id.action_share );
+
+        // 1. set the share intent
+
+        menuItem.setIntent( setWeatherDetailShareIntent() );
+
+    } // end method finishCreatingMenu
 
     /* INNER CLASSES */
 
