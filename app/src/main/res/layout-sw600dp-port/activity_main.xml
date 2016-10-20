@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+ -->
+
+<!--
+main activity layout for
+devices whose smallest width is greater than 600 dp,
+such as 7" and 10" tablets. This layout is for portrait mode.
+-->
+
+<!-- uses an extension of the phone portrait but showing more details for today. -->
+
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    >
+
+    <!-- toolbar -->
+
+    <android.support.v7.widget.Toolbar
+
+        android:layout_width="match_parent"
+
+        android:layout_height="?attr/actionBarSize"
+
+        android:id="@+id/am_toolbar"
+
+        android:elevation="@dimen/toolbar_elevation"
+
+        android:layout_alignParentTop="true"
+
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+
+        />
+
+    <!-- the logo -->
+
+    <ImageView
+
+        android:id="@+id/iv_logo"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="?listPreferredItemHeight"
+
+        android:src="@drawable/ic_logo"
+
+        android:contentDescription="@string/a11y_toolbar_icon"
+
+        android:scaleType="center"
+
+        android:layout_below="@id/am_toolbar"
+
+        android:elevation="@dimen/toolbar_elevation"
+
+        android:background="@color/primary"
+
+        />
+
+    <!-- some space, which will be overlapped by the today view -->
+
+    <View
+
+        android:elevation="@dimen/toolbar_elevation"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="@dimen/detail_app_bar_overlap"
+
+        android:layout_below="@id/iv_logo"
+
+        android:background="@color/primary"
+
+        />
+
+    <!-- LinearLayout to hold the app bar -->
+
+    <LinearLayout
+
+        android:id="@+id/appbar"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical"
+
+        android:background="@color/primary"
+
+        >
+
+    </LinearLayout>
+
+    <!-- the detail fragment - is dynamic since it should change based on the forecast chosen. -->
+
+    <!-- make it overlap the space provided by ensuring it's margin top is the height of the action bar -->
+    <FrameLayout
+
+        android:id="@+id/am_f_weather_detail_container"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:elevation="@dimen/toolbar_elevation"
+
+        android:paddingLeft="@dimen/layout_padding"
+
+        android:paddingRight="@dimen/layout_padding"
+
+        android:layout_below="@id/iv_logo"
+
+        />
+
+    <!-- the forecast fragment - is static since we know it will be there before run time. -->
+
+    <!-- list_content - layout that displays a list of individual "item-subitem"s -->
+    <fragment
+
+        android:id="@+id/am_f_forecast"
+
+        android:name="com.jlt.sunshine.ForecastFragment"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+
+        android:layout_below="@id/am_f_weather_detail_container"
+
+        tools:layout="@android:layout/list_content"
+
+        />
+
+</RelativeLayout>

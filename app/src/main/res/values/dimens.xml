@@ -120,6 +120,9 @@
 
     <dimen name="forecast_detail_horizontal_padding">32dp</dimen>
 
+    <!-- amount we want the details view to overlap the app bar -->
+    <dimen name="detail_app_bar_overlap">24dp</dimen>
+
     <!-- Icon sizes -->
 
     <dimen name="today_weather_icon_length">100dp</dimen>

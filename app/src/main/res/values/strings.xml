@@ -139,7 +139,7 @@ of localizable data and its related information.
 
     <!-- A11y -->
 
-    <string name="a11y_toolbar_icon">Sunshine toolbar logo</string>
+    <string name="a11y_toolbar_icon">Sunshine</string>
 
     <string name="a11y_detail_weather_art_format">
         Forecast icon: <xliff:g id="weather_description">%1$s</xliff:g>
