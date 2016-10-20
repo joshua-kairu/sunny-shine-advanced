@@ -45,10 +45,21 @@
 
     <color name="secondary_text">#727272</color>
 
+    <color name="material_background_light">#fffafafa</color>
+
     <!-- our detail accent colors -->
 
     <color name="detail_accent_pane_background">#455A64</color>
 
     <color name="detail_accent_label">#90A4AE</color>
+
+    <!-- state list colors -->
+
+    <color name="activated">#E0E0E0</color>
+
+    <!-- temperature colors -->
+
+    <!-- low temperature forecast list color -->
+    <color name="forecast_low_text">#607D8B</color>
 
 </resources>

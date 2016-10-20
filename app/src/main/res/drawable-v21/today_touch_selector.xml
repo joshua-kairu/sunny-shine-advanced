@@ -31,27 +31,18 @@
 
     >
 
-    <!-- when a row is pressed but not yet activated; finger down mode. -->
-    <!-- use a grey ripple background. -->
-    <item android:state_pressed="true">
-
-        <ripple android:color="@color/grey" />
-
-    </item>
-
     <!-- when a row is activated. In SINGLE_CHOICE_MODE,
          it flags the active row of a ListView. -->
-    <!-- color the selected item's background light blue. -->
     <item android:state_activated="true"
 
-        android:drawable="@color/primary_light" />
+        android:drawable="@color/activated" />
 
     <item android:state_selected="true"
 
         android:drawable="@color/primary_light" />
 
     <!-- Default state -->
-    <!-- it is still blue here. -->
-    <item android:drawable="@color/primary" />
+    <!-- has a ripple. -->
+    <item android:drawable="@drawable/touch_selector_base" />
 
 </selector>

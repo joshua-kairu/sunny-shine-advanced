@@ -25,45 +25,33 @@
 
 <!-- LinearLayout to display the forecast for today -->
 
-<LinearLayout
+<!-- Grid for the views -->
+
+<FrameLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
 
     android:layout_height="wrap_content"
 
-    android:orientation="horizontal"
+    android:background="@drawable/touch_selector_white"
 
-    android:gravity="center_vertical"
-
-    android:minHeight="?android:attr/listPreferredItemHeight"
-
-    android:background="@drawable/today_touch_selector"
-
-    android:baselineAligned="false"
-
-    android:paddingTop="@dimen/layout_padding"
-
-    android:paddingBottom="@dimen/layout_padding"
+    android:elevation="@dimen/toolbar_elevation"
 
     >
 
-    <!-- LinearLayout to hold date, high, and low -->
+    <android.support.v7.widget.GridLayout
 
-    <LinearLayout
-
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
 
         android:layout_height="wrap_content"
 
-        android:orientation="vertical"
-
-        android:layout_weight="7"
-
-        android:layout_marginLeft="@dimen/today_date_temperatures_margin_left"
-
-        android:layout_marginStart="@dimen/today_date_temperatures_margin_left"
+        app:columnCount="2"
 
         >
 
@@ -73,15 +61,47 @@
 
             android:id="@+id/list_item_date_textview"
 
-            android:layout_width="match_parent"
-
-            android:layout_height="wrap_content"
-
             android:textAppearance="?android:textAppearanceLarge"
 
-            android:fontFamily="sans-serif-condensed"
+            android:fontFamily="sans-serif"
 
-            android:textColor="@android:color/white"
+            android:layout_marginTop="@dimen/layout_padding"
+
+            android:layout_marginBottom="@dimen/layout_padding"
+
+            android:gravity="center_horizontal"
+
+            app:layout_columnSpan="2"
+
+            app:layout_columnWeight="1"
+
+            app:layout_gravity="fill_horizontal"
+
+            tools:text="Today, May 09"
+
+            />
+
+        <!-- ImageView to show the weather icon -->
+
+        <ImageView
+
+            android:id="@+id/list_item_icon"
+
+            android:layout_width="0dp"
+
+            android:maxHeight="@dimen/today_icon"
+
+            android:maxWidth="@dimen/today_icon"
+
+            android:contentDescription="@null"
+
+            android:adjustViewBounds="true"
+
+            app:layout_gravity="fill_horizontal"
+
+            app:layout_columnWeight="1"
+
+            tools:src="@drawable/art_clear"
 
             />
 
@@ -89,81 +109,21 @@
 
         <TextView
 
+            android:layout_width="0dp"
+
             android:id="@+id/list_item_high_textview"
-
-            android:layout_width="match_parent"
-
-            android:layout_height="wrap_content"
 
             android:fontFamily="sans-serif-light"
 
-            android:textColor="@android:color/white"
+            android:gravity="center_horizontal"
 
             android:textSize="@dimen/today_high_temperature_text_size"
 
-            />
+            app:layout_gravity="fill_horizontal"
 
-        <!-- TextView to hold the low temperature -->
+            app:layout_columnWeight="1"
 
-        <TextView
-
-            android:id="@+id/list_item_low_textview"
-
-            android:layout_width="match_parent"
-
-            android:layout_height="wrap_content"
-
-            android:fontFamily="sans-serif-light"
-
-            android:textColor="@android:color/white"
-
-            android:textSize="@dimen/today_low_temperature_text_size"
-
-            android:layout_marginLeft="@dimen/space_between_content_areas"
-
-            android:layout_marginStart="@dimen/space_between_content_areas"
-
-            />
-
-    </LinearLayout>
-
-    <!-- LinearLayout to hold the icon and forecast -->
-
-    <LinearLayout
-
-        android:layout_width="0dp"
-
-        android:layout_height="wrap_content"
-
-        android:orientation="vertical"
-
-        android:layout_weight="5"
-
-        android:gravity="center_horizontal|bottom"
-
-        android:layout_marginRight="@dimen/layout_padding"
-
-        android:layout_marginEnd="@dimen/layout_padding"
-
-        android:baselineAligned="false"
-
-        >
-
-        <!-- ImageView to show the weather icon -->
-
-        <ImageView
-
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-
-            android:id="@+id/list_item_icon"
-
-            android:layout_gravity="center_horizontal"
-
-            android:contentDescription="@null"
-
-            android:adjustViewBounds="true"
+            tools:text="8\u00B0"
 
             />
 
@@ -173,20 +133,48 @@
 
             android:id="@+id/list_item_forecast_textview"
 
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
 
-            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
 
-            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
 
-            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
 
-            android:textColor="@android:color/white"
+            android:textColor="@color/secondary_text"
 
-            android:textAppearance="?android:textAppearanceLarge"
+            app:layout_columnWeight="1"
+
+            app:layout_gravity="fill_horizontal"
+
+            tools:text="Clear"
 
             />
 
-    </LinearLayout>
+        <!-- TextView to hold the low temperature -->
 
-</LinearLayout>
+        <TextView
+
+            android:id="@+id/list_item_low_textview"
+
+            android:layout_width="0dp"
+
+            android:fontFamily="sans-serif-light"
+
+            android:gravity="center_horizontal"
+
+            android:textColor="@color/secondary_text"
+
+            android:layout_marginBottom="@dimen/layout_padding"
+
+            android:textSize="@dimen/today_low_temperature_text_size"
+
+            app:layout_columnWeight="1"
+
+            tools:text="5\u00B0"
+
+            />
+
+    </android.support.v7.widget.GridLayout>
+
+</FrameLayout>

@@ -23,37 +23,40 @@
 
  -->
 
-<!-- LinearLayout to display the forecast for future days(not today) in a list -->
+<!-- FrameLayout to display the forecast for future days(not today) in a list -->
 
-<LinearLayout
+<!-- make the background of our selector have a non-transparent color -->
+<FrameLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
 
     android:layout_height="wrap_content"
 
-    android:orientation="horizontal"
-
-    android:gravity="center_vertical"
-
-    android:minHeight="?android:attr/listPreferredItemHeight"
-
     android:background="@drawable/touch_selector"
-
-    android:baselineAligned="false"
 
     >
 
-    <!-- FrameLayout to hold the weather icon -->
+    <LinearLayout
 
-    <FrameLayout
-
-        android:layout_width="@dimen/list_item_icon_container_width"
+        android:layout_width="match_parent"
 
         android:layout_height="wrap_content"
 
-        android:gravity="center"
+        android:gravity="center_vertical"
+
+        android:minHeight="?android:attr/listPreferredItemHeight"
+
+        android:orientation="horizontal"
+
+        android:baselineAligned="false"
+
+        android:paddingLeft="@dimen/space_between_content_areas"
+
+        android:paddingRight="@dimen/space_between_content_areas"
 
         >
 
@@ -61,9 +64,9 @@
 
         <ImageView
 
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/list_icon"
 
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/list_icon"
 
             android:id="@+id/list_item_icon"
 
@@ -71,77 +74,69 @@
 
             android:layout_gravity="center"
 
+            android:layout_marginRight="@dimen/space_between_content_areas"
+
+            android:layout_marginEnd="@dimen/space_between_content_areas"
+
             android:adjustViewBounds="true"
 
+            tools:src="@drawable/art_clear"
+
             />
 
-    </FrameLayout>
+        <!-- LinearLayout to hold the date and forecast -->
 
-    <!-- LinearLayout to hold the date and forecast -->
+        <LinearLayout
 
-    <LinearLayout
-
-        android:layout_width="0dp"
-
-        android:layout_height="wrap_content"
-
-        android:orientation="vertical"
-
-        android:layout_weight="7"
-
-        >
-
-        <!-- TextView for the date -->
-
-        <TextView
-
-            android:id="@+id/list_item_date_textview"
-
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
 
             android:layout_height="wrap_content"
 
-            android:fontFamily="sans-serif-condensed"
+            android:orientation="vertical"
 
-            android:textAppearance="?android:textAppearanceLarge"
+            android:layout_weight="7"
 
-            android:textSize="@dimen/list_item_date_text_size"
+            >
 
-            />
+            <!-- TextView for the date -->
 
-        <!-- TextView for the forecast -->
+            <TextView
 
-        <TextView
+                android:id="@+id/list_item_date_textview"
 
-            android:id="@+id/list_item_forecast_textview"
+                android:layout_width="wrap_content"
 
-            android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-            android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
 
-            android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceLarge"
 
-            android:textAppearance="?android:textAppearanceSmall"
+                android:textSize="@dimen/list_item_date_text_size"
 
-            />
+                tools:text="Tomorrow, May 09"
 
-    </LinearLayout>
+                />
 
-    <!-- LinearLayout to hold the temperatures -->
+            <!-- TextView for the forecast -->
 
-    <LinearLayout
+            <TextView
 
-        android:layout_width="0dp"
+                android:id="@+id/list_item_forecast_textview"
 
-        android:layout_weight="5"
+                android:layout_width="wrap_content"
 
-        android:layout_height="wrap_content"
+                android:layout_height="wrap_content"
 
-        android:orientation="vertical"
+                android:fontFamily="sans-serif-condensed"
 
-        android:gravity="center"
+                android:textAppearance="?android:textAppearanceSmall"
 
-        >
+                tools:text="Clear"
+
+                />
+
+        </LinearLayout>
 
         <!-- TextView to hold the high temperature -->
 
@@ -149,15 +144,21 @@
 
             android:id="@+id/list_item_high_textview"
 
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/forecast_text_width"
 
             android:layout_height="wrap_content"
 
             android:fontFamily="sans-serif-condensed"
 
+            android:layout_marginRight="@dimen/space_between_content_areas"
+
+            android:layout_marginEnd="@dimen/space_between_content_areas"
+
             android:textAppearance="?android:textAppearanceLarge"
 
-            android:textSize="@dimen/list_item_high_temperature_text_size"
+            android:textSize="@dimen/forecast_text_size"
+
+            tools:text="10\u00B0"
 
             />
 
@@ -167,16 +168,24 @@
 
             android:id="@+id/list_item_low_textview"
 
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/forecast_text_width"
 
             android:layout_height="wrap_content"
 
             android:fontFamily="sans-serif-condensed"
 
+            android:layout_marginRight="@dimen/space_between_content_areas"
+
+            android:layout_marginEnd="@dimen/space_between_content_areas"
+
             android:textAppearance="?android:textAppearanceSmall"
 
-            />
+            android:textSize="@dimen/forecast_text_size"
 
+            tools:text="7\u00B0"
+
+            />
     </LinearLayout>
 
-</LinearLayout>
+
+</FrameLayout>

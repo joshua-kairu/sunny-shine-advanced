@@ -114,23 +114,30 @@
 
     <!-- OTHERS -->
 
-    <dimen name="list_item_icon_container_width">60dp</dimen>
+    <dimen name="today_date_temperatures_margin_left">60dp</dimen>
+
+    <dimen name="detail_wide_day_minimum_width">120dp</dimen>
+
+    <dimen name="forecast_detail_horizontal_padding">32dp</dimen>
+
+    <!-- Icon sizes -->
+
+    <dimen name="today_weather_icon_length">100dp</dimen>
+
+    <dimen name="notification_large_icon_default">48dp</dimen>
+
+    <dimen name="today_icon">96dp</dimen>
+    <dimen name="list_icon">40dp</dimen>
+
+    <!-- Text sizes -->
 
     <dimen name="list_item_date_text_size">22sp</dimen> <!-- for phones -->
 
     <dimen name="list_item_forecast_text_size">14sp</dimen> <!-- for phones -->
 
-    <dimen name="list_item_high_temperature_text_size">22sp</dimen> <!-- for phones -->
-
-    <dimen name="list_item_low_temperature_text_size">14sp</dimen> <!-- for phones -->
-
-    <dimen name="today_date_temperatures_margin_left">60dp</dimen>
-
     <dimen name="today_high_temperature_text_size">72sp</dimen>
 
     <dimen name="today_low_temperature_text_size">36sp</dimen>
-
-    <dimen name="today_weather_icon_length">100dp</dimen>
 
     <dimen name="detail_day_text_size">24sp</dimen>
 
@@ -140,10 +147,13 @@
 
     <dimen name="detail_low_temperature_text_size">36sp</dimen>
 
-    <dimen name="detail_wide_day_minimum_width">120dp</dimen>
+    <!-- we're using DP instead of SP because these are already large font sizes.
+    If we go larger we'll just make things worse. This is only for
+    the large forecast numbers in the forecast list -->
+    <dimen name="forecast_text_size">32dp</dimen>
 
-    <dimen name="notification_large_icon_default">48dp</dimen>
-
-    <dimen name="forecast_detail_horizontal_padding">32dp</dimen>
+    <!-- odd, but here to match font closely with devices not having Roboto yet.
+    DP reason is given above in forecast_text_size. -->
+    <dimen name="forecast_text_width">49dp</dimen>
 
 </resources>
