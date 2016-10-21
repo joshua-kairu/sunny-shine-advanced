@@ -29,6 +29,6 @@
 
     <!-- points to the correct detail frag for all screen configs - in this case fragment_detail_wide
     since in landscape mode we want to show vertical details -->
-    <item name="fragment_detail_start" type="layout">@layout/fragment_detail</item>
+    <item name="fragment_detail_start" type="layout">@layout/fragment_detail_twopane</item>
 
 </resources>

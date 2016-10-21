@@ -31,7 +31,7 @@
 
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:id="@+id/am_f_weather_detail_container"
+    android:id="@+id/am_cv_weather_detail_container"
 
     android:layout_width="match_parent"
 

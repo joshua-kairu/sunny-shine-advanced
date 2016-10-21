@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
         // we know two pane status by checking status of the existence of the detail container view
 
         // begin if there is a detail container view
-        if ( findViewById( R.id.am_f_weather_detail_container ) != null ) {
+        if ( findViewById( R.id.am_cv_weather_detail_container ) != null ) {
 
             // 4a. set the two pane flag to true
 
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
                     .beginTransaction()
 
-                    .replace( R.id.am_f_weather_detail_container,
+                    .replace( R.id.am_cv_weather_detail_container,
                             new DetailFragment(),
                             DETAILFRAGMENT_TAG )
 
@@ -413,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace( R.id.am_f_weather_detail_container, detailFragment )
+                    .replace( R.id.am_cv_weather_detail_container, detailFragment )
                     .commit();
 
         } // end if we are two pane

@@ -30,6 +30,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -273,23 +275,40 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     // begin onCreateLoader
     public Loader< Cursor > onCreateLoader( int id, Bundle args ) {
 
-        // 0. if this fragment was created without a Uri, there's no point in creating a loader
-        // 1. create a cursor loader to get the details
+        // 0. if this fragment was created with a Uri
+        // 0a. create and return a cursor loader to get the details
+        // 1. if the parent is a card view, hide it (it will be shown in onLoadFinished)
+        // 2. return null
 
-        // 0. if this fragment was created without a Uri, there's no point in creating a loader
+        // 0. if this fragment was created with a Uri
 
-        if ( mDataUri == null ) { return null; }
+        // begin if the uri is not null
+        if ( mDataUri != null ) {
 
-        // 1. create a cursor loader to get the details
+            // 0a. create and return a cursor loader to get the details
 
-        return new CursorLoader(
-                getActivity(),
-                mDataUri,
-                DETAILS_COLUMNS,
-                null,
-                null,
-                null
-        );
+            return new CursorLoader(
+                    getActivity(),
+                    mDataUri,
+                    DETAILS_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
+
+        } // end if the uri is not null
+
+        // 1. if the parent is a card view, hide it (it will be shown in onLoadFinished)
+
+        ViewParent viewParent = getView().getParent();
+
+        if ( viewParent instanceof CardView ) {
+            ( ( View ) viewParent ).setVisibility( View.INVISIBLE );
+        }
+
+        // 2. return null
+
+        return null;
 
     } // end onCreateLoader
 
@@ -301,6 +320,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoadFinished( Loader< Cursor > cursorLoader, Cursor cursor ) {
 
         // 0. bind the needed details data to the text view
+        // and if the parent is a card view, show it (since it was hidden in onCreateLoader)
         // 0a. initialize the sharing text
         // 0b. if possible set the share action provider to use the shared text
         // 0a and 0b ensure that a sensible share happens regardless of
@@ -312,9 +332,16 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // 0c4. put the menu in
 
         // 0. bind the needed details data to the text view
+        // and if the parent is a card view, show it (since it was hidden in onCreateLoader)
 
         // begin if there is a row in the cursor
         if ( cursor != null && cursor.moveToFirst() == true )  {
+
+            ViewParent viewParent = getView().getParent();
+
+            if ( viewParent instanceof CardView ) {
+                ( ( View ) viewParent ).setVisibility( View.VISIBLE );
+            }
 
             long dateInMillis = cursor.getLong( COLUMN_WEATHER_DATE );
             mDateTextView.setText( Utility.getFullFriendlyDayString( getActivity(), dateInMillis ) );
@@ -444,6 +471,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             } // end if there is a toolbar
 
         } // end if the activity is a detail one
+
+        // 0d. if the parent is a card view, show it (since it was hidden in onCreateView)
+
+        if ( getView() instanceof CardView ) { getView().setVisibility( View.VISIBLE ); }
 
     } // end onLoadFinished
 

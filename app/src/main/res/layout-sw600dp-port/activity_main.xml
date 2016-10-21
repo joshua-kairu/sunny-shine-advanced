@@ -126,21 +126,23 @@ such as 7" and 10" tablets. This layout is for portrait mode.
     <!-- the detail fragment - is dynamic since it should change based on the forecast chosen. -->
 
     <!-- make it overlap the space provided by ensuring it's margin top is the height of the action bar -->
-    <FrameLayout
+    <android.support.v7.widget.CardView
 
-        android:id="@+id/am_f_weather_detail_container"
+        android:id="@+id/am_cv_weather_detail_container"
 
         android:layout_width="match_parent"
 
         android:layout_height="wrap_content"
 
-        android:elevation="@dimen/toolbar_elevation"
+        app:cardElevation="@dimen/detail_card_elevation"
 
-        android:paddingLeft="@dimen/layout_padding"
+        android:layout_marginLeft="@dimen/layout_padding"
 
-        android:paddingRight="@dimen/layout_padding"
+        android:layout_marginRight="@dimen/layout_padding"
 
         android:layout_below="@id/iv_logo"
+
+        app:cardPreventCornerOverlap="false"
 
         />
 
@@ -157,7 +159,7 @@ such as 7" and 10" tablets. This layout is for portrait mode.
 
         android:layout_height="match_parent"
 
-        android:layout_below="@id/am_f_weather_detail_container"
+        android:layout_below="@id/am_cv_weather_detail_container"
 
         tools:layout="@android:layout/list_content"
 

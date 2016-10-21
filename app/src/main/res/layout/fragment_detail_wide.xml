@@ -25,7 +25,6 @@
 
 <!-- detail for phone landscape and tablet portrait and landscape -->
 
-<!-- fillViewport - if the scrollview should stretch its content to fill the viewport. -->
 <FrameLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
