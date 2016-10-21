@@ -117,6 +117,8 @@
 
             android:gravity="center_horizontal"
 
+            android:textColor="@color/primary_text"
+
             android:textSize="@dimen/today_high_temperature_text_size"
 
             app:layout_gravity="fill_horizontal"

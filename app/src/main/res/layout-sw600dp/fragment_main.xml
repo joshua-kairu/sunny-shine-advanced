@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+ 
+ A simple weather app
+ 
+ Copyright (C) 2016 Kairu Joshua Wambugu
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+ -->
+
+<!-- layout for the main sunshine fragment. for tabs. -->
+
+<FrameLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    >
+
+    <!-- ListView to show weather forecasts -->
+
+    <!-- divider -  Drawable or color to draw between list items. -->
+    <ListView
+
+        android:id="@+id/lv_forecast"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+
+        style="@style/ForecastListStyle"
+
+        android:divider="@null"
+
+        />
+    
+    <!-- TextView for when there is no info available -->
+    <TextView
+
+        android:id="@+id/tv_empty"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+
+        android:padding="@dimen/layout_padding"
+
+        android:text="@string/message_error_no_weather_info"
+
+        android:gravity="center_horizontal"
+
+        />
+
+</FrameLayout>

@@ -23,7 +23,7 @@
 
  -->
 
-<!-- layout for the main sunshine fragment -->
+<!-- layout for the main sunshine fragment. for landscape. -->
 
 <RelativeLayout
 
@@ -36,16 +36,6 @@
     android:layout_height="match_parent"
 
     >
-
-    <include layout="@layout/fragment_main_base"
-
-        android:layout_height="match_parent"
-
-        android:layout_width="match_parent"
-
-        android:layout_below="@+id/appbar"
-
-        />
 
 
     <!-- the appbar layout -->
@@ -62,6 +52,8 @@
 
         android:background="?attr/colorPrimary"
 
+        android:elevation="@dimen/toolbar_elevation"
+
         android:orientation="vertical"
 
         >
@@ -76,30 +68,52 @@
 
             android:layout_height="?attr/actionBarSize"
 
+            android:elevation="0dp"
+
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
 
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
 
             />
 
-        <!-- the logo inside -->
-
-        <ImageView
+        <android.support.v4.widget.Space
 
             android:layout_width="match_parent"
 
-            android:layout_height="?listPreferredItemHeight"
-
-            android:scaleType="center"
-
-            android:src="@drawable/ic_logo"
-
-            android:contentDescription="@string/a11y_toolbar_icon"
-
-            android:layout_gravity="center"
+            android:layout_height="?attr/listPreferredItemHeight"
 
             />
 
+        <!--&lt;!&ndash; the logo inside &ndash;&gt;-->
+
+        <!--<ImageView-->
+
+            <!--android:layout_width="match_parent"-->
+
+            <!--android:layout_height="?listPreferredItemHeight"-->
+
+            <!--android:scaleType="center"-->
+
+            <!--android:src="@drawable/ic_logo"-->
+
+            <!--android:contentDescription="@string/a11y_toolbar_icon"-->
+
+            <!--android:layout_gravity="center"-->
+
+            <!--/>-->
+
     </LinearLayout>
+
+    <include layout="@layout/fragment_main_base"
+
+        android:layout_height="match_parent"
+
+        android:layout_width="@dimen/landscape_forecast_view_width"
+
+        android:layout_centerHorizontal="true"
+
+        android:layout_alignParentTop="true"
+
+        />
 
 </RelativeLayout>

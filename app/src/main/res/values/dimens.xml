@@ -120,8 +120,14 @@
 
     <dimen name="forecast_detail_horizontal_padding">32dp</dimen>
 
+    <!-- space between  temperatures in the list item forecast. 8dp for here. Decent enough, right? -->
+    <dimen name="forecast_temperature_space">8dp</dimen>
+
     <!-- amount we want the details view to overlap the app bar -->
     <dimen name="detail_app_bar_overlap">24dp</dimen>
+
+    <!-- fixed width for the landscape forecast list -->
+    <dimen name="landscape_forecast_view_width">360dp</dimen>
 
     <!-- Icon sizes -->
 

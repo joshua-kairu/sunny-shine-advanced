@@ -27,7 +27,7 @@
 
 <!-- contains the forecast fragment alone, and a toolbar. -->
 
-<LinearLayout
+<FrameLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
 
@@ -35,9 +35,7 @@
 
     android:layout_height="match_parent"
 
-    android:layout_width="match_parent"
-
-    android:orientation="vertical"
+    android:layout_width="wrap_content"
 
     >
 
@@ -87,11 +85,9 @@
 
         android:layout_height="match_parent"
 
-        tools:context=".MainActivity"
-
         tools:layout="@android:layout/list_content"
 
         />
 
-</LinearLayout>
+</FrameLayout>
 

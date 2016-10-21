@@ -263,11 +263,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 3a. find reference to it
 
-        mForecastListView = ( ListView ) rootView.findViewById( R.id.fm_lv_forecast );
+        mForecastListView = ( ListView ) rootView.findViewById( R.id.lv_forecast );
 
         // 3b. set its empty view
 
-        TextView emptyTextView = ( TextView ) rootView.findViewById( R.id.fm_tv_empty );
+        TextView emptyTextView = ( TextView ) rootView.findViewById( R.id.tv_empty );
         mForecastListView.setEmptyView( emptyTextView );
 
         // 4. set adapter to the list
@@ -669,7 +669,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
             TextView emptyTextView = null;
             if ( getView() != null ) {
-                 emptyTextView = ( TextView ) getView().findViewById( R.id.fm_tv_empty );
+                 emptyTextView = ( TextView ) getView().findViewById( R.id.tv_empty );
             }
 
             // 0a1. if we get the empty view successfully
