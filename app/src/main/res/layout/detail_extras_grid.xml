@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+-->
+
+<!-- Grid for detail showing extra details: humidity, pressure, and wind -->
+
+<android.support.v7.widget.GridLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    android:paddingTop="@dimen/layout_padding"
+
+    android:paddingBottom="@dimen/layout_padding"
+
+    android:paddingLeft="@dimen/forecast_detail_horizontal_padding"
+
+    android:paddingStart="@dimen/forecast_detail_horizontal_padding"
+
+    android:paddingRight="@dimen/forecast_detail_horizontal_padding"
+
+    android:paddingEnd="@dimen/forecast_detail_horizontal_padding"
+
+    android:background="@color/detail_accent_pane_background"
+
+    app:columnCount="2"
+
+    >
+
+    <!-- TextView to hold humidity label -->
+
+    <TextView
+
+        android:layout_height="wrap_content"
+
+        android:id="@+id/detail_tv_humidity_label"
+
+        android:fontFamily="sans-serif"
+
+        android:gravity="center_vertical"
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+
+        android:textColor="@color/detail_accent_label"
+
+        android:text="@string/humidity_label"
+
+        app:layout_columnWeight="1"
+
+        app:layout_rowWeight="1"
+
+        app:layout_gravity="fill"
+
+        />
+
+    <!-- TextView to hold humidity value -->
+
+    <TextView
+
+        android:id="@+id/detail_tv_humidity_value"
+
+        android:gravity="center_vertical"
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+
+        android:textColor="@android:color/white"
+
+        tools:text="38%"
+
+        app:layout_columnWeight="1"
+
+        app:layout_gravity="fill"
+
+        />
+
+    <!-- TextView to hold pressure label -->
+
+    <TextView
+
+        android:id="@+id/detail_tv_pressure_label"
+
+        android:fontFamily="sans-serif"
+
+        android:gravity="center_vertical"
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+
+        android:text="@string/pressure_label"
+
+        android:textColor="@color/detail_accent_label"
+
+        app:layout_gravity="fill"
+
+        app:layout_columnWeight="1"
+
+        app:layout_rowWeight="1"
+
+        />
+
+    <!-- TextView to hold pressure value -->
+
+    <TextView
+
+        android:id="@+id/detail_tv_pressure_value"
+
+        android:gravity="center_vertical"
+
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+
+        android:textColor="@android:color/white"
+
+        app:layout_gravity="fill"
+
+        tools:text="995 hPa"
+
+        />
+
+    <!-- TextView to hold wind label -->
+
+    <TextView
+
+        android:id="@+id/detail_tv_wind_label"
+
+        android:fontFamily="sans-serif"
+
+        android:gravity="center_vertical"
+
+        android:textColor="@color/detail_accent_label"
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+
+        android:text="@string/wind_label"
+
+        app:layout_columnWeight="1"
+
+        app:layout_rowWeight="1"
+
+        app:layout_gravity="fill"
+
+        />
+
+    <!-- TextView to hold wind value -->
+
+    <TextView
+
+        android:id="@+id/detail_tv_wind_value"
+
+        android:gravity="center_vertical"
+
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+
+        android:textColor="@android:color/white"
+
+        tools:text="4km/h NW"
+
+        app:layout_columnWeight="1"
+
+        app:layout_gravity="fill"
+
+        />
+
+</android.support.v7.widget.GridLayout>

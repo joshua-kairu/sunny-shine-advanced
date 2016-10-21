@@ -159,4 +159,15 @@
     DP reason is given above in forecast_text_size. -->
     <dimen name="forecast_text_width">49dp</dimen>
 
+    <!-- Help to make us tablet beautiful -->
+    <dimen name="list_item_extra_padding">0dp</dimen>
+
+    <dimen name="detail_view_padding">@dimen/layout_padding</dimen>
+
+    <dimen name="forecast_detail_padding_wide">16dp</dimen>
+
+    <dimen name="detail_container_bottom_margin">@dimen/detail_view_padding</dimen>
+
+    <dimen name="detail_view_padding_vertical">0dp</dimen>
+
 </resources>

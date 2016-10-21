@@ -195,7 +195,7 @@ such as 7" and 10" tablets.
 
             android:paddingEnd="@dimen/layout_padding"
 
-            android:paddingBottom="@dimen/layout_padding"
+            android:paddingBottom="@dimen/detail_container_bottom_margin"
 
             />
 

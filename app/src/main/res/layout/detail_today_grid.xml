@@ -37,8 +37,6 @@
 
     android:layout_height="wrap_content"
 
-
-
     android:background="@android:color/white"
 
     app:columnCount="2"
@@ -48,6 +46,8 @@
     <!-- space -->
 
     <android.support.v4.widget.Space
+
+        android:layout_height="@dimen/detail_view_padding_vertical"
 
         app:layout_columnSpan="2"
 
@@ -192,6 +192,8 @@
     <!-- space after the grid -->
 
     <android.support.v4.widget.Space
+
+        android:layout_height="@dimen/detail_view_padding_vertical"
 
         app:layout_columnSpan="2"
 

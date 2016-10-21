@@ -23,32 +23,21 @@
 
  -->
 
-<!-- dimensions. for tabs. -->
+<!-- dimensions. for huger tabs. -->
 
 <resources>
 
     <!-- OTHERS -->
 
-    <dimen name="list_item_date_text_size">20sp</dimen> <!-- for tabs -->
-
-    <dimen name="list_item_forecast_text_size">12sp</dimen> <!-- for tabs -->
-
-    <dimen name="list_item_high_temperature_text_size">20sp</dimen> <!-- for tabs -->
-
-    <dimen name="list_item_low_temperature_text_size">12sp</dimen> <!-- for tabs -->
-
-    <dimen name="detail_date_text_size">20sp</dimen>
-
-    <dimen name="detail_day_date_container_width">180dp</dimen>
-
-    <!-- Extra Padding - This one actually smaller on tablets -->
-
+    <!-- Extra List Item Margin (tablet-only) -->
     <dimen name="list_item_extra_padding">80dp</dimen>
 
-    <dimen name="detail_view_extra_padding">0dp</dimen>
+    <dimen name="detail_view_padding_vertical">@dimen/layout_padding</dimen>
+
+    <dimen name="detail_view_padding">@dimen/abc_action_bar_default_height_material</dimen>
 
     <dimen name="forecast_temperature_space">@dimen/layout_padding</dimen>
 
-    <dimen name="detail_view_padding_vertical">@dimen/layout_padding</dimen>
+    <dimen name="detail_container_bottom_margin">@dimen/abc_action_bar_default_height_material</dimen>
 
 </resources>

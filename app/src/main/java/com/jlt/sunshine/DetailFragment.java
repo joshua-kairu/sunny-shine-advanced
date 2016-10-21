@@ -243,7 +243,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         // 1. use the detail layout
 
-        View rootView = inflater.inflate( R.layout.fragment_detail, container, false );
+        View rootView = inflater.inflate( R.layout.fragment_detail_start, container, false );
 
         // 2. get the needed views
 

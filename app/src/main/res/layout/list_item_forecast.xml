@@ -38,6 +38,10 @@
 
     android:background="@drawable/touch_selector"
 
+    android:paddingLeft="@dimen/list_item_extra_padding"
+
+    android:paddingRight="@dimen/list_item_extra_padding"
+
     >
 
     <LinearLayout
@@ -148,13 +152,15 @@
 
             android:layout_height="wrap_content"
 
-            android:fontFamily="sans-serif-condensed"
+            android:fontFamily="sans-serif-light"
 
-            android:layout_marginRight="@dimen/space_between_content_areas"
+            android:layout_marginRight="@dimen/forecast_temperature_space"
 
-            android:layout_marginEnd="@dimen/space_between_content_areas"
+            android:layout_marginEnd="@dimen/forecast_text_size"
 
             android:textAppearance="?android:textAppearanceLarge"
+
+            android:textColor="@color/primary_text"
 
             android:textSize="@dimen/forecast_text_size"
 
