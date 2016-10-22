@@ -22,9 +22,7 @@ package com.jlt.sunshine.data;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
-import android.support.v4.widget.CursorAdapter;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,15 +37,14 @@ import static com.jlt.sunshine.ForecastFragment.COLUMN_WEATHER_DATE;
 import static com.jlt.sunshine.ForecastFragment.COLUMN_WEATHER_MAX_TEMP;
 import static com.jlt.sunshine.ForecastFragment.COLUMN_WEATHER_MIN_TEMP;
 import static com.jlt.sunshine.ForecastFragment.COLUMN_WEATHER_SHORT_DESCRIPTION;
-import static com.jlt.sunshine.ForecastFragment.LOG_TAG;
 import static com.jlt.sunshine.data.contract.WeatherContract.LocationEntry;
 
 /**
  * {@link ForecastAdapter} exposes a list of weather forecasts
- * from a {@link android.database.Cursor} to a {@link android.widget.ListView}
+ * from a {@link android.database.Cursor} to a {@link RecyclerView}
  * */
 // begin class ForecastAdapter
-public class ForecastAdapter extends CursorAdapter {
+public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
 
     /* CONSTANTS */
 
@@ -79,6 +76,14 @@ public class ForecastAdapter extends CursorAdapter {
         
     /* VARIABLES */
 
+    /* Contexts */
+
+    private Context mContext; // ditto
+
+    /* Cursors */
+
+    private Cursor mCursor; // ditto
+
     /* Primitives */
 
     private boolean mUseTodayLayout = true; // tells if to use the enlarged today layout
@@ -87,160 +92,173 @@ public class ForecastAdapter extends CursorAdapter {
     /* CONSTRUCTOR */
 
     /**
-     * Recommended constructor.
+     * Default constructor.
      *
-     * @param context The context
-     * @param c       The cursor from which to get the data.
-     * @param flags   Flags used to determine the behavior of the adapter; may
-     *                be any combination of {@link #FLAG_AUTO_REQUERY} and
-     *                {@link #FLAG_REGISTER_CONTENT_OBSERVER}.
-     */
-    public ForecastAdapter( Context context, Cursor c, int flags ) {
-        super( context, c, flags );
-    }
+     * @param context Android {@link Context}
+     * */
+    // begin constructor
+    public ForecastAdapter( Context context ) {
+
+        // 0. initialize members
+
+        // 0. initialize members
+
+        mContext = context;
+
+    } // end constructor
 
     /* METHODS */
     
     /* Getters and Setters */
 
     // setter for mUseTodayLayout
-    public void setUseTodayLayout( boolean useTodayLayout ) {
-        this.mUseTodayLayout = useTodayLayout;
-    }
+    public void setUseTodayLayout( boolean useTodayLayout ) { mUseTodayLayout = useTodayLayout; }
+
+    // getter for the cursor
+    public Cursor getCursor() { return mCursor; }
 
     /* Overrides */
 
-    /**
-     * Makes a new view to hold the data pointed to by cursor.
-     *
-     * @param context Interface to application's global information
-     * @param cursor  The cursor from which to get the data. The cursor is already
-     *                moved to the correct position.
-     * @param parent  The parent to which the new view is attached to
-     * @return the newly created view.
-     */
     @Override
-    // begin newView
-    public View newView( Context context, Cursor cursor, ViewGroup parent ) {
+    // begin onCreateViewHolder
+    public WeatherViewHolder onCreateViewHolder( ViewGroup parentViewGroup, int viewType ) {
 
-        // 0. choose the layout type
-        // 1. determine the layout id from the view type
-        // 2. inflate the correct layout
-        // 3. put the inflated layout inside a view holder
-        // 4. return the inflated layout
+        // 0. if the parent view group is recycler
+        // 0a. choose the layout type from the view type
+        // 0b. inflate the correct layout
+        // 0b1. from the parent context
+        // 0b2. make the inflated view focusable
+        // 0b3. return the inflated layout
+        // 1. else exception!
 
-        // 0. choose the layout type
+        // 0. if the parent view group is recycler
 
-        int viewType = getItemViewType( cursor.getPosition() );
+        // begin if the parent view group is a recycler
+        if ( parentViewGroup instanceof RecyclerView ) {
 
-        // 1. determine the layout id from the view type
+            // 0a. choose the layout type from the view type
 
-        int layoutId = -1;
+            int layoutId = -1;
 
-        if ( viewType == VIEW_TYPE_TODAY  ) { layoutId = R.layout.list_item_forecast_today; }
-        else if ( viewType == VIEW_TYPE_FUTURE_DAY ) { layoutId =  R.layout.list_item_forecast; }
+            if ( viewType == VIEW_TYPE_TODAY ) { layoutId = R.layout.list_item_forecast_today; }
+            else if ( viewType == VIEW_TYPE_FUTURE_DAY ) { layoutId =  R.layout.list_item_forecast; }
 
-        // 2. inflate the correct layout
+            // 0b. inflate the correct layout
 
-        View inflatedView = LayoutInflater.from( context ).inflate( layoutId, parent, false );
+            // 0b1. from the parent context
 
-        // 3. put the inflated layout inside a view holder
+            View view = LayoutInflater.from( parentViewGroup.getContext() )
+                    .inflate( layoutId, parentViewGroup, false );
 
-        inflatedView.setTag( R.id.view_holder_tag, new WeatherViewHolder( inflatedView ) );
+            // 0b2. make the inflated view focusable
 
-        // 4. return the inflated layout
+            view.setFocusable( true );
 
-        return inflatedView;
+            // 0b3. return the inflated layout
 
-    } // end newView
+            return new WeatherViewHolder( view );
 
-    /**
-     * Bind an existing view to the data pointed to by cursor
-     *
-     * @param view    Existing view, returned earlier by newView
-     * @param context Interface to application's global information
-     * @param cursor  The cursor from which to get the data. The cursor is already
-     */
+        } // end if the parent view group is a recycler
+
+        // 1. else exception!
+
+        else {
+            throw new RuntimeException( "Not bound to RecyclerView." );
+        }
+
+    } // end onCreateViewHolder
+
     @Override
-    // begin bindView
-    public void bindView( View view, Context context, Cursor cursor ) {
+    // begin onBindViewHolder
+    public void onBindViewHolder( WeatherViewHolder weatherViewHolder, int position ) {
 
-        // 0. get the view holder from the tag
+        // 0. if the cursor exists and has something
+        // 0a. first move it to the given position
         // 1. read weather icon ID from cursor and display appropriate icon using view holder data
         // 1a. show art for both today's and the future's weather
         // 2. read date from cursor and display it appropriately using view holder data
         // 3. read forecast from cursor and display it using view holder data
-        // 3a. also make the forecast the content description for the image shown in 1a
+        // 3a. also make the forecast the content description for the image shown in 0a
         // 4. read high temperature from cursor and display it in appropriate units using view holder data
         // 4a. provide content description for the high temperature
         // 5. read low temperature from cursor and display it in appropriate units using view holder data
         // 5a. provide content description for the low temperature
 
-        // 0. get the view holder from the tag
+        // 0. if the cursor exists and has something
 
-        WeatherViewHolder weatherViewHolder =
-                ( WeatherViewHolder ) view.getTag( R.id.view_holder_tag );
+        // begin if there cursor is and is not empty
+        if ( mCursor != null && mCursor.moveToFirst() ) {
 
-        // 1. read weather icon ID from cursor and display appropriate icon using view holder data
+            // 0a. first move it to the given position
 
-        // 1a. show art for both today's and the future's weather
+            mCursor.moveToPosition( position );
 
-        int weatherIconId = cursor.getInt( COLUMN_WEATHER_CONDITION_ID );
-Uri uri = Utility.getArtUriForWeatherCondition( context, weatherIconId );
+            // 1. read weather icon ID from cursor and display appropriate icon using view holder data
+            // 1a. show art for both today's and the future's weather
 
-        Log.e( LOG_TAG, "bindView: uri " + uri.toString() );
-        Glide.with( context )
-                .load( Utility.getArtUriForWeatherCondition( context, weatherIconId ) )
-                .error( Utility.getArtResourceForWeatherCondition( weatherIconId ) )
-                .into( weatherViewHolder.iconImageView );
+            int weatherIconId = mCursor.getInt( COLUMN_WEATHER_CONDITION_ID );
 
-        // 2. read date from cursor and display it appropriately using view holder data
+            Glide.with( mContext )
+                    .load( Utility.getArtUriForWeatherCondition( mContext, weatherIconId ) )
+                    .error( Utility.getArtResourceForWeatherCondition( weatherIconId ) )
+                    .crossFade()
+                    .into( weatherViewHolder.mIconImageView );
 
-        long date = cursor.getLong( COLUMN_WEATHER_DATE );
+            // 2. read date from cursor and display it appropriately using view holder data
 
-        String dateString = Utility.getFriendlyDateString( context, date );
+            long date = mCursor.getLong( COLUMN_WEATHER_DATE );
 
-        weatherViewHolder.dateTextView.setText( dateString );
+            String dateString = Utility.getFriendlyDateString( mContext, date );
 
-        // 3. read forecast from cursor and display it using view holder data
+            weatherViewHolder.mDateTextView.setText( dateString );
 
-        String forecastString = Utility.getStringForWeatherCondition( context, weatherIconId );
+            // 3. read forecast from cursor and display it using view holder data
 
-        weatherViewHolder.descriptionTextView.setText( forecastString );
+            String forecastString = Utility.getStringForWeatherCondition( mContext, weatherIconId );
 
-        // 3a. also make the forecast the content description for the image shown in 1a
+            weatherViewHolder.mDescriptionTextView.setText( forecastString );
 
-        weatherViewHolder.descriptionTextView.setContentDescription( forecastString );
+            // 3a. also make the forecast the content description for the image shown in 0a
 
-        // 4. read high temperature from cursor and display it in appropriate units using view holder data
+            weatherViewHolder.mIconImageView.setContentDescription( forecastString );
 
-        float high = cursor.getFloat( COLUMN_WEATHER_MAX_TEMP );
+            // 4. read high temperature from cursor and display it in appropriate units using view holder data
 
-        String highString = Utility.formatTemperature( context, high, Utility.isMetric( mContext ) );
+            float high = mCursor.getFloat( COLUMN_WEATHER_MAX_TEMP );
 
-        weatherViewHolder.highTempTextView.setText( highString );
+            String highString = Utility.formatTemperature( mContext, high, Utility.isMetric( mContext ) );
 
-        // 4a. provide content description for the high temperature
+            weatherViewHolder.mHighTempTextView.setText( highString );
 
-        weatherViewHolder.highTempTextView.setContentDescription(
-                context.getString( R.string.a11y_high_temperature_format, highString )
-        );
+            // 4a. provide content description for the high temperature
 
-        // 5. read low temperature from cursor and display it in appropriate units using view holder data
+            weatherViewHolder.mHighTempTextView.setContentDescription(
+                    mContext.getString( R.string.a11y_high_temperature_format, highString )
+            );
 
-        float low = cursor.getFloat( COLUMN_WEATHER_MIN_TEMP );
+            // 5. read low temperature from cursor and display it in appropriate units using view holder data
 
-        String lowString = Utility.formatTemperature( mContext, low, Utility.isMetric( mContext ) );
+            float low = mCursor.getFloat( COLUMN_WEATHER_MIN_TEMP );
 
-        weatherViewHolder.lowTempTextView.setText( lowString );
+            String lowString = Utility.formatTemperature( mContext, low, Utility.isMetric( mContext ) );
 
-        // 5a. provide content description for the high temperature
+            weatherViewHolder.mLowTempTextView.setText( lowString );
 
-        weatherViewHolder.lowTempTextView.setContentDescription(
-                context.getString( R.string.a11y_low_temperature_format, lowString )
-        );
+            // 5a. provide content description for the low temperature
 
-    } // end bindView
+            weatherViewHolder.mLowTempTextView.setContentDescription(
+                    mContext.getString( R.string.a11y_low_temperature_format, lowString )
+            );
+
+            mCursor.moveToNext();
+
+        } // end if there cursor is and is not empty
+
+    } // end onBindViewHolder
+
+    @Override
+    // return the number of items in the cursor, or zero if cursor is not there
+    public int getItemCount() { return ( mCursor == null ) ? 0 : mCursor.getCount(); }
 
     @Override
     // begin getItemViewType
@@ -253,10 +271,6 @@ Uri uri = Utility.getArtUriForWeatherCondition( context, weatherIconId );
                 VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
 
     } // end getItemViewType
-
-    @Override
-    // getViewTypeCount
-    public int getViewTypeCount() { return VIEW_TYPE_COUNT; }
 
     /* Other Methods */
 
@@ -307,6 +321,28 @@ Uri uri = Utility.getArtUriForWeatherCondition( context, weatherIconId );
                         highLowString;
 
     } // end method convertCursorRowToUXFormat
+
+    /**
+     *
+     * Replaces the member {@link Cursor} with the one passed in and refreshes the data.
+     *
+     * @param newCursor The {@link Cursor} to replace the member cursor with.
+     * */
+    // begin method swapCursor
+    public void swapCursor( Cursor newCursor ) {
+
+        // 0. swap cursors
+        // 1. tell of data change
+
+        // 0. swap cursors
+
+        mCursor = newCursor;
+
+        // 1. tell of data change
+
+        notifyDataSetChanged();
+
+    } // end method swapCursor
 
     /* INNER CLASSES */
 

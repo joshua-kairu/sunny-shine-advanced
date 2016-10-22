@@ -31,6 +31,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,7 +40,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -116,17 +117,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private ForecastAdapter mForecastAdapter; // array adapter to fill the weather list view
 
-    /* List Views */
-
-    private ListView mForecastListView; // ditto
-
     /* Primitives */
 
-    private int mCurrentScrollPosition = ListView.INVALID_POSITION; // current scroll position of
-                                                                    // the list view. starting off
-                                                                    // with an invalid position
+    private int mCurrentScrollPosition = RecyclerView.NO_POSITION; // current scroll position of
+                                                                   // the recycler. starting off
+                                                                   // with an invalid no position
 
     private boolean mUseTodayLayout = true; // ditto
+
+    /* Recycler Views */
+
+    private RecyclerView mForecastRecyclerView; // ditto
 
     /*
      * CONSTRUCTOR
@@ -222,11 +223,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // and get a cursor
         // 2. initialize the adapter
         // 2a. tell it if to use the special today layout
-        // 3. the list view
+        // 3. the recycler
         // 3a. find reference to it
         // 3b. set its empty view
+        // 3c. use a linear layout manager
         // 4. set adapter to the list
-        // 5. when an item in the list view is clicked
+        // 5. when an item in the recycler is clicked
         // 5a. notify the parent activity
         // 5b. update the selected position member variable
         // 6. if there's instance state,
@@ -253,78 +255,82 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 2. initialize the adapter
 
-        mForecastAdapter = new ForecastAdapter( getActivity(), cursor, 0 );
+        mForecastAdapter = new ForecastAdapter( getActivity() );
 
         // 2a. tell it if to use the special today layout
 
         mForecastAdapter.setUseTodayLayout( mUseTodayLayout );
 
-        // 3. the list view
+        // 3. the recycler
 
         // 3a. find reference to it
 
-        mForecastListView = ( ListView ) rootView.findViewById( R.id.lv_forecast );
+        mForecastRecyclerView = ( RecyclerView ) rootView.findViewById( R.id.rv_forecast );
 
         // 3b. set its empty view
 
         TextView emptyTextView = ( TextView ) rootView.findViewById( R.id.tv_empty );
-        mForecastListView.setEmptyView( emptyTextView );
+//        mForecastRecyclerView.setEmptyView( emptyTextView );
+
+        // 3c. use a linear layout manager
+
+        mForecastRecyclerView.setLayoutManager( new LinearLayoutManager( getActivity() ) );
 
         // 4. set adapter to the list
 
-        mForecastListView.setAdapter( mForecastAdapter );
+        mForecastRecyclerView.setAdapter( mForecastAdapter );
 
         // 5. when an item in the list view is clicked
 
         // begin listView.setOnItemClickListener
-        mForecastListView.setOnItemClickListener(
-
-                // begin new AdapterView.OnItemClickListener
-                new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    // begin onItemClick
-                    public void onItemClick( AdapterView< ? > adapterView, View view,
-                                             int position, long id ) {
-
-                        // 5a. notify the parent activity
-
-                        // 0. get the cursor at the given position
-                        // 1. if there is a cursor there
-                        // 1a. get the location setting
-                        // 1b. pass these to the parent activity
-
-                        // 0. get the cursor at the given position
-
-                        Cursor cursor = ( Cursor ) adapterView.getItemAtPosition( position );
-
-                        // 1. if there is a cursor there
-
-                        // begin if there exists a cursor
-                        if ( cursor != null ) {
-
-                            // 1a. get the location setting
-
-                            String locationSetting = Utility.getPreferredLocation( getActivity() );
-
-                            // 1b. pass these to the parent activity
-
-                            forecastCallbackListener.onForecastItemSelected(
-                                    WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
-                                            locationSetting, cursor.getLong( COLUMN_WEATHER_DATE ) )
-                            );
-
-                        } // end if there exists a cursor
-
-                        // 5b. update the selected position member variable
-
-                        mCurrentScrollPosition = position;
-
-                    } // end onItemClick
-
-                } // end new AdapterView.OnItemClickListener
-
-        ); // end listView.setOnItemClickListener
+//        mForecastRecyclerView.setOnItemClickListener(
+//
+//                // begin new AdapterView.OnItemClickListener
+//                new AdapterView.OnItemClickListener() {
+//
+//                    @Override
+//                    // begin onItemClick
+//                    public void onItemClick( AdapterView< ? > adapterView, View view,
+//                                             int position, long id ) {
+//
+//                        // 5a. notify the parent activity
+//
+//                        // 0. get the cursor at the given position
+//                        // 1. if there is a cursor there
+//                        // 1a. get the location setting
+//                        // 1b. pass these to the parent activity
+//
+//                        // 0. get the cursor at the given position
+//
+//                        Cursor cursor = ( Cursor ) adapterView.getItemAtPosition( position );
+//
+//                        // 1. if there is a cursor there
+//
+//                        // begin if there exists a cursor
+//                        if ( cursor != null ) {
+//
+//                            // 1a. get the location setting
+//
+//                            String locationSetting = Utility.getPreferredLocation( getActivity() );
+//
+//                            // 1b. pass these to the parent activity
+//
+//                            forecastCallbackListener.onForecastItemSelected(
+//                                    WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
+//                                            locationSetting, cursor.getLong( COLUMN_WEATHER_DATE ) )
+//                            );
+//
+//                        } // end if there exists a cursor
+//
+//                        // 5b. update the selected position member variable
+//
+//                        mCurrentScrollPosition = position;
+//
+//                    } // end onItemClick
+//
+//                } // end new AdapterView.OnItemClickListener
+//
+//        ); // end listView.setOnItemClickListener
 
         // 6. if there's instance state,
 
@@ -481,7 +487,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoadFinished( Loader< Cursor > cursorLoader, Cursor cursor ) {
 
         // 0. refresh the list view
-        // 1. if there is an valid list scroll position
+        // 1. if there is an valid recycler scroll position
         // 1a. scroll to it
         // 2. update the empty view
 
@@ -490,11 +496,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // swapCursor - Swap in a new Cursor, returning the old Cursor
         mForecastAdapter.swapCursor( cursor );
 
-        // 1. if there is an valid list scroll position
+        // 1. if there is an valid recycler scroll position
         // 1a. scroll to it
 
         if ( mCurrentScrollPosition != ListView.INVALID_POSITION ) {
-            mForecastListView.smoothScrollToPosition( mCurrentScrollPosition );
+            mForecastRecyclerView.smoothScrollToPosition( mCurrentScrollPosition );
         }
 
         // 2. update the empty view
@@ -534,9 +540,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 1a. put the current scroll position in the bundle
 
-        // no item selected will leave the position at INVALID_POSITION
+        // no item selected will leave the position at NO_POSITION
 
-        if ( mCurrentScrollPosition != ListView.INVALID_POSITION ) {
+        if ( mCurrentScrollPosition != RecyclerView.NO_POSITION ) {
             outState.putInt( BUNDLE_SCROLL_POSITION, mCurrentScrollPosition );
         }
 
@@ -663,7 +669,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 0. if our adapter's cursor has nothing in it
 
         // begin if the adapter cursor is empty
-        if ( mForecastAdapter.getCount() == 0 ) {
+        if ( mForecastAdapter.getCursor().getCount() == 0 ) {
 
             // 0a. get the empty view
 

@@ -20,17 +20,20 @@
 
 package com.jlt.sunshine.ui;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jlt.sunshine.R;
 
 /**
- * Cache of the children views for a forecast list item.
+ * {@link android.support.v7.widget.RecyclerView.ViewHolder} to act as cache of the children views
+ * for a forecast list item.
  * */
 // begin class WeatherViewHolder
-public class WeatherViewHolder {
+public class WeatherViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnItemClickListener {
 
     /* CONSTANTS */
     
@@ -42,29 +45,34 @@ public class WeatherViewHolder {
 
     /* Image Views */
 
-    public final ImageView iconImageView; // ditto
+    public final ImageView mIconImageView; // ditto
 
     /* Text Views */
 
-    public final TextView dateTextView; // ditto
-    public final TextView descriptionTextView; // ditto
-    public final TextView highTempTextView; // ditto
-    public final TextView lowTempTextView; // ditto
+    public final TextView mDateTextView; // ditto
+    public final TextView mDescriptionTextView; // ditto
+    public final TextView mHighTempTextView; // ditto
+    public final TextView mLowTempTextView; // ditto
 
     /* CONSTRUCTOR */
 
     // begin constructor
     public WeatherViewHolder( View view ) {
 
-        // 0. initialize local views from the parameter view
+        // 0. super stuff
+        // 1. initialize local views from the parameter view
 
-        // 0. initialize local views from the parameter view
+        // 0. super stuff
 
-        iconImageView = ( ImageView ) view.findViewById( R.id.list_item_icon );
-        dateTextView = ( TextView ) view.findViewById( R.id.list_item_date_textview );
-        descriptionTextView = ( TextView ) view.findViewById( R.id.list_item_forecast_textview );
-        highTempTextView = ( TextView ) view.findViewById( R.id.list_item_high_textview );
-        lowTempTextView = ( TextView ) view.findViewById( R.id.list_item_low_textview );
+        super( view );
+
+        // 1. initialize local views from the parameter view
+
+        mIconImageView = ( ImageView ) view.findViewById( R.id.list_item_icon );
+        mDateTextView = ( TextView ) view.findViewById( R.id.list_item_date_textview );
+        mDescriptionTextView = ( TextView ) view.findViewById( R.id.list_item_forecast_textview );
+        mHighTempTextView = ( TextView ) view.findViewById( R.id.list_item_high_textview );
+        mLowTempTextView = ( TextView ) view.findViewById( R.id.list_item_low_textview );
 
     } // end constructor
 
@@ -73,7 +81,46 @@ public class WeatherViewHolder {
     /* Getters and Setters */
     
     /* Overrides */
-    
+
+    @Override
+    // begin onItemClick
+    public void onItemClick( AdapterView< ? > parent, View view, int position, long id ) {
+
+//                        // 5a. notify the parent activity
+//
+//                        // 0. get the cursor at the given position
+//                        // 1. if there is a cursor there
+//                        // 1a. get the location setting
+//                        // 1b. pass these to the parent activity
+//
+//                        // 0. get the cursor at the given position
+//
+//                        Cursor cursor = ( Cursor ) adapterView.getItemAtPosition( position );
+//
+//                        // 1. if there is a cursor there
+//
+//                        // begin if there exists a cursor
+//                        if ( cursor != null ) {
+//
+//                            // 1a. get the location setting
+//
+//                            String locationSetting = Utility.getPreferredLocation( getActivity() );
+//
+//                            // 1b. pass these to the parent activity
+//
+//                            forecastCallbackListener.onForecastItemSelected(
+//                                    WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
+//                                            locationSetting, cursor.getLong( COLUMN_WEATHER_DATE ) )
+//                            );
+//
+//                        } // end if there exists a cursor
+//
+//                        // 5b. update the selected position member variable
+//
+//                        mCurrentScrollPosition = position;
+
+    } // end onItemClick
+
     /* Other Methods */
     
     /* INNER CLASSES */

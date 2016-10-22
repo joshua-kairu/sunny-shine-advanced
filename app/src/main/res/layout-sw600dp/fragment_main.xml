@@ -35,20 +35,16 @@
 
     >
 
-    <!-- ListView to show weather forecasts -->
+    <!-- RecyclerView to show weather forecasts -->
 
     <!-- divider -  Drawable or color to draw between list items. -->
-    <ListView
+    <android.support.v7.widget.RecyclerView
 
-        android:id="@+id/lv_forecast"
+        android:id="@+id/rv_forecast"
 
         android:layout_width="match_parent"
 
         android:layout_height="match_parent"
-
-        style="@style/ForecastListStyle"
-
-        android:divider="@null"
 
         />
     

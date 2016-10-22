@@ -26,7 +26,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -111,17 +110,17 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
         setContentView( R.layout.activity_main );
 
-        // 3. set up toolbar
-
-        Toolbar toolbar = ( Toolbar ) findViewById( R.id.am_toolbar );
-
-        // 3a. set it as action bar
-
-        setSupportActionBar( toolbar );
-
-        // 3b. should not show a title
-
-        getSupportActionBar().setDisplayShowTitleEnabled( false );
+//        // 3. set up toolbar
+//
+//        Toolbar toolbar = ( Toolbar ) findViewById( R.id.am_toolbar );
+//
+//        // 3a. set it as action bar
+//
+//        setSupportActionBar( toolbar );
+//
+//        // 3b. should not show a title
+//
+//        getSupportActionBar().setDisplayShowTitleEnabled( false );
 
         // 4. if this is a two pane UI
 
