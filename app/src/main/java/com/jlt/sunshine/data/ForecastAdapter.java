@@ -70,7 +70,6 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
 
     private static final int VIEW_TYPE_TODAY = 0; // constant to tell when we are to inflate the today view
     private static final int VIEW_TYPE_FUTURE_DAY = 1; // constant to tell when we are to inflate the future day view
-    private static final int VIEW_TYPE_COUNT = 2; // ditto
 
     /* Strings */
         
@@ -84,10 +83,18 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
 
     private Cursor mCursor; // ditto
 
+    /* Forecast Adapter On Click Handlers */
+
+    public final ForecastAdapterOnClickHandler mForecastAdapterOnClickHandler; // ditto
+
     /* Primitives */
 
     private boolean mUseTodayLayout = true; // tells if to use the enlarged today layout
                                            // should be true in phones but false in tabs
+
+    /* Views */
+
+    private final View mEmptyView; // ditto
 
     /* CONSTRUCTOR */
 
@@ -95,15 +102,21 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
      * Default constructor.
      *
      * @param context Android {@link Context}
+     * @param handler A {@link ForecastAdapterOnClickHandler} to handle item clicks
+     * @param emptyView The empty view
      * */
     // begin constructor
-    public ForecastAdapter( Context context ) {
+    public ForecastAdapter( Context context, ForecastAdapterOnClickHandler handler, View emptyView ) {
 
         // 0. initialize members
 
         // 0. initialize members
 
         mContext = context;
+
+        mForecastAdapterOnClickHandler = handler;
+
+        mEmptyView = emptyView;
 
     } // end constructor
 
@@ -154,9 +167,10 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
 
             view.setFocusable( true );
 
+
             // 0b3. return the inflated layout
 
-            return new WeatherViewHolder( view );
+            return new WeatherViewHolder( view, this );
 
         } // end if the parent view group is a recycler
 
@@ -250,14 +264,13 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
                     mContext.getString( R.string.a11y_low_temperature_format, lowString )
             );
 
-            mCursor.moveToNext();
-
         } // end if there cursor is and is not empty
 
     } // end onBindViewHolder
 
     @Override
-    // return the number of items in the cursor, or zero if cursor is not there
+    /** return the number of items in the cursor, or zero if cursor is not there.  */
+    // getItemCount
     public int getItemCount() { return ( mCursor == null ) ? 0 : mCursor.getCount(); }
 
     @Override
@@ -333,6 +346,7 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
 
         // 0. swap cursors
         // 1. tell of data change
+        // 2. set empty view visibility based on item count
 
         // 0. swap cursors
 
@@ -341,6 +355,10 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
         // 1. tell of data change
 
         notifyDataSetChanged();
+
+        // 2. set empty view visibility based on item count
+
+        mEmptyView.setVisibility( getItemCount() == 0 ? View.VISIBLE : View.GONE );
 
     } // end method swapCursor
 

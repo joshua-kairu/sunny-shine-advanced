@@ -20,20 +20,22 @@
 
 package com.jlt.sunshine.ui;
 
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jlt.sunshine.R;
+import com.jlt.sunshine.data.ForecastAdapter;
+import com.jlt.sunshine.data.contract.WeatherContract;
 
 /**
  * {@link android.support.v7.widget.RecyclerView.ViewHolder} to act as cache of the children views
  * for a forecast list item.
  * */
 // begin class WeatherViewHolder
-public class WeatherViewHolder extends RecyclerView.ViewHolder implements AdapterView.OnItemClickListener {
+public class WeatherViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     /* CONSTANTS */
     
@@ -42,6 +44,10 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder implements Adapte
     /* Strings */
         
     /* VARIABLES */
+
+    /* Forecast Adapters */
+
+    private ForecastAdapter mHostForecastAdapter; // ditto
 
     /* Image Views */
 
@@ -57,10 +63,12 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder implements Adapte
     /* CONSTRUCTOR */
 
     // begin constructor
-    public WeatherViewHolder( View view ) {
+    public WeatherViewHolder( View view, ForecastAdapter forecastAdapter ) {
 
         // 0. super stuff
         // 1. initialize local views from the parameter view
+        // 2. this view holder should listen to clicks from the parameter view
+        // 3. initialize the host adapter
 
         // 0. super stuff
 
@@ -74,6 +82,14 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder implements Adapte
         mHighTempTextView = ( TextView ) view.findViewById( R.id.list_item_high_textview );
         mLowTempTextView = ( TextView ) view.findViewById( R.id.list_item_low_textview );
 
+        // 2. this view holder should listen to clicks from the parameter view
+
+        view.setOnClickListener( this );
+
+        // 3. initialize the host adapter
+
+        mHostForecastAdapter = forecastAdapter;
+
     } // end constructor
 
     /* METHODS */
@@ -83,41 +99,27 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder implements Adapte
     /* Overrides */
 
     @Override
-    // begin onItemClick
-    public void onItemClick( AdapterView< ? > parent, View view, int position, long id ) {
+    // begin onClick
+    public void onClick( View view ) {
 
-//                        // 5a. notify the parent activity
-//
-//                        // 0. get the cursor at the given position
-//                        // 1. if there is a cursor there
-//                        // 1a. get the location setting
-//                        // 1b. pass these to the parent activity
-//
-//                        // 0. get the cursor at the given position
-//
-//                        Cursor cursor = ( Cursor ) adapterView.getItemAtPosition( position );
-//
-//                        // 1. if there is a cursor there
-//
-//                        // begin if there exists a cursor
-//                        if ( cursor != null ) {
-//
-//                            // 1a. get the location setting
-//
-//                            String locationSetting = Utility.getPreferredLocation( getActivity() );
-//
-//                            // 1b. pass these to the parent activity
-//
-//                            forecastCallbackListener.onForecastItemSelected(
-//                                    WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
-//                                            locationSetting, cursor.getLong( COLUMN_WEATHER_DATE ) )
-//                            );
-//
-//                        } // end if there exists a cursor
-//
-//                        // 5b. update the selected position member variable
-//
-//                        mCurrentScrollPosition = position;
+        // 0. get the date from the adapter's current position using a cursor
+        // 1 call the handler with the necessary parameters
+
+        // 0. get the date from the adapter's current position using a cursor
+
+        Cursor cursor = mHostForecastAdapter.getCursor();
+
+        int adapterPosition = getAdapterPosition();
+
+        cursor.moveToPosition( adapterPosition );
+
+        int dateIndex = cursor.getColumnIndex( WeatherContract.WeatherEntry.COLUMN_DATE );
+
+        long date = cursor.getLong( dateIndex );
+
+        // 1 call the handler with the necessary parameters
+
+        mHostForecastAdapter.mForecastAdapterOnClickHandler.onClick( date, this );
 
     } // end onItemClick
 

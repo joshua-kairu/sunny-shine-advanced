@@ -45,11 +45,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jlt.sunshine.data.ForecastAdapter;
+import com.jlt.sunshine.data.ForecastAdapterOnClickHandler;
 import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.data.contract.WeatherContract.LocationEntry;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
 import com.jlt.sunshine.sync.SunshineSyncAdapter;
+import com.jlt.sunshine.ui.WeatherViewHolder;
 
 /**
  * Fragment to show the weather forecast.
@@ -59,7 +61,7 @@ import com.jlt.sunshine.sync.SunshineSyncAdapter;
  * */
 // begin fragment ForecastFragment
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks< Cursor >,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener, ForecastAdapterOnClickHandler {
 
     /* CONSTANTS */
 
@@ -218,123 +220,51 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
         // 0. inflate the main fragment layout
-        // 1. query the content provider for the current weather at
-        // the location specified by the location setting sorted by ascending date
-        // and get a cursor
-        // 2. initialize the adapter
-        // 2a. tell it if to use the special today layout
-        // 3. the recycler
-        // 3a. find reference to it
-        // 3b. set its empty view
-        // 3c. use a linear layout manager
-        // 4. set adapter to the list
-        // 5. when an item in the recycler is clicked
-        // 5a. notify the parent activity
-        // 5b. update the selected position member variable
-        // 6. if there's instance state,
-        // 6a. mine it for the scroll position
+        // 1. initialize the adapter
+        // 1a. tell it if to use the special today layout
+        // 2. the recycler
+        // 2a. find reference to it
+        // 2b. use a linear layout manager
+        // 2c. has fixed size
+        // 3. set adapter to the recycler
+        // 4. if there's instance state,
+        // 4a. mine it for the scroll position
         // last. return the inflated view
 
         // 0. inflate the main fragment layout
 
         View rootView = inflater.inflate( R.layout.fragment_main, container, false );
 
-        // 1. query the content provider for the current weather at
-        // the location specified by the location setting sorted by ascending date
-        // and get a cursor
+        // 1. initialize the adapter
 
-        String locationSetting = Utility.getPreferredLocation( getActivity() );
-
-        String sortOrder = WeatherEntry.COLUMN_DATE + " ASC";
-
-        Uri weatherForLocationUri = WeatherEntry.buildWeatherForLocationWithStartDateUri(
-                locationSetting, System.currentTimeMillis() );
-
-        Cursor cursor = getActivity().getContentResolver().query(
-                weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder );
-
-        // 2. initialize the adapter
-
-        mForecastAdapter = new ForecastAdapter( getActivity() );
+        TextView emptyTextView = ( TextView ) rootView.findViewById( R.id.tv_empty );
+        mForecastAdapter = new ForecastAdapter( getActivity(), this, emptyTextView );
 
         // 2a. tell it if to use the special today layout
 
         mForecastAdapter.setUseTodayLayout( mUseTodayLayout );
 
-        // 3. the recycler
+        // 2. the recycler
 
-        // 3a. find reference to it
+        // 2a. find reference to it
 
         mForecastRecyclerView = ( RecyclerView ) rootView.findViewById( R.id.rv_forecast );
 
-        // 3b. set its empty view
-
-        TextView emptyTextView = ( TextView ) rootView.findViewById( R.id.tv_empty );
-//        mForecastRecyclerView.setEmptyView( emptyTextView );
-
-        // 3c. use a linear layout manager
+        // 2b. use a linear layout manager
 
         mForecastRecyclerView.setLayoutManager( new LinearLayoutManager( getActivity() ) );
 
-        // 4. set adapter to the list
+        // 2c. has fixed size
+
+        mForecastRecyclerView.setHasFixedSize( true );
+
+        // 3. set adapter to the list
 
         mForecastRecyclerView.setAdapter( mForecastAdapter );
 
-        // 5. when an item in the list view is clicked
+        // 4. if there's instance state,
 
-        // begin listView.setOnItemClickListener
-//        mForecastRecyclerView.setOnItemClickListener(
-//
-//                // begin new AdapterView.OnItemClickListener
-//                new AdapterView.OnItemClickListener() {
-//
-//                    @Override
-//                    // begin onItemClick
-//                    public void onItemClick( AdapterView< ? > adapterView, View view,
-//                                             int position, long id ) {
-//
-//                        // 5a. notify the parent activity
-//
-//                        // 0. get the cursor at the given position
-//                        // 1. if there is a cursor there
-//                        // 1a. get the location setting
-//                        // 1b. pass these to the parent activity
-//
-//                        // 0. get the cursor at the given position
-//
-//                        Cursor cursor = ( Cursor ) adapterView.getItemAtPosition( position );
-//
-//                        // 1. if there is a cursor there
-//
-//                        // begin if there exists a cursor
-//                        if ( cursor != null ) {
-//
-//                            // 1a. get the location setting
-//
-//                            String locationSetting = Utility.getPreferredLocation( getActivity() );
-//
-//                            // 1b. pass these to the parent activity
-//
-//                            forecastCallbackListener.onForecastItemSelected(
-//                                    WeatherEntry.buildWeatherForLocationWithSpecificDateUri(
-//                                            locationSetting, cursor.getLong( COLUMN_WEATHER_DATE ) )
-//                            );
-//
-//                        } // end if there exists a cursor
-//
-//                        // 5b. update the selected position member variable
-//
-//                        mCurrentScrollPosition = position;
-//
-//                    } // end onItemClick
-//
-//                } // end new AdapterView.OnItemClickListener
-//
-//        ); // end listView.setOnItemClickListener
-
-        // 6. if there's instance state,
-
-        /// 6a. mine it for the scroll position
+        // 4a. mine it for the scroll position
 
         if ( savedInstanceState != null &&
                 savedInstanceState.containsKey( BUNDLE_SCROLL_POSITION ) == true ) {
@@ -573,10 +503,34 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     } // end onSharedPreferenceChanged
 
+    @Override
+    // begin onClick
+    public void onClick( Long date, WeatherViewHolder viewHolder ) {
+
+        // 0. get the uri for weather for this date
+        // 1. pass the date uri to the callback listener
+        // 2. store the view holder's position as the current scroll position
+
+        // 0. get the uri for weather for this date
+
+        String locationSetting = Utility.getPreferredLocation( getActivity() );
+
+        Uri dateUri = WeatherEntry.buildWeatherForLocationWithSpecificDateUri( locationSetting, date );
+
+        // 1. pass the date uri to the callback listener
+
+        forecastCallbackListener.onForecastItemSelected( dateUri );
+
+        // 2. store the view holder's position as the current scroll position
+
+        mCurrentScrollPosition = viewHolder.getAdapterPosition();
+
+    } // end onClick
+
     /* Other Methods */
 
+    /** Refreshes the weather. */
     // begin method updateWeather
-    // refreshes the weather
     private void updateWeather() {
 
         // 0. sync up
@@ -691,7 +645,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
                 @SunshineSyncAdapter.LocationStatus int locationStatus = Utility.getLocationStatus(
                         getActivity() );
-                Log.e( LOG_TAG, "updateEmptyView: locationStatus = " + locationStatus );
+
                 // begin switch to know about the status
                 switch ( locationStatus ) {
 
