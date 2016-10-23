@@ -161,6 +161,10 @@ such as 7" and 10" tablets. This layout is for portrait mode.
 
         android:layout_below="@id/am_cv_weather_detail_container"
 
+        android:choiceMode="singleChoice"
+
+        app:autoSelectView="true"
+
         tools:layout="@android:layout/list_content"
 
         />

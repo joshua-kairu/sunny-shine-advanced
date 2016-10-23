@@ -22,6 +22,7 @@ package com.jlt.sunshine.data;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,6 +88,10 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
 
     public final ForecastAdapterOnClickHandler mForecastAdapterOnClickHandler; // ditto
 
+    /* Item Choice Managers */
+
+    public final ItemChoiceManager mICM; // ditto
+
     /* Primitives */
 
     private boolean mUseTodayLayout = true; // tells if to use the enlarged today layout
@@ -104,9 +109,11 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
      * @param context Android {@link Context}
      * @param handler A {@link ForecastAdapterOnClickHandler} to handle item clicks
      * @param emptyView The empty view
+     * @param choiceMode The choice mode
      * */
     // begin constructor
-    public ForecastAdapter( Context context, ForecastAdapterOnClickHandler handler, View emptyView ) {
+    public ForecastAdapter( Context context, ForecastAdapterOnClickHandler handler, View emptyView,
+                            int choiceMode ) {
 
         // 0. initialize members
 
@@ -117,6 +124,9 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
         mForecastAdapterOnClickHandler = handler;
 
         mEmptyView = emptyView;
+
+        mICM = new ItemChoiceManager( this );
+        mICM.setChoiceMode( choiceMode );
 
     } // end constructor
 
@@ -197,6 +207,7 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
         // 4a. provide content description for the high temperature
         // 5. read low temperature from cursor and display it in appropriate units using view holder data
         // 5a. provide content description for the low temperature
+        // 6. bind the item choice manager
 
         // 0. if the cursor exists and has something
 
@@ -263,6 +274,10 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
             weatherViewHolder.mLowTempTextView.setContentDescription(
                     mContext.getString( R.string.a11y_low_temperature_format, lowString )
             );
+
+            // 6. bind the item choice manager
+
+            mICM.onBindViewHolder( weatherViewHolder, position );
 
         } // end if there cursor is and is not empty
 
@@ -361,6 +376,27 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
         mEmptyView.setVisibility( getItemCount() == 0 ? View.VISIBLE : View.GONE );
 
     } // end method swapCursor
+
+    /** Restores instance state for the member {@link ItemChoiceManager}. */
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        mICM.onRestoreInstanceState(savedInstanceState);
+    }
+
+    /** Saves instance state for the member {@link ItemChoiceManager}. */
+    public void onSaveInstanceState(Bundle outState) {
+        mICM.onSaveInstanceState(outState);
+    }
+
+    /** Gets the selected item's position from the member {@link ItemChoiceManager}. */
+    public int getSelectedItemPosition() { return mICM.getSelectedItemPosition(); }
+
+    /** Invokes the {@link android.view.View.OnClickListener} for the given {@link WeatherViewHolder}. */
+    public void selectView(RecyclerView.ViewHolder viewHolder) {
+        if ( viewHolder instanceof WeatherViewHolder ) {
+            WeatherViewHolder vfh = (WeatherViewHolder)viewHolder;
+            vfh.onClick(vfh.itemView);
+        }
+    }
 
     /* INNER CLASSES */
 

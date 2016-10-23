@@ -42,7 +42,7 @@
 
     <!-- style for using a list item selector drawable.
          but in phones it is just a stub. -->
-    <style name="ForecastListStyle">
+    <style name="ForecastStyle">
     </style>
 
     <!-- main activity toolbar style -->

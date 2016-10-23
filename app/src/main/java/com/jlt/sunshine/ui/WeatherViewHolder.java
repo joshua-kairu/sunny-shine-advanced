@@ -104,6 +104,7 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder implements View.O
 
         // 0. get the date from the adapter's current position using a cursor
         // 1 call the handler with the necessary parameters
+        // 2. click the adapter's item choice manager too
 
         // 0. get the date from the adapter's current position using a cursor
 
@@ -120,6 +121,10 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder implements View.O
         // 1 call the handler with the necessary parameters
 
         mHostForecastAdapter.mForecastAdapterOnClickHandler.onClick( date, this );
+
+        // 2. click the adapter's item choice manager too
+
+        mHostForecastAdapter.mICM.onClick( this );
 
     } // end onItemClick
 

@@ -20,8 +20,10 @@
 
 package com.jlt.sunshine;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +35,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,6 +43,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -126,6 +131,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                                                                    // with an invalid no position
 
     private boolean mUseTodayLayout = true; // ditto
+
+    private boolean mAutoSelectView;
+    private int mChoiceMode;
 
     /* Recycler Views */
 
@@ -216,6 +224,16 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     } // end onCreateOptionsMenu
 
     @Override
+    // inflate so as to get the choice mode
+    public void onInflate( Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(activity, attrs, savedInstanceState);
+        TypedArray a = activity.obtainStyledAttributes(attrs, R.styleable.ForecastFragment, 0, 0);
+        mChoiceMode = a.getInt(R.styleable.ForecastFragment_android_choiceMode, AbsListView.CHOICE_MODE_NONE);
+        mAutoSelectView = a.getBoolean(R.styleable.ForecastFragment_autoSelectView, false);
+        a.recycle();
+    }
+
+    @Override
     // begin onCreateView
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
@@ -238,7 +256,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 1. initialize the adapter
 
         TextView emptyTextView = ( TextView ) rootView.findViewById( R.id.tv_empty );
-        mForecastAdapter = new ForecastAdapter( getActivity(), this, emptyTextView );
+        mForecastAdapter = new ForecastAdapter( getActivity(), this, emptyTextView,
+                AbsListView.CHOICE_MODE_NONE );
 
         // 2a. tell it if to use the special today layout
 
@@ -266,9 +285,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 4a. mine it for the scroll position
 
-        if ( savedInstanceState != null &&
-                savedInstanceState.containsKey( BUNDLE_SCROLL_POSITION ) == true ) {
-            mCurrentScrollPosition = savedInstanceState.getInt( BUNDLE_SCROLL_POSITION );
+        if ( savedInstanceState != null ) {
+            if ( savedInstanceState.containsKey( BUNDLE_SCROLL_POSITION ) == true ) {
+                mCurrentScrollPosition = savedInstanceState.getInt( BUNDLE_SCROLL_POSITION );
+            }
+            mForecastAdapter.onRestoreInstanceState(savedInstanceState);
         }
 
         // lastb. return the inflated view
@@ -420,6 +441,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 1. if there is an valid recycler scroll position
         // 1a. scroll to it
         // 2. update the empty view
+        // 3. select a view holder based on the current adapter position using the item choice manager, if needed
 
         // 0. refresh the list view
 
@@ -436,6 +458,29 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 2. update the empty view
 
         updateEmptyView();
+
+        // 3. select a view holder based on the current adapter position using the item choice manager, if needed
+
+        if ( cursor.getCount() > 0 ) {
+            mForecastRecyclerView.getViewTreeObserver().addOnPreDrawListener( new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    // Since we know we're going to get items, we keep the listener around until
+                    // we see Children.
+                    if ( mForecastRecyclerView.getChildCount() > 0 ) {
+                        mForecastRecyclerView.getViewTreeObserver().removeOnPreDrawListener( this );
+                        int itemPosition = mForecastAdapter.getSelectedItemPosition();
+                        if ( RecyclerView.NO_POSITION == itemPosition ) itemPosition = 0;
+                        RecyclerView.ViewHolder vh = mForecastRecyclerView.findViewHolderForAdapterPosition( itemPosition );
+                        if ( null != vh && mAutoSelectView ) {
+                            mForecastAdapter.selectView( vh );
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            } );
+        }
 
     } // end onLoadFinished
 
@@ -461,6 +506,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 0. super stuff
         // 1. if there is an item selected
         // 1a. put the current scroll position in the bundle
+        // 2. save state for the adapter
 
         // 0. super stuff
 
@@ -475,6 +521,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         if ( mCurrentScrollPosition != RecyclerView.NO_POSITION ) {
             outState.putInt( BUNDLE_SCROLL_POSITION, mCurrentScrollPosition );
         }
+
+        // 2. save state for the adapter
+
+        mForecastAdapter.onSaveInstanceState(outState);
 
     } // end onSaveInstanceState
 

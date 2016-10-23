@@ -30,7 +30,7 @@ use a list item selector drawable
 <resources>
 
     <!-- style for using a list item selector drawable -->
-    <style name="ForecastListStyle">
+    <style name="ForecastStyle">
         <item name="android:choiceMode">singleChoice</item>
     </style>
     

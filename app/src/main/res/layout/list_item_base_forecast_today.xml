@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+ -->
+
+<!-- reusable layout for the today list item. -->
+
+<android.support.v7.widget.GridLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+
+    app:columnCount="2"
+
+    >
+
+    <!-- TextView for the date -->
+
+    <TextView
+
+        android:id="@+id/list_item_date_textview"
+
+        android:textAppearance="?android:textAppearanceLarge"
+
+        android:fontFamily="sans-serif"
+
+        android:layout_marginTop="@dimen/layout_padding"
+
+        android:layout_marginBottom="@dimen/layout_padding"
+
+        android:gravity="center_horizontal"
+
+        app:layout_columnSpan="2"
+
+        app:layout_columnWeight="1"
+
+        app:layout_gravity="fill_horizontal"
+
+        tools:text="Today, May 09"
+
+        />
+
+    <!-- ImageView to show the weather icon -->
+
+    <ImageView
+
+        android:id="@+id/list_item_icon"
+
+        android:layout_width="0dp"
+
+        android:maxHeight="@dimen/today_icon"
+
+        android:maxWidth="@dimen/today_icon"
+
+        android:contentDescription="@null"
+
+        android:adjustViewBounds="true"
+
+        app:layout_gravity="fill_horizontal"
+
+        app:layout_columnWeight="1"
+
+        tools:src="@drawable/art_clear"
+
+        />
+
+    <!-- TextView to hold the high temperature -->
+
+    <TextView
+
+        android:layout_width="0dp"
+
+        android:id="@+id/list_item_high_textview"
+
+        android:fontFamily="sans-serif-light"
+
+        android:gravity="center_horizontal"
+
+        android:textColor="@color/primary_text"
+
+        android:textSize="@dimen/today_high_temperature_text_size"
+
+        app:layout_gravity="fill_horizontal"
+
+        app:layout_columnWeight="1"
+
+        tools:text="8\u00B0"
+
+        />
+
+    <!-- TextView for the forecast -->
+
+    <TextView
+
+        android:id="@+id/list_item_forecast_textview"
+
+        android:layout_width="0dp"
+
+        android:fontFamily="sans-serif"
+
+        android:gravity="center_horizontal"
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+
+        android:textColor="@color/secondary_text"
+
+        app:layout_columnWeight="1"
+
+        app:layout_gravity="fill_horizontal"
+
+        tools:text="Clear"
+
+        />
+
+    <!-- TextView to hold the low temperature -->
+
+    <TextView
+
+        android:id="@+id/list_item_low_textview"
+
+        android:layout_width="0dp"
+
+        android:fontFamily="sans-serif-light"
+
+        android:gravity="center_horizontal"
+
+        android:textColor="@color/secondary_text"
+
+        android:layout_marginBottom="@dimen/layout_padding"
+
+        android:textSize="@dimen/today_low_temperature_text_size"
+
+        app:layout_columnWeight="1"
+
+        tools:text="5\u00B0"
+
+        />
+
+</android.support.v7.widget.GridLayout>

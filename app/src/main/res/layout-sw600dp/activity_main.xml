@@ -170,6 +170,10 @@ such as 7" and 10" tablets.
 
         android:layout_below="@id/appbar"
 
+        android:choiceMode="singleChoice"
+
+        app:autoSelectView="true"
+
         tools:layout="@android:layout/list_content"
 
         />
