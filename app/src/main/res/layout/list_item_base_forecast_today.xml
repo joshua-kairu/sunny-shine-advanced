@@ -47,7 +47,7 @@
 
         android:id="@+id/list_item_date_textview"
 
-        android:textAppearance="?android:textAppearanceLarge"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
 
         android:fontFamily="sans-serif"
 
