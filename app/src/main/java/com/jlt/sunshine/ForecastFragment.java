@@ -20,12 +20,14 @@
 
 package com.jlt.sunshine;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -244,6 +246,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 2a. find reference to it
         // 2b. use a linear layout manager
         // 2c. has fixed size
+        // 2d. add scroll listener for parallax scrolling
+        // 2d1. works if there is the parallax bar (found in landscape) and we're at least honeycomb
+        // 2d2. change translationY of parallax bar by .5 * -deltaY, with minimum change being -parallaxBarHeight
         // 3. set adapter to the recycler
         // 4. if there's instance state,
         // 4a. mine it for the scroll position
@@ -276,6 +281,79 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 2c. has fixed size
 
         mForecastRecyclerView.setHasFixedSize( true );
+
+        // 2d. add scroll listener for parallax scrolling
+
+        // 2d1. works if there is the parallax bar (found in landscape) and we're at least honeycomb
+
+        final View parallaxBar = rootView.findViewById( R.id.parallax_bar );
+
+        // begin if we have a parallax bar
+        if ( parallaxBar != null ) {
+
+            // begin if we're at least honeycomb
+            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+
+                // begin mForecastRecyclerView.addOnScrollListener
+                mForecastRecyclerView.addOnScrollListener(
+
+                        // begin new RecyclerView.OnScrollListener
+                        new RecyclerView.OnScrollListener() {
+
+                            @Override
+                            @TargetApi( Build.VERSION_CODES.HONEYCOMB )
+                            // begin onScrolled
+                            // dx - The amount of horizontal scroll.
+                            // dy - The amount of vertical scroll.
+                            public void onScrolled( RecyclerView recyclerView, int dx, int dy ) {
+
+                                // 2d2. change translationY of parallax bar by .5 * -deltaY, with minimum change being -parallaxBarHeight
+
+                                // 0. super stuff
+                                // 1. change parallax bar translationY as needed
+                                // 1a. if the translationY is greater than bar height,
+                                // make the translationY bar height
+                                // 1b. if the translationY is greater than zero, set it to zero -
+                                // we don't want the bar going lower than it should
+
+                                // 0. super stuff
+
+                                super.onScrolled( recyclerView, dx, dy );
+
+                                // 1. change parallax bar translationY as needed
+
+                                float translationMultiplier = -0.5f;
+
+                                int parallaxBarHeight = parallaxBar.getHeight(); // this leaves the shadow, ha ha
+
+                                float parallaxBarTranslationY = parallaxBar.getTranslationY() +
+                                        ( dy * translationMultiplier );
+
+                                // 1a. if the translationY is greater than bar height,
+                                // make the translationY bar height
+
+                                if ( parallaxBarTranslationY <= -parallaxBarHeight ) {
+                                    parallaxBarTranslationY = -parallaxBarHeight;
+                                }
+
+                                // 1b. if the translationY is greater than zero, set it to zero -
+                                // we don't want the bar going lower than it should
+
+                                else if ( parallaxBarTranslationY > 0 ) {
+                                    parallaxBarTranslationY = 0;
+                                }
+
+                                parallaxBar.setTranslationY( parallaxBarTranslationY );
+
+                            } // end onScrolled
+
+                        } // end new RecyclerView.OnScrollListener
+
+                ); // end mForecastRecyclerView.addOnScrollListener
+
+            } // end if we're at least honeycomb
+
+        } // end if we have a parallax bar
 
         // 3. set adapter to the list
 
@@ -576,6 +654,23 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mCurrentScrollPosition = viewHolder.getAdapterPosition();
 
     } // end onClick
+
+    @Override
+    // begin onDestroy
+    public void onDestroy() {
+
+        // 0. super stuff
+        // 1. if there's the recycler, remove its scroll listeners
+
+        // 0. super stuff
+
+        super.onDestroy();
+
+        // 1. if there's the recycler, remove its scroll listeners
+
+        if ( mForecastRecyclerView != null ) { mForecastRecyclerView.clearOnScrollListeners(); }
+
+    } // end onDestroy
 
     /* Other Methods */
 

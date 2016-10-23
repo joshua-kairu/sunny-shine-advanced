@@ -42,7 +42,7 @@
 
     <LinearLayout
 
-        android:id="@+id/appbar"
+        android:id="@+id/parallax_bar"
 
         android:layout_width="match_parent"
 
@@ -84,24 +84,6 @@
 
             />
 
-        <!--&lt;!&ndash; the logo inside &ndash;&gt;-->
-
-        <!--<ImageView-->
-
-            <!--android:layout_width="match_parent"-->
-
-            <!--android:layout_height="?listPreferredItemHeight"-->
-
-            <!--android:scaleType="center"-->
-
-            <!--android:src="@drawable/ic_logo"-->
-
-            <!--android:contentDescription="@string/a11y_toolbar_icon"-->
-
-            <!--android:layout_gravity="center"-->
-
-            <!--/>-->
-
     </LinearLayout>
 
     <include layout="@layout/fragment_main_base"
@@ -113,6 +95,8 @@
         android:layout_centerHorizontal="true"
 
         android:layout_alignParentTop="true"
+
+        android:layout_marginTop="@dimen/layout_padding"
 
         />
 
