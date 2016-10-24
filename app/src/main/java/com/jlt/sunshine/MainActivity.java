@@ -25,6 +25,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -405,6 +407,7 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
         // showing the selected item's information
         // 1. otherwise
         // 1a. start the detail activity
+        // 1a1. use the transition bundle
 
         // 0. if we are on two pane mode
 
@@ -430,9 +433,14 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
             // 1a. start the detail activity
 
+            // 1a1. use the transition bundle
+
+            Bundle transitionBundle = ActivityOptionsCompat.makeSceneTransitionAnimation( this )
+                    .toBundle();
+
             Intent detailsIntent = new Intent( this, DetailActivity.class ).setData( dateUri );
 
-            startActivity( detailsIntent );
+            ActivityCompat.startActivity( this, detailsIntent, transitionBundle );
 
         } // end else we are single pane
 

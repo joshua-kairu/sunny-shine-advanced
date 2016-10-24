@@ -260,7 +260,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mHumidityValueTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_humidity_value );
         mPressureValueTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_pressure_value );
         mWindValueTextView = ( TextView ) rootView.findViewById( R.id.detail_tv_wind_value );
-        mToolbar = ( Toolbar ) rootView.findViewById( R.id.fd_toolbar );
+        mToolbar = ( Toolbar ) rootView.findViewById( R.id.detail_toolbar );
 
         // last. return the inflated detail layout
 

@@ -62,7 +62,7 @@
 
         <android.support.v7.widget.Toolbar
 
-            android:id="@+id/fd_toolbar"
+            android:id="@+id/detail_toolbar"
 
             android:layout_width="match_parent"
 
@@ -77,6 +77,8 @@
     <!-- the detail grid showing humidity, pressure, and wind -->
 
     <include layout="@layout/detail_extras_grid"
+
+        android:id="@+id/detail_extras_grid"
 
         android:layout_width="match_parent"
 

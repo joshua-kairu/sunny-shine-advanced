@@ -40,10 +40,17 @@
 
     </style>
 
+    <!-- Theme for the main activity -->
+    <!-- stub for pre Lollipop -->
+    <style name="AppTheme.Main" parent="AppTheme" />
+
+    <!-- Theme for the detail activity -->
+    <!-- stub for pre Lollipop -->
+    <style name="AppTheme.Detail" parent="AppTheme" />
+
     <!-- style for using a list item selector drawable.
          but in phones it is just a stub. -->
-    <style name="ForecastStyle">
-    </style>
+    <style name="ForecastStyle" />
 
     <!-- main activity toolbar style -->
     <!-- extends from the widget toolbar -->

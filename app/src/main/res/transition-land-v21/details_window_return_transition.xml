@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+-->
+
+<!-- transition to leave from the details window in portrait -->
+
+<!-- fade all out, with usual nav and status bar exceptions -->
+<!-- extras should slide out to right -->
+<transitionSet
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:duration="@integer/transition_animation_duration"
+
+    android:transitionOrdering="together"
+
+    >
+
+    <!-- fade all out, with usual nav and status bar exceptions -->
+
+    <fade>
+
+        <targets>
+
+            <target android:excludeId="@android:id/statusBarBackground" />
+
+            <target android:excludeId="@android:id/navigationBarBackground" />
+
+        </targets>
+
+    </fade>
+
+    <!-- extras should slide to right -->
+
+    <slide android:slideEdge="right">
+
+        <targets>
+
+            <target android:targetId="@id/detail_extras_grid"/>
+
+        </targets>
+
+
+    </slide>
+
+</transitionSet>
