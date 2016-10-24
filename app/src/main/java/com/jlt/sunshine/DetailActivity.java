@@ -46,8 +46,9 @@ public class DetailActivity extends AppCompatActivity {
 
         // 0. super stuff
         // 1. use the detail layout
-        // 2. add the detail fragment with the date uri argument
+        // 2. add the detail fragment with the date uri and transition arguments
         // passed into the intent that started this activity
+        // 2a. postpone any pending animations
 
         // 0. super stuff
 
@@ -57,7 +58,7 @@ public class DetailActivity extends AppCompatActivity {
 
         setContentView( R.layout.activity_detail );
 
-        // 2. add the detail fragment with the date uri argument
+        // 2. add the detail fragment with the date uri and transition arguments
         // passed into the intent that started this activity
 
         // begin if this is first run
@@ -65,8 +66,12 @@ public class DetailActivity extends AppCompatActivity {
 
             getSupportFragmentManager().beginTransaction()
                     .add( R.id.am_cv_weather_detail_container,
-                            DetailFragment.newInstance( getIntent().getData() ) )
+                            DetailFragment.newInstance( getIntent().getData(), true ) )
                     .commit();
+
+            // 2a. postpone any pending animations
+
+            supportPostponeEnterTransition();
 
         } // end if this is first run
 

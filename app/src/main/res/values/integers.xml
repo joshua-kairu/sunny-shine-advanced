@@ -28,6 +28,6 @@
 <resources>
 
     <!-- transition animation duration -->
-    <integer name="transition_animation_duration">500</integer>
+    <integer name="transition_animation_duration">250</integer>
 
 </resources>

@@ -113,6 +113,8 @@
 
         android:adjustViewBounds="true"
 
+        android:transitionName="@string/detail_icon_transition_name"
+
         app:layout_columnWeight="1"
 
         app:layout_gravity="fill_horizontal"

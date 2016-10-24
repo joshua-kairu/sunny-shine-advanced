@@ -27,11 +27,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -39,6 +41,7 @@ import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.gcm.RegistrationIntentService;
 import com.jlt.sunshine.sync.SunshineSyncAdapter;
+import com.jlt.sunshine.ui.WeatherViewHolder;
 
 /** The landing activity. */
 // begin activity MainActivity
@@ -394,20 +397,23 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
     } // end onOptionsItemSelected
 
     /**
-     * {@link DetailFragment} callback for when an item has been selected.
+     * {@link com.jlt.sunshine.DetailFragment} callback for when an item has been selected.
      *
-     * @param dateUri The Uri of the date of the item that has been selected
-     */
+     * @param dateUri {@link Uri} for the date.
+     * @param weatherViewHolder {@link WeatherViewHolder} to assist in shared activity transitioning.
+     * */
     @Override
     // begin onForecastItemSelected
-    public void onForecastItemSelected( Uri dateUri ) {
+    public void onForecastItemSelected( Uri dateUri, WeatherViewHolder weatherViewHolder ) {
 
         // 0. if we are on two pane mode
         // 0a. replace the current detail fragment with a detail fragment
         // showing the selected item's information
         // 1. otherwise
         // 1a. start the detail activity
-        // 1a1. use the transition bundle
+        // 1a0. pair the correct items for shared element transitioning
+        // 1a1. use the transition bundle with the pair
+        // 1a2. tell the detail fragment to start shared transitions
 
         // 0. if we are on two pane mode
 
@@ -417,7 +423,8 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
             // 0a. replace the current detail fragment with a detail fragment
             // showing the selected item's information
 
-            DetailFragment detailFragment = DetailFragment.newInstance( dateUri );
+            // I think we do not use shared transitions in tab, no?
+            DetailFragment detailFragment = DetailFragment.newInstance( dateUri, false );
 
             getSupportFragmentManager()
                     .beginTransaction()
@@ -433,10 +440,15 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
             // 1a. start the detail activity
 
-            // 1a1. use the transition bundle
+            // 1a0. pair the correct items for shared element transitioning
 
-            Bundle transitionBundle = ActivityOptionsCompat.makeSceneTransitionAnimation( this )
-                    .toBundle();
+            // 1a1. use the transition bundle the pair
+
+            Bundle transitionBundle = ActivityOptionsCompat.makeSceneTransitionAnimation( this,
+                    new Pair< View, String >( weatherViewHolder.mIconImageView,
+                            getString( R.string.detail_icon_transition_name ) ) ).toBundle();
+
+            // 1a2. tell the detail fragment to start shared transitions
 
             Intent detailsIntent = new Intent( this, DetailActivity.class ).setData( dateUri );
 

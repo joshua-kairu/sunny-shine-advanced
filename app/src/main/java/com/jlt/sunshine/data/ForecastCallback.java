@@ -22,6 +22,8 @@ package com.jlt.sunshine.data;
 
 import android.net.Uri;
 
+import com.jlt.sunshine.ui.WeatherViewHolder;
+
 /**
  * A callback interface that all activities containing the {@link com.jlt.sunshine.ForecastFragment}
  * should have. This mechanism allows activities to be informed of item selections
@@ -37,8 +39,11 @@ public interface ForecastCallback {
 
     /**
      * {@link com.jlt.sunshine.DetailFragment} callback for when an item has been selected.
+     *
+     * @param dateUri {@link Uri} for the date.
+     * @param weatherViewHolder {@link WeatherViewHolder} to assist in shared activity transitioning.
      * */
-    public void onForecastItemSelected( Uri dateUri );
+    void onForecastItemSelected( Uri dateUri, WeatherViewHolder weatherViewHolder );
         
     /* Getters and Setters */
         

@@ -318,4 +318,14 @@ of localizable data and its related information.
 
     <string name="gcm_weather_alert">Heads up: %1$s in %2$s!</string>
 
+    <!-- Transitions -->
+
+    <!-- Transition name used to transition to the detail today icon. [CHAR LIMIT=NONE] -->
+    <string name="detail_icon_transition_name" translatable="false">detail_transition_name</string>
+
+    <!-- Format for generating transition names for items in the forecast list. [CHAR LIMIT=NONE] -->
+    <string name="format_weather_icon_transition_name">
+        <xliff:g id="adapter_class_name">%1$s</xliff:g>-<xliff:g id="view_holder_position">%2$d</xliff:g>
+    </string>
+
 </resources>

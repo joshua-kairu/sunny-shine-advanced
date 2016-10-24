@@ -135,6 +135,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private boolean mUseTodayLayout = true; // ditto
 
     private boolean mAutoSelectView;
+    private boolean mHoldForTransitions;
     private int mChoiceMode;
 
     /* Recycler Views */
@@ -226,12 +227,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     } // end onCreateOptionsMenu
 
     @Override
-    // inflate so as to get the choice mode
+    // inflate so as to get the XML attributes
     public void onInflate( Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
         super.onInflate(activity, attrs, savedInstanceState);
         TypedArray a = activity.obtainStyledAttributes(attrs, R.styleable.ForecastFragment, 0, 0);
         mChoiceMode = a.getInt(R.styleable.ForecastFragment_android_choiceMode, AbsListView.CHOICE_MODE_NONE);
         mAutoSelectView = a.getBoolean(R.styleable.ForecastFragment_autoSelectView, false);
+
+        // read the shared element transition status
+        mHoldForTransitions = a.getBoolean(
+                R.styleable.ForecastFragment_sharedElementTransitions, false );
+
         a.recycle();
     }
 
@@ -381,13 +387,20 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public void onActivityCreated( @Nullable Bundle savedInstanceState ) {
 
         // 0. super things
-        // 1. start the weather loader
+        // 1. wait before doing a transition, just in case the activity needs to be recreated.
+        // In standard return transition, this doesn't actually make a difference.
+        // 2. start the weather loader
 
         // 0. super things
 
         super.onActivityCreated( savedInstanceState );
 
-        // 1. start the weather loader
+        // 1. wait before doing a transition, just in case the activity needs to be recreated.
+        // In standard return transition, this doesn't actually make a difference.
+
+        if ( mHoldForTransitions == true ) { getActivity().supportPostponeEnterTransition(); }
+
+        // 2. start the weather loader
 
         getLoaderManager().initLoader( FORECAST_LOADER_ID, null, this );
 
@@ -519,7 +532,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 1. if there is an valid recycler scroll position
         // 1a. scroll to it
         // 2. update the empty view
-        // 3. select a view holder based on the current adapter position using the item choice manager, if needed
+        // 3. if there cursor has nothing
+        // 3a. start any postponed transitions
+        // 4. else the cursor has something,
+        // 4a. select a view holder based on the current adapter position using the item choice manager, if needed
+        // 4b. if we are to do so, start any pending transitions after the recycler has laid its kids out
 
         // 0. refresh the list view
 
@@ -537,28 +554,67 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         updateEmptyView();
 
-        // 3. select a view holder based on the current adapter position using the item choice manager, if needed
+        // 3. if there cursor has nothing
 
-        if ( cursor.getCount() > 0 ) {
-            mForecastRecyclerView.getViewTreeObserver().addOnPreDrawListener( new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    // Since we know we're going to get items, we keep the listener around until
-                    // we see Children.
-                    if ( mForecastRecyclerView.getChildCount() > 0 ) {
-                        mForecastRecyclerView.getViewTreeObserver().removeOnPreDrawListener( this );
-                        int itemPosition = mForecastAdapter.getSelectedItemPosition();
-                        if ( RecyclerView.NO_POSITION == itemPosition ) itemPosition = 0;
-                        RecyclerView.ViewHolder vh = mForecastRecyclerView.findViewHolderForAdapterPosition( itemPosition );
-                        if ( null != vh && mAutoSelectView ) {
-                            mForecastAdapter.selectView( vh );
-                        }
-                        return true;
-                    }
-                    return false;
-                }
-            } );
-        }
+        // 3a. start any postponed transitions
+
+        if ( cursor.getCount() == 0 ) { getActivity().supportStartPostponedEnterTransition(); }
+
+        // 4. else the cursor has something,
+
+        // begin else the cursor has something
+        else {
+
+            // 4a. select a view holder based on the current adapter position using the item choice manager, if needed
+
+            // begin mForecastRecyclerView.getViewTreeObserver().addOnPreDrawListener
+            mForecastRecyclerView.getViewTreeObserver().addOnPreDrawListener(
+
+                    // begin new ViewTreeObserver.OnPreDrawListener
+                    new ViewTreeObserver.OnPreDrawListener() {
+
+                        @Override
+                        // begin onPreDraw
+                        public boolean onPreDraw() {
+
+                            // Since we know we're going to get items, we keep the listener around until
+                            // we see Children.
+                            // begin if the recycler has kids
+                            if ( mForecastRecyclerView.getChildCount() > 0 ) {
+
+                                mForecastRecyclerView.getViewTreeObserver().removeOnPreDrawListener( this );
+
+                                int itemPosition = mForecastAdapter.getSelectedItemPosition();
+
+                                if ( RecyclerView.NO_POSITION == itemPosition ) itemPosition = 0;
+
+                                RecyclerView.ViewHolder vh = mForecastRecyclerView
+                                        .findViewHolderForAdapterPosition( itemPosition );
+
+                                if ( null != vh && mAutoSelectView ) {
+                                    mForecastAdapter.selectView( vh );
+                                }
+
+                                // 4b. if we are to do so, start any pending transitions after
+                                // the recycler has laid its kids out
+
+                                if ( mHoldForTransitions == true ) {
+                                    getActivity().supportStartPostponedEnterTransition();
+                                }
+
+                                return true;
+
+                            } // end if the recycler has kids
+
+                            return false;
+
+                        } // end onPreDraw
+
+                    } // end new ViewTreeObserver.OnPreDrawListener
+
+            ); // end mForecastRecyclerView.getViewTreeObserver().addOnPreDrawListener
+
+        } // end else the cursor has something
 
     } // end onLoadFinished
 
@@ -636,7 +692,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public void onClick( Long date, WeatherViewHolder viewHolder ) {
 
         // 0. get the uri for weather for this date
-        // 1. pass the date uri to the callback listener
+        // 1. pass the date uri and the view holder to the callback listener
         // 2. store the view holder's position as the current scroll position
 
         // 0. get the uri for weather for this date
@@ -645,9 +701,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         Uri dateUri = WeatherEntry.buildWeatherForLocationWithSpecificDateUri( locationSetting, date );
 
-        // 1. pass the date uri to the callback listener
+        // 1. pass the date uri and the view holder to the callback listener
 
-        forecastCallbackListener.onForecastItemSelected( dateUri );
+        forecastCallbackListener.onForecastItemSelected( dateUri, viewHolder );
 
         // 2. store the view holder's position as the current scroll position
 
@@ -830,4 +886,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     }  // end method updateEmptyView
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e( LOG_TAG, "onStart: " );
+        int s = 0;
+
+    }
 } // end fragment ForecastFragment

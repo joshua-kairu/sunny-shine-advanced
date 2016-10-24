@@ -97,15 +97,23 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private static final String FORECAST_SHARE_HASHTAG = "#SunshineApp"; // the share hashtag
 
-    public static final String ARGUMENT_URI_KEY = "ARGUMENT_URI_KEY"; // key used to refer the uri
+    public static final String ARGUMENT_URI_KEY = "ARGUMENT_URI_KEY"; // key used to refer to the uri
                                                                       // in the bundle passed into
                                                                       // this fragment during instantiation
+
+    public static final String ARGUMENT_SHARED_TRANSITION_KEY = "ARGUMENT_SHARED_TRANSITION_KEY";
+    // key used to refer to the boolean for element transitioning in
+    // the bundle passed into this fragment during instantiation
 
     /* VARIABLES */
 
     /* Image Views */
 
     private ImageView mWeatherIconImageView; // ditto
+
+    /* Primitives */
+
+    private boolean mSharedElementTransitionsAnimation; // if to do a shared element transition
 
     /* Share Action Providers */
 
@@ -149,12 +157,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
      *
      * @param uri A {@link android.net.Uri} we will use to initialize the
      *            {@link DetailFragment} with.
+     * @param useTransition If we are to use shared transitions
      * */
     // begin instantiating method newInstance
-    public static DetailFragment newInstance( Uri uri ) {
+    public static DetailFragment newInstance( Uri uri, boolean useTransition ) {
 
         // 0. create a new DetailFragment
-        // 1. put the parameter uri in a bundle
+        // 1. put the parameters in a bundle
         // 2. use the bundle as the arguments for the DetailFragment created at 0
         // 3. return the DetailFragment created at 0
 
@@ -162,11 +171,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         DetailFragment detailFragment = new DetailFragment();
 
-        // 1. put the parameter uri in a bundle
+        // 1. put the parameters in a bundle
 
         Bundle bundle = new Bundle();
 
         bundle.putParcelable( ARGUMENT_URI_KEY, uri );
+
+        bundle.putBoolean( ARGUMENT_SHARED_TRANSITION_KEY, useTransition );
 
         // 2. use the bundle as the arguments for the DetailFragment created at 0
 
@@ -232,16 +243,22 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     // begin onCreateView
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 
-        // 0. initialize the data uri from the arguments
+        // 0. initialize parameters from the arguments
         // 1. use the detail layout
         // 2. get the needed views
         // last. return the inflated detail layout
 
-        // 0. initialize the data uri from the arguments
+        // 0. initialize parameters from the arguments
 
+        // begin if there are arguments
         if ( getArguments() != null ) {
+
             mDataUri = getArguments().getParcelable( ARGUMENT_URI_KEY );
-        }
+
+            mSharedElementTransitionsAnimation = getArguments()
+                    .getBoolean( ARGUMENT_SHARED_TRANSITION_KEY, false );
+
+        } // end if there are arguments
 
         // 1. use the detail layout
 
@@ -325,11 +342,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // 0b. if possible set the share action provider to use the shared text
         // 0a and 0b ensure that a sensible share happens regardless of
         // which among onCreateOptionsMenu and onLoadFinished is called first
-        // 0c. set up the toolbar
-        // 0c1. set it as the action bar
-        // 0c2. no title
-        // 0c3. yes up
-        // 0c4. put the menu in
+        // 0c. set up the toolbar and the transition animation
+        // 0c1. start any pending transitions
+        // 0c2. set toolbar as the action bar
+        // 0c3. no title
+        // 0c4. yes up
+        // 0c5. put the menu in
 
         // 0. bind the needed details data to the text view
         // and if the parent is a card view, show it (since it was hidden in onCreateLoader)
@@ -434,29 +452,39 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         } // end if there is a row in the cursor
 
-        // 0c. set up the toolbar
+        // 0c. set up the toolbar and the transition animation
 
         AppCompatActivity activity = ( AppCompatActivity ) getActivity();
 
-        // begin if the activity is a detail one
-        if ( activity instanceof DetailActivity ) {
+        // begin if we are to share transitions
+        // this used to be if ( activity instanceof DetailActivity ) {
+        // but since mSharedElementTransitionsAnimation is true only when it is set as so from the
+        // MainActivity is single pane mode, there is no doubt that the activity hosting
+        // this fragment is DetailActivity
+
+        // begin if the we are to use shared element transitions
+        if ( mSharedElementTransitionsAnimation == true ) {
+
+            // 0c1. start any pending transitions
+
+            activity.supportStartPostponedEnterTransition();
 
             // begin if there is a toolbar
             if ( mToolbar != null ) {
 
-                // 0c1. set it as the action bar
+                // 0c2. set toolbar as the action bar
 
                 activity.setSupportActionBar( mToolbar );
 
-                // 0c2. no title
+                // 0c3. no title
 
                 activity.getSupportActionBar().setDisplayShowTitleEnabled( false );
 
-                // 0c3. yes up
+                // 0c4. yes up
 
                 activity.getSupportActionBar().setDisplayHomeAsUpEnabled( true );
 
-                // 0c4. put the menu in
+                // 0c5. put the menu in
 
                 Menu menu = mToolbar.getMenu();
 
@@ -470,7 +498,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
             } // end if there is a toolbar
 
-        } // end if the activity is a detail one
+        } // end if we are to use shared element transitions
 
         // 0d. if the parent is a card view, show it (since it was hidden in onCreateView)
 

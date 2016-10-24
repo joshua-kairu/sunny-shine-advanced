@@ -23,6 +23,7 @@ package com.jlt.sunshine.data;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -200,6 +201,7 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
         // 0a. first move it to the given position
         // 1. read weather icon ID from cursor and display appropriate icon using view holder data
         // 1a. show art for both today's and the future's weather
+        // 1b. put unique transition name for the art
         // 2. read date from cursor and display it appropriately using view holder data
         // 3. read forecast from cursor and display it using view holder data
         // 3a. also make the forecast the content description for the image shown in 0a
@@ -228,6 +230,15 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
                     .error( Utility.getArtResourceForWeatherCondition( weatherIconId ) )
                     .crossFade()
                     .into( weatherViewHolder.mIconImageView );
+
+            // 1b. put unique transition name for the art
+
+            ViewCompat.setTransitionName(
+                    weatherViewHolder.mIconImageView,
+                    Utility.generateTransitionName( mContext, ForecastAdapter.class,
+                            weatherViewHolder )
+                );
+
 
             // 2. read date from cursor and display it appropriately using view holder data
 
