@@ -27,6 +27,14 @@
 
 <resources>
 
+    <!-- the value to set the appbar elevation to when the appbar is to be raised. 6dp.
+    Called in ForecastFragment. -->
+    <integer name="appbar_elevation_raised">6</integer>
+
+    <!-- the value to set the appbar elevation to when the appbar is resting. 4dp.
+    Called in ForecastFragment. -->
+    <integer name="appbar_elevation_resting">4</integer>
+
     <!-- transition animation duration -->
     <integer name="transition_animation_duration">250</integer>
 

@@ -31,10 +31,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -252,9 +254,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 2a. find reference to it
         // 2b. use a linear layout manager
         // 2c. has fixed size
-        // 2d. add scroll listener for parallax scrolling
-        // 2d1. works if there is the parallax bar (found in landscape) and we're at least honeycomb
-        // 2d2. change translationY of parallax bar by .5 * -deltaY, with minimum change being -parallaxBarHeight
+        // 2d. add scroll listener
+        // 2d0. for parallax scrolling
+        // 2d0a. works if there is the parallax bar (found in landscape) and we're at least honeycomb
+        // 2d0b. change translationY of parallax bar by .5 * -deltaY, with minimum change being -parallaxBarHeight
+        // 2d1. to raise app bar height during scroll
+        // 2d1a. works if there is the app bar (found in portrait) and we're on Lollipop
+        // 2d1a0. first make the app bar elevation zero
+        // 2d1a1. if we are not scrolling, no elevation
+        // 2a1a2. if we are scrolling, elevate
         // 3. set adapter to the recycler
         // 4. if there's instance state,
         // 4a. mine it for the scroll position
@@ -288,9 +296,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         mForecastRecyclerView.setHasFixedSize( true );
 
-        // 2d. add scroll listener for parallax scrolling
+        // 2d. add scroll listener
 
-        // 2d1. works if there is the parallax bar (found in landscape) and we're at least honeycomb
+        // 2d0. for parallax scrolling
+
+        // 2d0a. works if there is the parallax bar (found in landscape) and we're at least honeycomb
 
         final View parallaxBar = rootView.findViewById( R.id.parallax_bar );
 
@@ -313,7 +323,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                             // dy - The amount of vertical scroll.
                             public void onScrolled( RecyclerView recyclerView, int dx, int dy ) {
 
-                                // 2d2. change translationY of parallax bar by .5 * -deltaY, with minimum change being -parallaxBarHeight
+                                // 2d0b. change translationY of parallax bar by .5 * -deltaY, with minimum change being -parallaxBarHeight
 
                                 // 0. super stuff
                                 // 1. change parallax bar translationY as needed
@@ -360,6 +370,55 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             } // end if we're at least honeycomb
 
         } // end if we have a parallax bar
+
+        // 2d1. to raise app bar height during scroll
+
+        // 2d1a. works if there is the app bar (found in portrait) and we're on Lollipop
+
+        final AppBarLayout appBarLayout = ( AppBarLayout ) rootView.findViewById( R.id.main_appbar );
+
+        // begin if there is an app bar
+        if ( appBarLayout != null ) {
+
+            // 2d1a0. first make the app bar elevation zero
+
+            ViewCompat.setElevation( appBarLayout, 0 );
+
+            // begin if we are an lollipop
+            if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+
+                // begin mForecastRecyclerView.addOnScrollListener
+                mForecastRecyclerView.addOnScrollListener(
+
+                        // begin new RecyclerView.OnScrollListener
+                        new RecyclerView.OnScrollListener() {
+
+                            @Override
+                            @TargetApi( Build.VERSION_CODES.LOLLIPOP )
+                            // begin onScrolled
+                            public void onScrolled( RecyclerView recyclerView, int dx, int dy ) {
+
+                                // 2d1a1. if we are not scrolling, no elevation
+
+                                if ( mForecastRecyclerView.computeVerticalScrollOffset() == 0 ) {
+                                    appBarLayout.setElevation( 0 );
+                                }
+
+                                // 2a1a2. if we are scrolling, elevate
+
+                                else {
+                                    appBarLayout.setElevation( appBarLayout.getTargetElevation() );
+                                }
+
+                            } // end onScrolled
+
+                        } // end new RecyclerView.OnScrollListener
+
+                ); // end mForecastRecyclerView.addOnScrollListener
+
+            } // end if we are an lollipop
+
+        } // end if there is an app bar
 
         // 3. set adapter to the list
 
@@ -886,11 +945,4 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     }  // end method updateEmptyView
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.e( LOG_TAG, "onStart: " );
-        int s = 0;
-
-    }
 } // end fragment ForecastFragment
