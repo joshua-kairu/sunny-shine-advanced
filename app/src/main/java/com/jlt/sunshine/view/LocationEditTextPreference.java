@@ -30,10 +30,14 @@ import android.preference.EditTextPreference;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.jlt.sunshine.R;
 
 /**
@@ -78,6 +82,8 @@ public class LocationEditTextPreference extends EditTextPreference implements Te
         // 0. super stuff
         // 1. get the minimum length from XML
         // 2. recycle the XML
+        // 3. if the google play services are available
+        // 3a. use the current location widget
 
         // 0. super stuff
 
@@ -94,14 +100,24 @@ public class LocationEditTextPreference extends EditTextPreference implements Te
             mMinLength = a.getInt( R.styleable.LocationEditTextPreference_minLength,
                     DEFAULT_MINIMUM_LOCATION_LENGTH );
 
-            Log.e( LOG_TAG, "LocationEditTextPreference: minLength = " + mMinLength );
-
         } // end trying to get things from XML
 
         // 2. recycle the XML
 
         finally {
             a.recycle();
+        }
+
+        // 3. if the google play services are available
+
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+
+        int availabilityCode = apiAvailability.isGooglePlayServicesAvailable( getContext() );
+
+        // 3a. use the current location widget
+
+        if ( availabilityCode == ConnectionResult.SUCCESS ) {
+            setWidgetLayoutResource( R.layout.pref_current_location );
         }
 
     } // end constructor
@@ -198,6 +214,52 @@ public class LocationEditTextPreference extends EditTextPreference implements Te
         } // end if the dialog is an alert dialog
 
     } // end afterTextChanged
+
+    @Override
+    // begin onCreateView
+    protected View onCreateView( ViewGroup parent ) {
+
+        // 0. get the created view
+        // 1. get the current location view from the created view
+        // 2. when the location view is clicked
+        // 2a. toast for now
+        // last. return the created view
+
+        // 0. get the created view
+
+        View createdView = super.onCreateView( parent );
+
+        // 1. get the current location view from the created view
+
+        View currentLocationView = createdView.findViewById( R.id.current_location_picker );
+
+        // 2. when the location view is clicked
+
+        // begin currentLocationView.setOnClickListener
+        currentLocationView.setOnClickListener(
+
+                // begin new View.OnClickListener
+                new View.OnClickListener() {
+
+                    @Override
+                    // begin onClick
+                    public void onClick( View v ) {
+
+                        // 2a. toast for now
+
+                        Toast.makeText( getContext(), "Hello, Picker!", Toast.LENGTH_SHORT ).show();
+
+                    } // end onClick
+
+                } // end new View.OnClickListener
+
+        ); // end currentLocationView.setOnClickListener
+
+        // last. return the created view
+
+        return createdView;
+
+    } // end onCreateView
 
     /* Other Methods */
     

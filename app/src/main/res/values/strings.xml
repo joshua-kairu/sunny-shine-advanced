@@ -165,6 +165,9 @@ of localizable data and its related information.
     <string name="a11y_pressure_format">Barometric Pressure: <xliff:g id="pressure">%1$s</xliff:g></string>
     <string name="a11y_wind_format">Wind speed and direction: <xliff:g id="wind">%1$s</xliff:g></string>
 
+    <!-- description for the location icon in settings [CHAR LIMIT = 15] -->
+    <string name="a11y_current_location_description">Place picker</string>
+
     <!-- Date labels -->
 
     <!-- Date label when displaying today's weather forecast [CHAR LIMIT=20] -->
