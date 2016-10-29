@@ -74,6 +74,10 @@ of localizable data and its related information.
         Location permission denied.
     </string>
 
+    <!-- Info message to show attribution for the Places API for devices which cannot show a footer
+     in the Settings - such as pre-Honeycomb devices [CHAR LIMIT = 25] -->
+    <string name="message_info_places_attribution_text">Powered by Google</string>
+
     <!-- Preference strings -->
 
     <!-- Key for storing location preference in SharedPreferences [CHAR LIMIT = NONE]-->

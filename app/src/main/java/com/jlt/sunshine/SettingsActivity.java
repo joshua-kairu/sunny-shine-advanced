@@ -12,7 +12,10 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
@@ -59,6 +62,10 @@ public class SettingsActivity extends PreferenceActivity
 
     /* VARIABLES */
 
+    /* Image Views */
+
+    private ImageView mAttributionImageView; // ditto, for Powered by Google when using the Places API
+
     /* METHODS */
 
     /* Getters and Setters */
@@ -74,6 +81,12 @@ public class SettingsActivity extends PreferenceActivity
         // 0. super things
         // 1. add 'general' preferences from XML
         // 2. for all preferences, attach a change listener so that their summaries can be updated on preference change
+        // 3. if we are using Places, we need to attribute the creators
+        // 3a. if we are on Honeycomb
+        // 3a0. initialize the attribution image view
+        // 3a1. use the Powered by Google image
+        // 3a2. we shouldn't see this if we are not using Places
+        // 3a3. put the attribution image at the footer region
 
         // 0. super things
 
@@ -88,6 +101,34 @@ public class SettingsActivity extends PreferenceActivity
         bindPreferenceSummaryToValue( findPreference( getString( R.string.pref_location_key ) ) );
         bindPreferenceSummaryToValue( findPreference( getString( R.string.pref_temperature_unit_key ) ) );
         bindPreferenceSummaryToValue( findPreference( getString( R.string.pref_icon_pack_key ) ) );
+
+        // 3. if we are using Places, we need to attribute the creators
+
+        // 3a. if we are on Honeycomb
+
+        // begin if we are at least honeycomb
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
+
+            // 3a0. initialize the attribution image view
+
+            mAttributionImageView = new ImageView( this );
+
+            // 3a1. use the Powered by Google image
+
+            mAttributionImageView.setImageResource( R.drawable.powered_by_google_light );
+
+            // 3a2. we shouldn't see this if we are not using Places
+
+            if ( Utility.isLocationLatLongAvailable( this ) == false ) {
+                mAttributionImageView.setVisibility( View.GONE );
+            }
+
+            // 3a3. put the attribution image at the footer region
+
+            // Set a footer that should be shown at the bottom of the header list.
+            setListFooter( mAttributionImageView );
+
+        } // end if we are at least honeycomb
 
     } // end onCreate
 
@@ -166,8 +207,11 @@ public class SettingsActivity extends PreferenceActivity
                 // 1a2. COMMIT store the place address in shared preferences
                 // 1a3. show the new place in the location preference summary
                 // 1a3a. if the new place doesn't have an address, show a friendly coordinate combo
-                // 1a4. reset location status as prep for sync
-                // 1a5. resync
+                // 1a4. show attribution
+                // 1a4a. for Honeycomb and above, use the footer
+                // 1a4b. for pre-Honeycomb use a snackbar since footers are not available
+                // 1a5. reset location status as prep for sync
+                // 1a6. resync
 
                 Place place = PlacePicker.getPlace( data, this );
 
@@ -207,11 +251,31 @@ public class SettingsActivity extends PreferenceActivity
 
                 locationPreference.setSummary( placeAddress );
 
-                // 1a4. reset location status as prep for sync
+                // 1a4. show attribution
+
+                // 1a4a. for Honeycomb and above, use the footer
+
+                if ( mAttributionImageView != null ) {
+                    mAttributionImageView.setVisibility( View.VISIBLE );
+                }
+
+                // 1a4b. for pre-Honeycomb use a snackbar since footers are not available
+
+                // begin else pre Honeycomb attribution
+                else {
+
+                    View rootView = findViewById( android.R.id.content );
+
+                    Snackbar.make( rootView, getString( R.string.message_info_places_attribution_text ),
+                            Snackbar.LENGTH_LONG ).show();
+
+                } // end else pre Honeycomb attribution
+
+                // 1a5. reset location status as prep for sync
 
                 Utility.resetLocationStatus( this );
 
-                // 1a5. resync
+                // 1a6. resync
 
                 syncImmediately( this );
 
@@ -307,8 +371,9 @@ public class SettingsActivity extends PreferenceActivity
         // 3b. remove latitude and longitude from the preferences since
         // by editing this preference the user wants to use manual locations, and COMMIT, not APPLY
         // since we will sync after this and we want the removal to have finished by then
-        // 3c. reset location status as prep for the sync
-        // 3d. resync
+        // 3c. remove any attributions
+        // 3d. reset location status as prep for the sync
+        // 3e. resync
         // 4. if the changed preference was the icon pack one
         // 4a. update lists of weather entries accordingly
 
@@ -365,11 +430,17 @@ public class SettingsActivity extends PreferenceActivity
                     .remove( getString( R.string.pref_location_longitude_key ) )
                     .commit();
 
-            // 3c. reset location status as prep for the sync
+            // 3c. remove any attributions
+
+            if ( mAttributionImageView != null ) {
+                mAttributionImageView.setVisibility( View.GONE );
+            }
+
+            // 3d. reset location status as prep for the sync
 
             Utility.resetLocationStatus( this );
 
-            // 3d. resync
+            // 3e. resync
 
             syncImmediately( this );
 
