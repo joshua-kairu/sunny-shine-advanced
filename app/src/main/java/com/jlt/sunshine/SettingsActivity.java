@@ -1,5 +1,6 @@
 package com.jlt.sunshine;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
@@ -127,6 +129,7 @@ public class SettingsActivity extends PreferenceActivity
 
     } // end onPause
 
+    @SuppressLint( "CommitPrefEdits" )
     @Override
     // begin onActivityResult
     // This is where the places request from LocationEditTextPreference is handled
@@ -135,7 +138,13 @@ public class SettingsActivity extends PreferenceActivity
         // 0. super stuff
         // 1. if the request code is the places one
         // 1a. if the result is OK
-        // 1a0. store the place address in shared preferences
+        // 1a0. get location latitude from the new place and store it
+        // 1a1. get location longitude from the new place and store it
+        // 1a2. store the place address in shared preferences with a COMMIT not APPLY since
+        // the sync will need this information for success
+        // 1a3. show the new place in the location preference summary
+        // 1a4. reset location status as prep for sync
+        // 1a5. resync
 
         // 0. super stuff
 
@@ -151,14 +160,60 @@ public class SettingsActivity extends PreferenceActivity
             // begin if result of OK
             if ( resultCode == RESULT_OK ) {
 
-                // 1a0. store the place address in shared preferences
+                // 1a0. get location latitude from the new place and store it with a COMMIT not APPLY since
+                // the sync will need this information for success
+                // 1a1. get location longitude from the new place and COMMIT store it
+                // 1a2. COMMIT store the place address in shared preferences
+                // 1a3. show the new place in the location preference summary
+                // 1a3a. if the new place doesn't have an address, show a friendly coordinate combo
+                // 1a4. reset location status as prep for sync
+                // 1a5. resync
 
                 Place place = PlacePicker.getPlace( data, this );
 
-                String address = place.getAddress().toString();
+                // 1a0. get location latitude from the new place and store it with a COMMIT not APPLY since
+                // the sync will need this information for success -> storage deferred
+                // to when we have the longitude
+
+                float latitude = ( float ) place.getLatLng().latitude;
+
+                // 1a1. get location longitude from the new place and COMMIT store it
+
+                float longitude = ( float ) place.getLatLng().longitude;
 
                 PreferenceManager.getDefaultSharedPreferences( this ).edit()
-                        .putString( getString( R.string.pref_location_key ), address ).apply();
+                        .putFloat( getString( R.string.pref_location_latitude_key ), latitude )
+                        .putFloat( getString( R.string.pref_location_longitude_key ), longitude )
+                        .commit();
+
+                // 1a2. COMMIT store the place address in shared preferences
+
+                String placeAddress = place.getAddress().toString();
+
+                PreferenceManager.getDefaultSharedPreferences( this ).edit()
+                        .putString( getString( R.string.pref_location_key ), placeAddress )
+                        .commit();
+
+                // 1a3. show the new place in the location preference summary
+
+                Preference locationPreference = findPreference( getString( R.string.pref_location_key ) );
+
+                // 1a3a. if the new place doesn't have an address, show a friendly coordinate combo
+
+                if ( TextUtils.isEmpty( placeAddress ) == true ) {
+                    placeAddress = getString( R.string.pref_location_summary_unnamed_place_address,
+                            latitude, longitude );
+                }
+
+                locationPreference.setSummary( placeAddress );
+
+                // 1a4. reset location status as prep for sync
+
+                Utility.resetLocationStatus( this );
+
+                // 1a5. resync
+
+                syncImmediately( this );
 
             } // end if result of OK
 
@@ -234,6 +289,7 @@ public class SettingsActivity extends PreferenceActivity
 
     } // end onPreferenceChange
 
+    @SuppressLint( "CommitPrefEdits" )
     @Override
     // begin onSharedPreferenceChanged
     // This is called AFTER the preference is CHANGEd
@@ -248,6 +304,11 @@ public class SettingsActivity extends PreferenceActivity
         // 2a. update the weather entry list with the new units
         // 3. if the changed preference was the location one
         // 3a. update the summary to show that we are in the process of refreshing
+        // 3b. remove latitude and longitude from the preferences since
+        // by editing this preference the user wants to use manual locations, and COMMIT, not APPLY
+        // since we will sync after this and we want the removal to have finished by then
+        // 3c. reset location status as prep for the sync
+        // 3d. resync
         // 4. if the changed preference was the icon pack one
         // 4a. update lists of weather entries accordingly
 
@@ -294,6 +355,23 @@ public class SettingsActivity extends PreferenceActivity
             locationPreference.setSummary(
                     getString( R.string.pref_location_summary_unknown, preferredLocation )
             );
+
+            // 3b. remove latitude and longitude from the preferences since
+            // by editing this preference the user wants to use manual locations, and COMMIT, not APPLY
+            // since we will sync after this and we want the removal to have finished by then
+
+            PreferenceManager.getDefaultSharedPreferences( this ).edit()
+                    .remove( getString( R.string.pref_location_latitude_key ) )
+                    .remove( getString( R.string.pref_location_longitude_key ) )
+                    .commit();
+
+            // 3c. reset location status as prep for the sync
+
+            Utility.resetLocationStatus( this );
+
+            // 3d. resync
+
+            syncImmediately( this );
 
         } // end else if its the location that changed
 

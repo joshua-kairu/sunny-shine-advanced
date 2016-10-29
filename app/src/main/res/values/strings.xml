@@ -114,6 +114,12 @@ of localizable data and its related information.
     <string name="pref_location_summary_unknown">Validating location. . . (<xliff:g id="location_setting">%1$s</xliff:g>)
     </string>
 
+    <!-- Summary for displaying a place that doesn't have an address. We use a display-friendly
+    string based on latitude and longitude. [CHAR LIMIT - NONE] -->
+    <string name="pref_location_summary_unnamed_place_address">
+        (<xliff:g id="latitude">%1$.2f</xliff:g>, <xliff:g id="longitude">%2$.2f</xliff:g>)
+    </string>
+
     <!-- Key for storing icon pack preference in SharedPreferences [CHAR LIMIT = NONE]-->
     <string name="pref_icon_pack_key" translatable="false">icon_pack</string>
 
@@ -135,6 +141,14 @@ of localizable data and its related information.
 
     <!-- The mono icon pack label [CHAR LIMIT = 25] -->
     <string name="pref_icon_pack_mono_label">Mono</string>
+
+    <!-- Key for storing the latitude gotten from Google Places inside SharedPreferences
+    [CHAR LIMIT = NONE]-->
+    <string name="pref_location_latitude_key" translatable="false">location_latitude</string>
+
+    <!-- Key for storing the longitude gotten from Google Places inside SharedPreferences
+    [CHAR LIMIT = NONE]-->
+    <string name="pref_location_longitude_key" translatable="false">location_longitude</string>
 
     <!-- Titles -->
 

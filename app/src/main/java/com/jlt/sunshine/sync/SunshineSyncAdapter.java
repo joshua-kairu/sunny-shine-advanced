@@ -466,6 +466,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 0b. the buffered reader
         // 0c. the string that will store the received forecast in JSON form
         // 1. construct the url to fetch
+        // 1a. determine if to use latitude-longitude or location-name
         // 2. create a http get request to the url
         // 3. connect to the url
         // 4. buffer read from the url
@@ -503,21 +504,39 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             final String
                     FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?",
                     QUERY_PARAMETER = "q", // use q to mean we will use the postal code to find the city; if the city has no postal code - Nairobi does not - then use id and pass the city's OWM id as the parameter - Nairobi's is 184745
+                    LATITUDE_PARAMETER = "lat",
+                    LONGITUDE_PARAMETER = "lon",
                     FORMAT_PARAMETER = "mode",
                     UNITS_PARAMETER = "units",
                     DAYS_PARAMETER = "cnt", // this was "days" but "days" only returned 7 days worth of forecast. "cnt" gets us the whole 14. :-)
                     ID_PARAMETER = "appid";
 
-            Uri builtUri =
-                    Uri.parse( FORECAST_BASE_URL ).buildUpon()
-                            .appendQueryParameter( QUERY_PARAMETER,locationQuery )
-                            .appendQueryParameter( FORMAT_PARAMETER, format )
-                            .appendQueryParameter( UNITS_PARAMETER, units )
-                            .appendQueryParameter( DAYS_PARAMETER, String.valueOf( numDays ) )
-                            .appendQueryParameter( ID_PARAMETER, BuildConfig.OPEN_WEATHER_MAP_API_KEY )
-                            .build();
+            Uri.Builder builderUri = Uri.parse( FORECAST_BASE_URL ).buildUpon();
 
-            URL url = new URL( builtUri.toString() );
+            // 1a. determine if to use latitude-longitude or location-name
+
+            // begin if we are using latitude-longitude
+            if ( Utility.isLocationLatLongAvailable( getContext() ) == true ) {
+
+                String latitude = Float.toString( Utility.getLocationLatitude( getContext() ) );
+                String longitude = Float.toString( Utility.getLocationLongitude( getContext() ) );
+
+                builderUri.appendQueryParameter( LATITUDE_PARAMETER, latitude )
+                        .appendQueryParameter( LONGITUDE_PARAMETER, longitude );
+
+            } // end if we are using latitude-longitude
+
+            // else we are using location-name
+            else {
+                builderUri.appendQueryParameter( QUERY_PARAMETER, locationQuery );
+            }
+            builderUri.appendQueryParameter( FORMAT_PARAMETER, format )
+                    .appendQueryParameter( UNITS_PARAMETER, units )
+                    .appendQueryParameter( DAYS_PARAMETER, String.valueOf( numDays ) )
+                    .appendQueryParameter( ID_PARAMETER, BuildConfig.OPEN_WEATHER_MAP_API_KEY )
+                    .build();
+
+            URL url = new URL( builderUri.toString() );
 
             urlConnection = ( HttpURLConnection ) url.openConnection();
             urlConnection.setRequestMethod( "GET" );

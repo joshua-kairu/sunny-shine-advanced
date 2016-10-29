@@ -48,7 +48,9 @@ public class Utility {
     /* CONSTANTS */
     
     /* Integers */
-    
+
+    private static final float DEFAULT_LAT_LONG = 0f; // ditto
+
     /* Strings */
 
     /* VARIABLES */
@@ -1017,6 +1019,60 @@ public class Utility {
                 adapterClass.getSimpleName(), viewHolder.getAdapterPosition() );
 
     } // end method generateTransitionName
+
+    /**
+     * Helper method to check if location latitude and longitude are available.
+     *
+     * @param context Android {@link Context}
+     *
+     * @return Whether or not there is a location latitude and longitude pair in preferences.
+     */
+    // begin method isLocationLatLongAvailable
+    public static boolean isLocationLatLongAvailable( Context context ) {
+
+        // 0. get preferences
+        // 1. return if location latitude and longitude exist
+
+        // 0. get preferences
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( context );
+
+        // 1. return if location latitude and longitude exist
+
+        return sharedPreferences.contains( context.getString( R.string.pref_location_latitude_key ) )
+                && sharedPreferences.contains( context.getString( R.string.pref_location_longitude_key ) );
+
+    } // end method isLocationLatLongAvailable
+
+    /**
+     * Helper method to get the location latitude.
+     *
+     * @param context Android {@link Context}
+     *
+     * @return The location latitude.
+     */
+    // begin method getLocationLatitude
+    public static float getLocationLatitude( Context context ) {
+
+        return PreferenceManager.getDefaultSharedPreferences( context )
+                .getFloat( context.getString( R.string.pref_location_latitude_key ), DEFAULT_LAT_LONG );
+
+    } // end method getLocationLatitude
+
+    /**
+     * Helper method to get the location longitude.
+     *
+     * @param context Android {@link Context}
+     *
+     * @return The location longitude.
+     */
+    // begin method getLocationLongitude
+    public static float getLocationLongitude( Context context ) {
+
+        return PreferenceManager.getDefaultSharedPreferences( context )
+                .getFloat( context.getString( R.string.pref_location_longitude_key ), DEFAULT_LAT_LONG );
+
+    } // end method getLocationLongitude
 
     /* INNER CLASSES */
 
