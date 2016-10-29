@@ -317,6 +317,16 @@
             android:exported="false">
         </service>
 
+        <!-- Google Places API key -->
+
+        <meta-data
+
+            android:name="com.google.android.geo.API_KEY"
+
+            android:value="AIzaSyAYmBYyknpYkGp0eR-Z2rnNPSvXl1Wbl_4"
+
+            />
+
     </application>
 
 </manifest>
