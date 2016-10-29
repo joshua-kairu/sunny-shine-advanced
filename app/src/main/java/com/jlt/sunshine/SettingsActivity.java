@@ -12,6 +12,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.jlt.sunshine.data.Utility;
 import com.jlt.sunshine.data.contract.WeatherContract;
 import com.jlt.sunshine.sync.SunshineSyncAdapter.LocationStatus;
@@ -47,6 +49,11 @@ public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     /* CONSTANTS */
+
+    /* Integers */
+
+    /** Identifier for the result from {@link com.google.android.gms.location.places.ui.PlacePicker}. */
+    public static final int PLACE_PICKER_REQUEST = 1;
 
     /* VARIABLES */
 
@@ -119,6 +126,45 @@ public class SettingsActivity extends PreferenceActivity
         super.onPause();
 
     } // end onPause
+
+    @Override
+    // begin onActivityResult
+    // This is where the places request from LocationEditTextPreference is handled
+    protected void onActivityResult( int requestCode, int resultCode, Intent data ) {
+
+        // 0. super stuff
+        // 1. if the request code is the places one
+        // 1a. if the result is OK
+        // 1a0. store the place address in shared preferences
+
+        // 0. super stuff
+
+        super.onActivityResult( requestCode, resultCode, data );
+
+        // 1. if the request code is the places one
+
+        // begin if the request code is places
+        if ( requestCode == PLACE_PICKER_REQUEST ) {
+
+            // 1a. if the result is OK
+
+            // begin if result of OK
+            if ( resultCode == RESULT_OK ) {
+
+                // 1a0. store the place address in shared preferences
+
+                Place place = PlacePicker.getPlace( data, this );
+
+                String address = place.getAddress().toString();
+
+                PreferenceManager.getDefaultSharedPreferences( this ).edit()
+                        .putString( getString( R.string.pref_location_key ), address ).apply();
+
+            } // end if result of OK
+
+        } // end if the request code is places
+
+    } // end onActivityResult
 
     @Override
     // begin onPreferenceChange

@@ -69,6 +69,11 @@ of localizable data and its related information.
         No weather information available. The location in settings is not recognized by the weather server.
     </string>
 
+    <!-- Error message for when we do not have permission to access fine location [CHAR LIMIT = 35] -->
+    <string name="message_error_no_fine_location_perm">
+        Location permission denied.
+    </string>
+
     <!-- Preference strings -->
 
     <!-- Key for storing location preference in SharedPreferences [CHAR LIMIT = NONE]-->

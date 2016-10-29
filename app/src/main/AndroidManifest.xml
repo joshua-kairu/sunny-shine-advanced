@@ -67,6 +67,10 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Location -->
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <!-- Network -->
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

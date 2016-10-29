@@ -21,15 +21,19 @@
 
 package com.jlt.sunshine.view;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,7 +42,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.jlt.sunshine.R;
+import com.jlt.sunshine.SettingsActivity;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 /**
  * A custom {@link android.preference.EditTextPreference} to enforce a
@@ -55,7 +66,7 @@ public class LocationEditTextPreference extends EditTextPreference implements Te
 
     /** The default minimum length of the location preference string. */
     private static final int DEFAULT_MINIMUM_LOCATION_LENGTH = 2;
-    
+
     /* Strings */
 
     /**
@@ -222,7 +233,13 @@ public class LocationEditTextPreference extends EditTextPreference implements Te
         // 0. get the created view
         // 1. get the current location view from the created view
         // 2. when the location view is clicked
-        // 2a. toast for now
+        // 2a. if we have permission to access fine location
+        // 2a0. get the user's location from Google Places
+        // 2a0a. get the settings activity from the context
+        // 2a0a0. construct an intent to Places
+        // 2a0a1. start the intent activity with a result based on the place picker request
+        // 2b. otherwise
+        // 2b0. toast the user of the lack of permission
         // last. return the created view
 
         // 0. get the created view
@@ -245,9 +262,55 @@ public class LocationEditTextPreference extends EditTextPreference implements Te
                     // begin onClick
                     public void onClick( View v ) {
 
-                        // 2a. toast for now
+                        // 2a. if we have permission to access fine location
 
-                        Toast.makeText( getContext(), "Hello, Picker!", Toast.LENGTH_SHORT ).show();
+                        Context context = getContext();
+
+                        int locationPermissionCheck = ContextCompat.checkSelfPermission( context,
+                                ACCESS_FINE_LOCATION );
+
+                        // begin if permission is granted
+                        if ( locationPermissionCheck == PERMISSION_GRANTED ) {
+
+                            // 2a0. get the user's location from Google Places
+
+                            // begin trying to place the user
+                            try {
+
+                                // 2a0a. get the settings activity from the context
+
+                                Activity settingsActivity = ( SettingsActivity ) context;
+
+                                // 2a0a0. construct an intent to Places
+
+                                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                                Intent placeIntent = builder.build( settingsActivity );
+
+                                // 2a0a1. start the intent activity with a result based on
+                                // the place picker request
+
+                                settingsActivity.startActivityForResult( placeIntent,
+                                        SettingsActivity.PLACE_PICKER_REQUEST );
+
+                            } // end trying to place the user
+
+                            // catch Google Play Services issues
+                            catch ( GooglePlayServicesRepairableException |
+                                    GooglePlayServicesNotAvailableException e ) {
+                                Log.e( LOG_TAG, "onClick: Play services issues!", e );
+                            }
+
+                        } // end if permission is granted
+
+                        // 2b. otherwise
+
+                        // 2b0. toast the user of the lack of permission
+
+                        else {
+                            Toast.makeText( context, R.string.message_error_no_fine_location_perm,
+                                    Toast.LENGTH_SHORT ).show();
+                        }
 
                     } // end onClick
 
