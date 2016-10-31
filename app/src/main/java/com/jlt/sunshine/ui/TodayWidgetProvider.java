@@ -29,6 +29,7 @@ import android.widget.RemoteViews;
 
 import com.jlt.sunshine.MainActivity;
 import com.jlt.sunshine.R;
+import com.jlt.sunshine.data.Utility;
 
 /**
  * An {@link android.appwidget.AppWidgetProvider} for the today widget.
@@ -59,8 +60,9 @@ public class TodayWidgetProvider extends AppWidgetProvider {
         // 0. update the widget
         // 0a. for the today widget this is easy since it is a static widget
         // 0a0. get a remote view for the small today widget
-        // 0a1. create a pending intent to go to the main activity
-        // 0a2. use that pending intent for when the widget is clicked
+        // 0a1. put some static data
+        // 0a2. create a pending intent to go to the main activity
+        // 0a3. use that pending intent for when the widget is clicked
         // last. update this widget with the remote view
 
         // 0. update the widget
@@ -71,19 +73,31 @@ public class TodayWidgetProvider extends AppWidgetProvider {
         for ( int appWidgetId : appWidgetIds ) {
 
             // 0a0. get a remote view for the small today widget
-            // 0a1. update this widget with the remote view
+            // 0a1. put some static data
+            // 0a2. create a pending intent to go to the main activity
+            // 0a3. use that pending intent for when the widget is clicked
 
             // 0a0. get a remote view for the small today widget
 
             RemoteViews views = new RemoteViews( context.getPackageName(),
                     R.layout.widget_today_small );
 
-            // 0a1. create a pending intent to go to the main activity
+            // 0a1. put some static data
+
+            int todayWeatherResourceID = R.drawable.art_clear;
+
+            String todayMaxTemperature = Utility.formatTemperature( context, 24.0f );
+
+            views.setImageViewResource( R.id.widget_icon, todayWeatherResourceID );
+
+            views.setTextViewText( R.id.widget_high_temperature, todayMaxTemperature );
+
+            // 0a2. create a pending intent to go to the main activity
 
             PendingIntent pendingIntent = PendingIntent.getActivity( context, 0,
                     new Intent( context, MainActivity.class ), 0 );
 
-            // 0a2. use that pending intent for when the widget is clicked
+            // 0a3. use that pending intent for when the widget is clicked
 
             // setOnClickPendingIntent - when the given view is clicked, fire the given PendingIntent
             views.setOnClickPendingIntent( R.id.widget, pendingIntent );
