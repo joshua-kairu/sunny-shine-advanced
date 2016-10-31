@@ -109,11 +109,10 @@ public class Utility {
     /**
      * Formats the temperature based on whether the temperature is metric or not.
      * @param temperature   The temperature (whose default units are metric)
-     * @param isMetric  If we are to convert the temperature to metric units or not
      * @return Returns a string format of the possibly converted temperature
      * */
     // begin method formatTemperature
-    public static String formatTemperature( Context context, float temperature, boolean isMetric ) {
+    public static String formatTemperature( Context context, float temperature ) {
 
         // 0. if necessary convert the temperature to metric form
         // 1. return the temperature in a formatted string
@@ -122,7 +121,7 @@ public class Utility {
 
         double temp;
 
-        if ( isMetric == false ) { temp = 9.0 / 5.0 * temperature + 32; }
+        if ( Utility.isMetric( context ) == false ) { temp = 9.0 / 5.0 * temperature + 32; }
         else { temp = temperature; }
 
         // 1. return the temperature in a formatted string
