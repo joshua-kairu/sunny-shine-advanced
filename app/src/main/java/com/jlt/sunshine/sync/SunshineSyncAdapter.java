@@ -1148,8 +1148,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     String notificationText = context.getString( R.string.format_notification,
                             todayWeatherDescription,
-                            Utility.formatTemperature( context, todayHigh, isMetric ),
-                            Utility.formatTemperature( context, todayLow, isMetric ) );
+                            Utility.formatTemperature( context, todayHigh ),
+                            Utility.formatTemperature( context, todayLow ) );
 
                     // 0d. put the needed images
 

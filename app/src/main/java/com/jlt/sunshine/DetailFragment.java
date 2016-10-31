@@ -365,8 +365,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mDateTextView.setText( Utility.getFullFriendlyDayString( getActivity(), dateInMillis ) );
 
             String highString = Utility.formatTemperature( getActivity(),
-                    cursor.getFloat( COLUMN_WEATHER_MAX_TEMP ),
-                    Utility.isMetric( getActivity() ) );
+                    cursor.getFloat( COLUMN_WEATHER_MAX_TEMP ) );
 
             mHighTempTextView.setText( highString );
 
@@ -375,8 +374,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             );
 
             String lowString = Utility.formatTemperature( getActivity(),
-                    cursor.getFloat( COLUMN_WEATHER_MIN_TEMP ),
-                    Utility.isMetric( getActivity() ) );
+                    cursor.getFloat( COLUMN_WEATHER_MIN_TEMP ) );
 
             mLowTempTextView.setText( lowString );
 
@@ -596,17 +594,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     // begin method formatHighLows
     private String formatHighLows( float high, float low ) {
 
-        // 0. are the units metric?
-        // 1. return the correct high/low string
+        // 0. return the correct high/low string
 
-        // 0. are the units metric?
+        // 0. return the correct high/low string
 
-        boolean isMetric = Utility.isMetric( getActivity() );
-
-        // 1. return the correct high/low string
-
-        return Utility.formatTemperature( getActivity(), high, isMetric ) + "/"
-                        + Utility.formatTemperature( getActivity(), low, isMetric );
+        return Utility.formatTemperature( getActivity(), high ) + "/"
+                        + Utility.formatTemperature( getActivity(), low );
 
     } // end method formatHighLows
 

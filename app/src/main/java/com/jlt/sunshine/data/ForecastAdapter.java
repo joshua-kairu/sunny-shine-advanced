@@ -262,7 +262,7 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
 
             float high = mCursor.getFloat( COLUMN_WEATHER_MAX_TEMP );
 
-            String highString = Utility.formatTemperature( mContext, high, Utility.isMetric( mContext ) );
+            String highString = Utility.formatTemperature( mContext, high );
 
             weatherViewHolder.mHighTempTextView.setText( highString );
 
@@ -276,7 +276,7 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
 
             float low = mCursor.getFloat( COLUMN_WEATHER_MIN_TEMP );
 
-            String lowString = Utility.formatTemperature( mContext, low, Utility.isMetric( mContext ) );
+            String lowString = Utility.formatTemperature( mContext, low );
 
             weatherViewHolder.mLowTempTextView.setText( lowString );
 
@@ -317,21 +317,16 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
     // begin method formatHighLows
     private String formatHighLows( float high, float low ) {
 
-        // 0. are the units metric?
-        // 1. get the correct high/low string
-        // 2. and return it
+        // 0. get the correct high/low string
+        // 1. and return it
 
-        // 0. are the units metric?
-
-        boolean isMetric = Utility.isMetric( mContext );
-
-        // 1. get the correct high/low string
+        // 0. get the correct high/low string
 
         String highLowString =
-                Utility.formatTemperature( mContext, high, isMetric ) + "/"
-                        + Utility.formatTemperature( mContext, low, isMetric );
+                Utility.formatTemperature( mContext, high ) + "/"
+                        + Utility.formatTemperature( mContext, low );
 
-        // 2. and return it
+        // 1. and return it
 
         return highLowString;
 
