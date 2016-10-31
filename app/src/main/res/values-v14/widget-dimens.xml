@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ Sunshine
+
+ A simple weather app
+
+ Copyright (C) 2016 Kairu Joshua Wambugu
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see http://www.gnu.org/licenses/.
+
+ -->
+
+<!-- dimensions. for widgets in v14(4.0/ICS) and above. -->
+
+<resources>
+
+    <!-- widget margin.
+    for pre-Android-4.0/v13-and-below devices this should be 8dp since those versions did not put
+    the automatic widget margin that post-4.0 devices put.
+    for post-4.0 devices, like here, this is 0dp. -->
+    <dimen name="widget_margin">0dp</dimen>
+
+</resources>

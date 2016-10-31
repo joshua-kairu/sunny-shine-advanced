@@ -1,11 +1,3 @@
-package com.jlt.sunshine;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-
 /*
  *  Sunshine
  *
@@ -25,6 +17,14 @@ import android.view.MenuItem;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
+
+package com.jlt.sunshine;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 /** Shows the details of the weather. */
 // begin activity DetailActivity

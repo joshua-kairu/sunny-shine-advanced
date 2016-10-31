@@ -160,6 +160,9 @@ of localizable data and its related information.
 
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Title for the today widget. [CHAR LIMIT = 20] -->
+    <string name="title_widget_today">Sunshine Today</string>
+
     <!-- A11y -->
 
     <string name="a11y_toolbar_icon">Sunshine</string>
