@@ -18,7 +18,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-package com.jlt.sunshine.ui;
+package com.jlt.sunshine.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;

@@ -335,7 +335,7 @@
 
         <receiver
 
-            android:name=".ui.TodayWidgetProvider"
+            android:name=".widget.TodayWidgetProvider"
 
             android:label="@string/title_widget_today"
 
