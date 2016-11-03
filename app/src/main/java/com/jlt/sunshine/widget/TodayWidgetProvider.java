@@ -20,16 +20,13 @@
 
 package com.jlt.sunshine.widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.RemoteViews;
+import android.os.Bundle;
 
-import com.jlt.sunshine.MainActivity;
-import com.jlt.sunshine.R;
-import com.jlt.sunshine.data.Utility;
+import com.jlt.sunshine.sync.SunshineSyncAdapter;
 
 /**
  * An {@link android.appwidget.AppWidgetProvider} for the today widget.
@@ -55,60 +52,60 @@ public class TodayWidgetProvider extends AppWidgetProvider {
 
     @Override
     // begin onUpdate
+    // called as many times as stated in the AppWidgetProvider XML's android:updatePeriodMillis
     public void onUpdate( Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds ) {
 
-        // 0. update the widget
-        // 0a. for the today widget this is easy since it is a static widget
-        // 0a0. get a remote view for the small today widget
-        // 0a1. put some static data
-        // 0a2. create a pending intent to go to the main activity
-        // 0a3. use that pending intent for when the widget is clicked
-        // last. update this widget with the remote view
+        // 0. update the widget by starting the today widget intent service
 
-        // 0. update the widget
+        // 0. update the widget by starting the today widget intent service
 
-        // 0a. for the today widget this is easy since it is a static widget
+        Intent todayWidgetUpdateIntent = new Intent( context, TodayWidgetIntentService.class );
 
-        // begin for through the widget IDs
-        for ( int appWidgetId : appWidgetIds ) {
-
-            // 0a0. get a remote view for the small today widget
-            // 0a1. put some static data
-            // 0a2. create a pending intent to go to the main activity
-            // 0a3. use that pending intent for when the widget is clicked
-
-            // 0a0. get a remote view for the small today widget
-
-            RemoteViews views = new RemoteViews( context.getPackageName(),
-                    R.layout.widget_today_small );
-
-            // 0a1. put some static data
-
-            int todayWeatherResourceID = R.drawable.art_clear;
-
-            String todayMaxTemperature = Utility.formatTemperature( context, 24.0f );
-
-            views.setImageViewResource( R.id.widget_icon, todayWeatherResourceID );
-
-            views.setTextViewText( R.id.widget_high_temperature, todayMaxTemperature );
-
-            // 0a2. create a pending intent to go to the main activity
-
-            PendingIntent pendingIntent = PendingIntent.getActivity( context, 0,
-                    new Intent( context, MainActivity.class ), 0 );
-
-            // 0a3. use that pending intent for when the widget is clicked
-
-            // setOnClickPendingIntent - when the given view is clicked, fire the given PendingIntent
-            views.setOnClickPendingIntent( R.id.widget, pendingIntent );
-
-            // last. update this widget with the remote view
-
-            appWidgetManager.updateAppWidget( appWidgetId, views );
-
-        } // end for through the widget IDs
+        context.startService( todayWidgetUpdateIntent );
 
     } // end onUpdate
+
+    @Override
+    /*
+    Called in response to the AppWidgetManager.ACTION_APPWIDGET_OPTIONS_CHANGED broadcast when
+    this widget has been laid out at a new size.
+    */
+    // begin onAppWidgetOptionsChanged
+    public void onAppWidgetOptionsChanged( Context context, AppWidgetManager appWidgetManager,
+                                           int appWidgetId, Bundle newOptions ) {
+
+        // seems to be called during a widget resize
+
+        // 0. update the widget with the latest weather
+
+        // 0. update the widget with the latest weather
+
+        context.startService( new Intent( context, TodayWidgetIntentService.class ) );
+
+    } // end onAppWidgetOptionsChanged
+
+    @Override
+    // begin onReceive
+    public void onReceive( Context context, Intent intent ) {
+
+        // 0. super stuff
+        // 1. if we have received the data updated broadcast from the sync adapter
+        // 1a. update the widget by starting the today widget intent service
+
+        // 0. super stuff
+
+        super.onReceive( context, intent );
+
+        // 1. if we have received the data updated broadcast from the sync adapter
+
+        // 1a. update the widget by starting the today widget intent service
+
+        if ( intent.getAction() != null &&
+                intent.getAction().equals( SunshineSyncAdapter.ACTION_DATA_UPDATED ) == true ) {
+            context.startService( new Intent( context, TodayWidgetIntentService.class ) );
+        }
+
+    } // end onReceive
 
     /* Other Methods */
     

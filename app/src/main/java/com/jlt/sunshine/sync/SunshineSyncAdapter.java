@@ -144,6 +144,10 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
      */
     private static final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
 
+    /** String to send a broadcasting alerting any widgets that
+     * sync is complete and so data has changed. */
+    public static final String ACTION_DATA_UPDATED = "com.jlt.sunshine.ACTION_DATA_UPDATED";
+
     /* VARIABLES */
 
     /* Annotations */
@@ -204,6 +208,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 0. fetch the weather info
 
         fetchWeather();
+
+        Log.e( LOG_TAG, "onPerformSync: finished" );
 
     } // end onPerformSync
 
@@ -680,6 +686,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 2f1. bulk insert to add the weather entries in the vector to the db
         // 2f2. delete any day-old data
         // 2f3. send a notification of the current weather
+        // 2f4. update any widgets
         // 2g. put the server OK status in the preferences
         // 3. otherwise if the location is not found
         // 3a. put the invalid location status in the preferences
@@ -972,6 +979,10 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 // 2f3. send a notification of the current weather
 
                 notifyWeather();
+
+                // 2f4. update any widgets
+
+                updateWidgets();
 
             } // end if the weather values vector has something
 
@@ -1299,6 +1310,28 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 //                new String[] {yesterdayDate});
 
     } // end method deleteOldData
+
+    /**
+     * Helper method to update the widgets.
+     *
+     * This is done by sending a {@link SunshineSyncAdapter#ACTION_DATA_UPDATED} broadcast.
+     *  */
+    // begin method updateWidgets
+    private void updateWidgets() {
+
+        // 0. get the context
+        // 1. send the data changed broadcast
+
+        // 0. get the context
+
+        Context context = getContext();
+
+        // 1. send the data changed broadcast
+
+        Intent dataUpdatedIntent = new Intent( ACTION_DATA_UPDATED );
+        context.sendBroadcast( dataUpdatedIntent );
+
+    } // end method updateWidgets
 
     /* INNER CLASSES */
 

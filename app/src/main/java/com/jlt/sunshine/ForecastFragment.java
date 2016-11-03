@@ -112,7 +112,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     /* Strings */
 
-    public static final String LOG_TAG = ForecastFragment.class.getSimpleName(); // the logger
+    private static final String LOG_TAG = ForecastFragment.class.getSimpleName(); // the logger
 
     private static final String BUNDLE_SCROLL_POSITION = "BUNDLE_SCROLL_POSITION";
         // key to store the current scroll position

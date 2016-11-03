@@ -341,10 +341,13 @@
 
             >
 
-            <!-- this widget receives the widget update broadcast? so that it can update itself -->
             <intent-filter>
 
+                <!-- this widget receives the widget update broadcast so that it can update itself -->
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+
+                <!-- this widget receives the data update broadcast so that it can know when to update itself -->
+                <action android:name="com.jlt.sunshine.ACTION_DATA_UPDATED" />
 
             </intent-filter>
 
@@ -358,6 +361,16 @@
                 />
 
         </receiver>
+
+        <!-- the service to update the today widget -->
+
+        <service
+
+            android:name=".widget.TodayWidgetIntentService"
+
+            android:exported="false"
+
+            />
 
     </application>
 
