@@ -160,6 +160,7 @@ public class Utility {
      *
      * @param context Context to use for resource localization.
      * @param dateInMillis The date in milliseconds
+     * @param displayLongToday Boolean to say if we are to use the long format of the today date
      * @return A user-friendly representation of the date.
      * */
     // begin method getFriendlyDateString
