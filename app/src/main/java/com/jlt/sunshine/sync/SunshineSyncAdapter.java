@@ -53,6 +53,7 @@ import com.jlt.sunshine.BuildConfig;
 import com.jlt.sunshine.MainActivity;
 import com.jlt.sunshine.R;
 import com.jlt.sunshine.data.Utility;
+import com.jlt.sunshine.muzei.WeatherMuzeiArtSourceService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -685,8 +686,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 2f. if the vector has something,
         // 2f1. bulk insert to add the weather entries in the vector to the db
         // 2f2. delete any day-old data
-        // 2f3. send a notification of the current weather
-        // 2f4. update any widgets
+        // 2f3. update any widgets
+        // 2f4. update Muzei
+        // 2f-last. send a notification of the current weather
         // 2g. put the server OK status in the preferences
         // 3. otherwise if the location is not found
         // 3a. put the invalid location status in the preferences
@@ -976,13 +978,17 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 deleteOldData();
 
-                // 2f3. send a notification of the current weather
-
-                notifyWeather();
-
-                // 2f4. update any widgets
+                // 2f3. update any widgets
 
                 updateWidgets();
+
+                // 2f4. update Muzei
+
+                updateMuzei();
+
+                // 2f-last. send a notification of the current weather
+
+                notifyWeather();
 
             } // end if the weather values vector has something
 
@@ -1332,6 +1338,36 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         context.sendBroadcast( dataUpdatedIntent );
 
     } // end method updateWidgets
+
+    /**
+     * Helper method to update Muzei when necessary.
+     * */
+    // begin method updateMuzei
+    private void updateMuzei() {
+
+        // 0. for compatible devices (ICS MR1 and above)
+        // 0a. send the broadcast to update Muzei
+
+        // 0. for compatible devices (ICS MR1 and above)
+
+        // begin if we are on or above ICS MR1
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1 ) {
+
+            // 0a. send the broadcast to update Muzei
+
+            Context context = getContext();
+
+            Intent muzeiIntent = new Intent( ACTION_DATA_UPDATED )
+                    // Convenience for calling setComponent(ComponentName) with the name returned
+                    // by a Class object.
+                    // setComponent explicitly states which component to handle the intent
+                    .setClass( context, WeatherMuzeiArtSourceService.class );
+
+            context.startService( muzeiIntent );
+
+        } // end if we are on or above ICS MR1
+
+    } // end method updateMuzei
 
     /* INNER CLASSES */
 

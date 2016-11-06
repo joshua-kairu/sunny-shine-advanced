@@ -419,6 +419,33 @@
 
             />
 
+        <!-- service for providing Muzei art -->
+
+        <service
+
+            android:name=".muzei.WeatherMuzeiArtSourceService"
+
+            android:icon="@drawable/ic_muzei"
+
+            android:label="@string/app_name"
+
+            android:description="@string/muzei_description"
+
+            android:exported="false"
+
+            >
+
+            <!-- catch the muzei broadcast -->
+            <intent-filter>
+                <action android:name="com.google.android.apps.muzei.api.MuzeiArtSource" />
+            </intent-filter>
+
+            <!-- the sunshine app color to help make the app feel right at home with Muzei -->
+
+            <meta-data android:name="color" android:value="@color/primary" />
+
+        </service>
+
     </application>
 
 </manifest>
