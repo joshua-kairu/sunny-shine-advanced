@@ -7,40 +7,31 @@
  A simple weather app
 
  Copyright (C) 2016 Kairu Joshua Wambugu
-
+ 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
-
+ 
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
-
+ 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see http://www.gnu.org/licenses/.
 
  -->
 
-<!-- metadata for the today 1 x 1 widget -->
+<!-- booleans. for default phones. -->
 
-<!-- minResizeHeight - Minimum height that the AppWidget can be resized to. -->
-<!-- minResizeWidth - Minimum width that the AppWidget can be resized to. -->
-<appwidget-provider
+<resources>
 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- if to show the detail widget - no for default phones -->
+    <bool name="widget_detail_enabled">false</bool>
 
-    android:initialLayout="@layout/widget_today_medium"
+    <!-- if to use the detail activity when an item in the detail widget is tapped
+    - yes for default phones -->
+    <bool name="use_detail_activity">true</bool>
 
-    android:minHeight="@dimen/widget_today_default_height"
-
-    android:minWidth="@dimen/widget_today_default_width"
-
-    android:minResizeHeight="@dimen/widget_today_min_resize_height"
-
-    android:minResizeWidth="@dimen/widget_today_min_resize_width"
-
-    android:updatePeriodMillis="0"
-
-    />
+</resources>

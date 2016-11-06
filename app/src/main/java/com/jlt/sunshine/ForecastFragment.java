@@ -49,7 +49,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +56,7 @@ import com.jlt.sunshine.data.ForecastAdapter;
 import com.jlt.sunshine.data.ForecastAdapterOnClickHandler;
 import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
+import com.jlt.sunshine.data.contract.WeatherContract;
 import com.jlt.sunshine.data.contract.WeatherContract.LocationEntry;
 import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
 import com.jlt.sunshine.sync.SunshineSyncAdapter;
@@ -130,15 +130,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     /* Primitives */
 
-    private int mCurrentScrollPosition = RecyclerView.NO_POSITION; // current scroll position of
-                                                                   // the recycler. starting off
-                                                                   // with an invalid no position
-
     private boolean mUseTodayLayout = true; // ditto
 
     private boolean mAutoSelectView;
     private boolean mHoldForTransitions;
     private int mChoiceMode;
+
+    private long mInitialSelectedDate = -1;
 
     /* Recycler Views */
 
@@ -180,6 +178,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         if ( mForecastAdapter != null ) { mForecastAdapter.setUseTodayLayout( mUseTodayLayout ); }
 
     } // end method setUseTodayLayout
+
+    public void setInitialSelectedDate(long initialSelectedDate) {
+        mInitialSelectedDate = initialSelectedDate;
+    }
 
     /*
      * Overrides
@@ -265,7 +267,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 2a1a2. if we are scrolling, elevate
         // 3. set adapter to the recycler
         // 4. if there's instance state,
-        // 4a. mine it for the scroll position
+        // 4a. restore instance for the adapter
         // last. return the inflated view
 
         // 0. inflate the main fragment layout
@@ -426,12 +428,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 4. if there's instance state,
 
-        // 4a. mine it for the scroll position
+        // 4a. restore instance for the adapter
 
         if ( savedInstanceState != null ) {
-            if ( savedInstanceState.containsKey( BUNDLE_SCROLL_POSITION ) == true ) {
-                mCurrentScrollPosition = savedInstanceState.getInt( BUNDLE_SCROLL_POSITION );
-            }
             mForecastAdapter.onRestoreInstanceState(savedInstanceState);
         }
 
@@ -588,43 +587,34 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoadFinished( Loader< Cursor > cursorLoader, Cursor cursor ) {
 
         // 0. refresh the list view
-        // 1. if there is an valid recycler scroll position
-        // 1a. scroll to it
-        // 2. update the empty view
-        // 3. if there cursor has nothing
-        // 3a. start any postponed transitions
-        // 4. else the cursor has something,
-        // 4a. select a view holder based on the current adapter position using the item choice manager, if needed
-        // 4b. if we are to do so, start any pending transitions after the recycler has laid its kids out
+        // 1. update the empty view
+        // 2. if there cursor has nothing
+        // 2a. start any postponed transitions
+        // 3. else the cursor has something,
+        // 3a. select a view holder based on the current adapter position using the item choice manager, if needed
+        // 3b. if we are to do so, start any pending transitions after the recycler has laid its kids out
 
         // 0. refresh the list view
 
         // swapCursor - Swap in a new Cursor, returning the old Cursor
         mForecastAdapter.swapCursor( cursor );
 
-        // 1. if there is an valid recycler scroll position
-        // 1a. scroll to it
-
-        if ( mCurrentScrollPosition != ListView.INVALID_POSITION ) {
-            mForecastRecyclerView.smoothScrollToPosition( mCurrentScrollPosition );
-        }
-
-        // 2. update the empty view
+        // 1. update the empty view
 
         updateEmptyView();
 
-        // 3. if there cursor has nothing
+        // 2. if there cursor has nothing
 
-        // 3a. start any postponed transitions
+        // 2a. start any postponed transitions
 
         if ( cursor.getCount() == 0 ) { getActivity().supportStartPostponedEnterTransition(); }
 
-        // 4. else the cursor has something,
+        // 3. else the cursor has something,
 
         // begin else the cursor has something
         else {
 
-            // 4a. select a view holder based on the current adapter position using the item choice manager, if needed
+            // 3a. select a view holder based on the current adapter position using the item choice manager, if needed
 
             // begin mForecastRecyclerView.getViewTreeObserver().addOnPreDrawListener
             mForecastRecyclerView.getViewTreeObserver().addOnPreDrawListener(
@@ -641,20 +631,35 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                             // begin if the recycler has kids
                             if ( mForecastRecyclerView.getChildCount() > 0 ) {
 
-                                mForecastRecyclerView.getViewTreeObserver().removeOnPreDrawListener( this );
+                                int position = mForecastAdapter.getSelectedItemPosition();
 
-                                int itemPosition = mForecastAdapter.getSelectedItemPosition();
+                                if ( position == RecyclerView.NO_POSITION &&
+                                        -1 != mInitialSelectedDate ) {
+                                    Cursor data = mForecastAdapter.getCursor();
+                                    int count = data.getCount();
+                                    int dateColumn = data.getColumnIndex( WeatherContract.WeatherEntry.COLUMN_DATE);
+                                    for ( int i = 0; i < count; i++ ) {
+                                        data.moveToPosition(i);
+                                        if ( data.getLong(dateColumn) == mInitialSelectedDate ) {
+                                            position = i;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (position == RecyclerView.NO_POSITION) position = 0;
 
-                                if ( RecyclerView.NO_POSITION == itemPosition ) itemPosition = 0;
+                                // If we don't need to restart the loader, and there's a
+                                // desired position to restore to, do so now.
+                                mForecastRecyclerView.smoothScrollToPosition(position);
 
-                                RecyclerView.ViewHolder vh = mForecastRecyclerView
-                                        .findViewHolderForAdapterPosition( itemPosition );
+                                WeatherViewHolder vh = ( WeatherViewHolder )
+                                        mForecastRecyclerView.findViewHolderForAdapterPosition(position);
 
-                                if ( null != vh && mAutoSelectView ) {
-                                    mForecastAdapter.selectView( vh );
+                                if (null != vh && mAutoSelectView) {
+                                    mForecastAdapter.selectView(vh);
                                 }
 
-                                // 4b. if we are to do so, start any pending transitions after
+                                // 3b. if we are to do so, start any pending transitions after
                                 // the recycler has laid its kids out
 
                                 if ( mHoldForTransitions == true ) {
@@ -697,25 +702,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public void onSaveInstanceState( Bundle outState ) {
 
         // 0. super stuff
-        // 1. if there is an item selected
-        // 1a. put the current scroll position in the bundle
-        // 2. save state for the adapter
+        // 1. save state for the adapter
 
         // 0. super stuff
 
         super.onSaveInstanceState( outState );
 
-        // 1. if there is an item selected
-
-        // 1a. put the current scroll position in the bundle
-
-        // no item selected will leave the position at NO_POSITION
-
-        if ( mCurrentScrollPosition != RecyclerView.NO_POSITION ) {
-            outState.putInt( BUNDLE_SCROLL_POSITION, mCurrentScrollPosition );
-        }
-
-        // 2. save state for the adapter
+        // 1. save state for the adapter
 
         mForecastAdapter.onSaveInstanceState(outState);
 
@@ -752,7 +745,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // 0. get the uri for weather for this date
         // 1. pass the date uri and the view holder to the callback listener
-        // 2. store the view holder's position as the current scroll position
 
         // 0. get the uri for weather for this date
 
@@ -763,10 +755,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // 1. pass the date uri and the view holder to the callback listener
 
         forecastCallbackListener.onForecastItemSelected( dateUri, viewHolder );
-
-        // 2. store the view holder's position as the current scroll position
-
-        mCurrentScrollPosition = viewHolder.getAdapterPosition();
 
     } // end onClick
 

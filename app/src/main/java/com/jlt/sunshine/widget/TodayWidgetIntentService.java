@@ -136,7 +136,6 @@ public class TodayWidgetIntentService extends IntentService {
                         AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH );
             }
 
-            Log.e( LOG_TAG, "onHandleIntent: widgetWidth " + widgetWidth );
             // 2b. get a remote view based on widget width
 
             RemoteViews views = getRemoteViewsForWidth( getPackageName(), widgetWidth );
@@ -152,7 +151,7 @@ public class TodayWidgetIntentService extends IntentService {
                 // 2d. use that pending intent for when the widget is clicked
 
                 // setOnClickPendingIntent - when the given view is clicked, fire the given PendingIntent
-                views.setOnClickPendingIntent( R.id.widget, pendingIntent );
+                views.setOnClickPendingIntent( R.id.widget_today, pendingIntent );
 
                 // 2last. update this widget with the remote view
 
@@ -174,7 +173,7 @@ public class TodayWidgetIntentService extends IntentService {
     @TargetApi( Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1 )
     // method setRemoteContentDescription
     private void setRemoteContentDescription( RemoteViews views, String description ) {
-        views.setContentDescription( R.id.widget_icon, description );
+        views.setContentDescription( R.id.widget_today_iv_icon, description );
     }
 
     /* Other Methods */
@@ -287,13 +286,13 @@ public class TodayWidgetIntentService extends IntentService {
 
             views = new RemoteViews( packageName, R.layout.widget_today_small );
 
-            views.setImageViewResource( R.id.widget_icon, weatherIconId );
+            views.setImageViewResource( R.id.widget_today_iv_icon, weatherIconId );
 
-            views.setTextViewText( R.id.widget_high_temperature, high );
+            views.setTextViewText( R.id.widget_today_tv_high_temperature, high );
 
             // 0e. put a content description, if device version allows
 
-            contentDescription = getString( R.string.a11y_widget_small, forecastDescription, high );
+            contentDescription = getString( R.string.a11y_widget_today_small, forecastDescription, high );
 
             if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1 ) {
                 setRemoteContentDescription( views, contentDescription );
@@ -344,15 +343,15 @@ public class TodayWidgetIntentService extends IntentService {
 
             views = new RemoteViews( packageName, R.layout.widget_today_medium );
 
-            views.setImageViewResource( R.id.widget_icon, weatherIconId );
+            views.setImageViewResource( R.id.widget_today_iv_icon, weatherIconId );
 
-            views.setTextViewText( R.id.widget_high_temperature, high );
+            views.setTextViewText( R.id.widget_today_tv_high_temperature, high );
 
-            views.setTextViewText( R.id.widget_low_temperature, low );
+            views.setTextViewText( R.id.widget_today_tv_low_temperature, low );
 
             // 1e. put a content description, if device version allows
 
-            contentDescription = getString( R.string.a11y_widget_medium, forecastDescription,
+            contentDescription = getString( R.string.a11y_widget_today_medium, forecastDescription,
                     high, low );
 
             if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1 ) {
@@ -404,17 +403,17 @@ public class TodayWidgetIntentService extends IntentService {
 
             views = new RemoteViews( packageName, R.layout.widget_today_large );
 
-            views.setImageViewResource( R.id.widget_icon, weatherIconId );
+            views.setImageViewResource( R.id.widget_today_iv_icon, weatherIconId );
 
-            views.setTextViewText( R.id.widget_forecast_description, forecastDescription );
+            views.setTextViewText( R.id.widget_today_tv_forecast_description, forecastDescription );
 
-            views.setTextViewText( R.id.widget_high_temperature, high );
+            views.setTextViewText( R.id.widget_today_tv_high_temperature, high );
 
-            views.setTextViewText( R.id.widget_low_temperature, low );
+            views.setTextViewText( R.id.widget_today_tv_low_temperature, low );
 
             // 0e. put a content description, if device version allows
 
-            contentDescription = getString( R.string.a11y_widget_large, forecastDescription,
+            contentDescription = getString( R.string.a11y_widget_today_large, forecastDescription,
                     high, low );
 
             if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1 ) {

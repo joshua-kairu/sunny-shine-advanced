@@ -178,7 +178,6 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
 
             view.setFocusable( true );
 
-
             // 0b3. return the inflated layout
 
             return new WeatherViewHolder( view, this );
@@ -239,12 +238,13 @@ public class ForecastAdapter extends RecyclerView.Adapter< WeatherViewHolder > {
                             weatherViewHolder )
                 );
 
-
             // 2. read date from cursor and display it appropriately using view holder data
 
             long date = mCursor.getLong( COLUMN_WEATHER_DATE );
 
-            String dateString = Utility.getFriendlyDateString( mContext, date );
+            boolean useLongToday = ( getItemViewType( position ) == VIEW_TYPE_TODAY );
+
+            String dateString = Utility.getFriendlyDateString( mContext, date, useLongToday );
 
             weatherViewHolder.mDateTextView.setText( dateString );
 

@@ -109,7 +109,7 @@ public class RegistrationIntentService extends IntentService {
         } // end trying to register
 
         // begin catching IO issues
-        catch ( IOException e ) {
+        catch ( IOException | IncompatibleClassChangeError e ) {
 
             // 0. log
             // 1. store boolean false we haven't sent the token

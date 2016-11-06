@@ -43,7 +43,7 @@
     <!-- the widget -->
     <LinearLayout
 
-        android:id="@+id/widget"
+        android:id="@+id/widget_today"
 
         android:layout_width="match_parent"
 
@@ -61,7 +61,7 @@
 
         <ImageView
 
-            android:id="@+id/widget_icon"
+            android:id="@+id/widget_today_iv_icon"
 
             android:layout_width="0dp"
 
@@ -91,7 +91,7 @@
 
             <TextView
 
-                android:id="@+id/widget_high_temperature"
+                android:id="@+id/widget_today_tv_high_temperature"
 
                 android:layout_width="wrap_content"
 
@@ -113,7 +113,7 @@
 
             <TextView
 
-                android:id="@+id/widget_low_temperature"
+                android:id="@+id/widget_today_tv_low_temperature"
 
                 android:layout_width="wrap_content"
 

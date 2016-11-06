@@ -83,7 +83,9 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
     protected void onCreate( Bundle savedInstanceState ) {
 
         // 0. super things
-        // 1. get the current location
+        // 1. initialize things
+        // 1a. the current location
+        // 1b. content Uri
         // 2. use the main activity layout
         // 3. set up toolbar if it exists
         // 3a. set it as action bar
@@ -108,9 +110,15 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
         super.onCreate( savedInstanceState );
 
-        // 1. get the current location
+        // 1. initialize things
+
+        // 1a. the current location
 
         mCurrentLocation = Utility.getPreferredLocation( this );
+
+        // 1b. content Uri
+
+        Uri contentUri = getIntent() != null ? getIntent().getData() : null;
 
         // 2. use the main activity layout
 
@@ -160,12 +168,15 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
                 // 4b1. replace the detail fragment in the second pane
                 // (the forecast fragment is added to the first pane in xml way before runtime)
 
+                DetailFragment detailFragment = contentUri != null ?
+                        DetailFragment.newInstance( contentUri, false )
+                        : new DetailFragment();
+
                 getSupportFragmentManager()
 
                     .beginTransaction()
 
-                    .replace( R.id.am_cv_weather_detail_container,
-                            new DetailFragment(),
+                    .replace( R.id.am_cv_weather_detail_container, detailFragment,
                             DETAILFRAGMENT_TAG )
 
                     .commit();

@@ -186,6 +186,9 @@ of localizable data and its related information.
     <!-- Title for the today widget. [CHAR LIMIT = 20] -->
     <string name="title_widget_today">Sunshine Today</string>
 
+    <!-- Title for the details widget. [CHAR LIMIT = 20] -->
+    <string name="title_widget_details">Sunshine Details</string>
+
     <!-- A11y -->
 
     <string name="a11y_toolbar_icon">Sunshine</string>
@@ -217,19 +220,25 @@ of localizable data and its related information.
     <!-- description for the location icon in settings [CHAR LIMIT = 15] -->
     <string name="a11y_current_location_description">Place picker</string>
 
-    <!-- description for the small widget. Says the forecast and high -->
-    <string name="a11y_widget_small">
+    <!-- description for the small today widget. Says the forecast and high -->
+    <string name="a11y_widget_today_small">
         <xliff:g id="forecast">%1$s</xliff:g>, High: <xliff:g id="high">%2$s</xliff:g>
     </string>
 
-    <!-- description for the medium widget. Says the forecast, high, and low -->
-    <string name="a11y_widget_medium">
+    <!-- description for the medium today widget. Says the forecast, high, and low -->
+    <string name="a11y_widget_today_medium">
         <xliff:g id="forecast">%1$s</xliff:g>, High: <xliff:g id="high">%2$s</xliff:g>, Low: <xliff:g id="low">%3$s</xliff:g>
     </string>
 
-    <!-- description for the large widget. Says the forecast, high, and low -->
-    <string name="a11y_widget_large">
+    <!-- description for the large today widget. Says the forecast, high, and low -->
+    <string name="a11y_widget_today_large">
         <xliff:g id="forecast">%1$s</xliff:g>, High: <xliff:g id="high">%2$s</xliff:g>, Low: <xliff:g id="low">%3$s</xliff:g>
+    </string>
+
+    <!-- description for an individual item in the detail widget.
+    Says the date, forecast, high, and low -->
+    <string name="a11y_widget_detail_list_item">
+        <xliff:g id="date">%1$s</xliff:g>, <xliff:g id="forecast">%2$s</xliff:g>, High: <xliff:g id="high">%3$s</xliff:g>, Low: <xliff:g id="low">%4$s</xliff:g>
     </string>
 
     <!-- Date labels -->

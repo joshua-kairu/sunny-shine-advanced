@@ -163,10 +163,11 @@ public class Utility {
      * @return A user-friendly representation of the date.
      * */
     // begin method getFriendlyDateString
-    static String getFriendlyDateString ( Context context, long dateInMillis ) {
+    public static String getFriendlyDateString ( Context context, long dateInMillis,
+                                                 boolean displayLongToday ) {
 
         // The logic used is:
-        // For today: "Today, September 1"
+        // For today: a long "Today, September 1",  or a short "Today"
         // For tomorrow: "Tomorrow"
         // For the next five days: "Saturday"
         // For all days after that: "Thu Sep 1"
@@ -204,8 +205,8 @@ public class Utility {
 
         // 2. if the date we're building a string for is today's date
 
-        // begin if the day we're building for is today
-        if ( dateInMillisDay == currentDay ) {
+        // begin if the day we're building for is today and we are to use the long today
+        if ( displayLongToday == true && dateInMillisDay == currentDay ) {
 
             // 2a. the format is "Today, September 1"
 
@@ -222,7 +223,7 @@ public class Utility {
                             getFormattedMonthDay( dateInMillis )
                     );
 
-        } // end if the day we're building for is today
+        } // end if the day we're building for is today and we are to use the long today
 
         // 3. if the date we're building for is less than a week to come and is within this month
 

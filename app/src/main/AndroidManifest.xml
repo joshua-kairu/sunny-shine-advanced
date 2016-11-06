@@ -372,6 +372,53 @@
 
             />
 
+        <!-- the detail widget receiver -->
+
+        <receiver
+
+            android:name=".widget.DetailWidgetProvider"
+
+            android:label="@string/title_widget_details"
+
+            android:enabled="@bool/widget_detail_enabled"
+
+            >
+
+            <intent-filter>
+
+                <!-- this widget receives the widget update broadcast so that it can update itself -->
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+
+                <!-- this widget receives the data update broadcast so that it can know when to update itself -->
+                <action android:name="com.jlt.sunshine.ACTION_DATA_UPDATED" />
+
+            </intent-filter>
+
+            <!-- tells Android where to find the metadata to display in the widget selection screen -->
+            <meta-data
+
+                android:name="android.appwidget.provider"
+
+                android:resource="@xml/sunshine_detail_list_widget"
+
+                />
+
+        </receiver>
+
+        <!-- the service to update the detail widget -->
+
+        <service
+
+            android:name=".widget.DetailWidgetRemoteViewsService"
+
+            android:enabled="@bool/widget_detail_enabled"
+
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+
+            android:exported="false"
+
+            />
+
     </application>
 
 </manifest>
