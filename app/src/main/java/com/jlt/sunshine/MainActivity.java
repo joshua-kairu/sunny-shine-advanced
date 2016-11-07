@@ -39,6 +39,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.jlt.sunshine.data.ForecastCallback;
 import com.jlt.sunshine.data.Utility;
+import com.jlt.sunshine.data.contract.WeatherContract.WeatherEntry;
 import com.jlt.sunshine.gcm.RegistrationIntentService;
 import com.jlt.sunshine.sync.SunshineSyncAdapter;
 import com.jlt.sunshine.ui.WeatherViewHolder;
@@ -100,11 +101,12 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
         // 5a. set the two pane flag to false
         // 5b. we should use the today layout in one pane mode
         // 5c. we should make the action bar as high as the today section
-        // 6. start the sync
-        // 7. start Google Play Services if possible
-        // 7a. know if we have the token
-        // 7b. if we don't have the token
-        // 7b1. start the registration service
+        // 6. if we have the content uri, use the initial selected date gotten from the uri
+        // 7. start the sync
+        // 8. start Google Play Services if possible
+        // 8a. know if we have the token
+        // 8b. if we don't have the token
+        // 8b1. start the registration service
 
         // 0. super things
 
@@ -214,27 +216,41 @@ public class MainActivity extends AppCompatActivity implements ForecastCallback 
 
         } // end else there's no detail container
 
-        // 6. start the sync
+        // 6. if we have the content uri, use the initial selected date gotten from the uri
+
+        // begin if there is a content uri
+        if ( contentUri != null ) {
+
+            ForecastFragment forecastFragment = ( ForecastFragment )
+                    getSupportFragmentManager().findFragmentById( R.id.am_f_forecast );
+
+            if ( forecastFragment != null ) {
+                forecastFragment.setInitialSelectedDate( WeatherEntry.getDateFromUri( contentUri ) );
+            }
+
+        } // end if there is a content uri
+
+        // 7. start the sync
 
         SunshineSyncAdapter.initializeSyncAdapter( this );
 
-        // 7. start Google Play Services if possible
+        // 8. start Google Play Services if possible
 
         // begin if Play Services are enabled
-        if ( checkPlayServices() ) {
+        if ( checkPlayServices() == true ) {
 
-            // 7a. know if we have the token
+            // 8a. know if we have the token
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences( this );
 
             boolean haveToken = sharedPreferences.getBoolean( PREF_SENT_TOKEN_KEY, false );
 
-            // 7b. if we don't have the token
+            // 8b. if we don't have the token
 
             // begin if we have not the token
-            if ( ! haveToken ) {
+            if ( haveToken == false ) {
 
-                // 7b1. start the registration service
+                // 8b1. start the registration service
 
                 Intent registrationIntent = new Intent( this, RegistrationIntentService .class );
                 startService( registrationIntent );
