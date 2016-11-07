@@ -431,7 +431,7 @@
 
             android:description="@string/muzei_description"
 
-            android:exported="false"
+            android:exported="true"
 
             >
 
