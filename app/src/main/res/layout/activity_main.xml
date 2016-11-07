@@ -37,7 +37,7 @@
 
     android:id="@+id/am_f_forecast"
 
-    android:name="com.jlt.sunshine.ForecastFragment"
+    android:name="com.joslitto.sunshine.ForecastFragment"
 
     android:layout_width="match_parent"
 

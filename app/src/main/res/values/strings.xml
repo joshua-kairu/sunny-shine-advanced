@@ -292,10 +292,10 @@ of localizable data and its related information.
     <!-- SyncAdapter related -->
 
     <!-- suggests that the account is specific to our Sunshine app. -->
-    <string name="sync_account_type">sunshine.jlt.com</string>
+    <string name="sync_account_type">sunshine.joslittho.com</string>
 
     <!-- Uri authority for the content provider. -->
-    <string name="content_authority">com.jlt.sunshine.app</string>
+    <string name="content_authority">com.joslittho.sunshine.app</string>
 
     <!-- Notifications -->
 
