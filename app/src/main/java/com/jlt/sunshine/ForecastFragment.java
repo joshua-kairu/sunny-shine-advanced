@@ -628,11 +628,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
                             // Since we know we're going to get items, we keep the listener around until
                             // we see Children.
+
                             // begin if the recycler has kids
                             if ( mForecastRecyclerView.getChildCount() > 0 ) {
 
                                 int position = mForecastAdapter.getSelectedItemPosition();
 
+                                Log.e( LOG_TAG, "onPreDraw: mInitialSelectedDate " + mInitialSelectedDate );
                                 if ( position == RecyclerView.NO_POSITION &&
                                         -1 != mInitialSelectedDate ) {
                                     Cursor data = mForecastAdapter.getCursor();
@@ -646,11 +648,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                                         }
                                     }
                                 }
-                                if (position == RecyclerView.NO_POSITION) position = 0;
 
                                 // If we don't need to restart the loader, and there's a
                                 // desired position to restore to, do so now.
-                                mForecastRecyclerView.smoothScrollToPosition(position);
+                                // we should only scroll to a position that is valid
+                                if ( position != RecyclerView.NO_POSITION ) {
+                                    mForecastRecyclerView.smoothScrollToPosition(position);
+                                }
 
                                 WeatherViewHolder vh = ( WeatherViewHolder )
                                         mForecastRecyclerView.findViewHolderForAdapterPosition(position);
