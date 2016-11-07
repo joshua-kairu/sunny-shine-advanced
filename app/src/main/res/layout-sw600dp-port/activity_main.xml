@@ -153,7 +153,7 @@ such as 7" and 10" tablets. This layout is for portrait mode.
 
         android:id="@+id/am_f_forecast"
 
-        android:name="com.joslitto.sunshine.ForecastFragment"
+        android:name="com.joslittho.sunshine.ForecastFragment"
 
         android:layout_width="match_parent"
 

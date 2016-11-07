@@ -49,7 +49,7 @@
     key - the key value in SharedPreferences
     -->
 
-    <com.joslitto.sunshine.view.LocationEditTextPreference
+    <com.joslittho.sunshine.view.LocationEditTextPreference
 
         android:key="@string/pref_location_key"
 

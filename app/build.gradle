@@ -4,7 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     defaultConfig {
-        applicationId "com.jlt.sunshine"
+        applicationId "com.joslittho.sunshine"
         minSdkVersion 10
         targetSdkVersion 23
         versionCode 1

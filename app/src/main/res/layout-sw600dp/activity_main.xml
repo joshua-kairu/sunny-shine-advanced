@@ -154,7 +154,7 @@ such as 7" and 10" tablets.
 
         android:id="@+id/am_f_forecast"
 
-        android:name="com.joslitto.sunshine.ForecastFragment"
+        android:name="com.joslittho.sunshine.ForecastFragment"
 
         android:layout_width="0dp"
 

@@ -29,7 +29,7 @@
 
     xmlns:android="http://schemas.android.com/apk/res/android"
 
-    package="com.joslitto.sunshine"
+    package="com.joslittho.sunshine"
 
     >
 
@@ -55,7 +55,7 @@
         as the application that declared the permission. -->
     <permission
 
-        android:name="com.joslitto.sunshine.permission.C2D_MESSAGE"
+        android:name="com.joslittho.sunshine.permission.C2D_MESSAGE"
 
         android:protectionLevel="signature"
 
@@ -96,7 +96,7 @@
 
         <activity
 
-            android:name="com.joslitto.sunshine.MainActivity"
+            android:name="com.joslittho.sunshine.MainActivity"
 
             android:label="@string/app_name"
 
@@ -126,11 +126,11 @@
 
         <activity
 
-            android:name="com.joslitto.sunshine.DetailActivity"
+            android:name="com.joslittho.sunshine.DetailActivity"
 
             android:label="@string/title_activity_detail"
 
-            android:parentActivityName="com.joslitto.sunshine.MainActivity"
+            android:parentActivityName="com.joslittho.sunshine.MainActivity"
 
             android:theme="@style/AppTheme.Detail"
 
@@ -140,7 +140,7 @@
 
                 android:name="android.support.PARENT_ACTIVITY"
 
-                android:value="com.joslitto.sunshine.MainActivity"
+                android:value="com.joslittho.sunshine.MainActivity"
 
                 />
 
@@ -150,13 +150,13 @@
 
         <activity
 
-            android:name="com.joslitto.sunshine.SettingsActivity"
+            android:name="com.joslittho.sunshine.SettingsActivity"
 
             android:label="@string/title_activity_settings"
 
             android:theme="@style/SettingsTheme"
 
-            android:parentActivityName="com.joslitto.sunshine.MainActivity"
+            android:parentActivityName="com.joslittho.sunshine.MainActivity"
 
             >
 
@@ -164,7 +164,7 @@
 
                 android:name="android.support.PARENT_ACTIVITY"
 
-                android:value="com.joslitto.sunshine.MainActivity"
+                android:value="com.joslittho.sunshine.MainActivity"
 
                 />
 
@@ -177,7 +177,7 @@
 
             android:authorities="@string/content_authority"
 
-            android:name="com.joslitto.sunshine.data.WeatherProvider"
+            android:name="com.joslittho.sunshine.data.WeatherProvider"
 
             android:exported="false"
 
@@ -190,7 +190,7 @@
         <!-- SunshineSyncAdapter's dummy authentication service. -->
         <service
 
-            android:name="com.joslitto.sunshine.sync.SunshineAuthenticatorService"
+            android:name="com.joslittho.sunshine.sync.SunshineAuthenticatorService"
 
             >
 
@@ -225,7 +225,7 @@
 
         <service
 
-            android:name="com.joslitto.sunshine.sync.SunshineSyncService"
+            android:name="com.joslittho.sunshine.sync.SunshineSyncService"
 
             android:exported="true"
 
@@ -286,7 +286,7 @@
 
         <!-- GCM Listener Service -->
 
-        <service android:name="com.joslitto.sunshine.gcm.MyGcmListenerService"
+        <service android:name="com.joslittho.sunshine.gcm.MyGcmListenerService"
             android:exported="false" >
 
             <!-- handles receiving GCM messages -->
@@ -301,7 +301,7 @@
 
         <!-- GCM Instance ID Listener Service -->
 
-        <service android:name="com.joslitto.sunshine.gcm.MyInstanceIDListenerService"
+        <service android:name="com.joslittho.sunshine.gcm.MyInstanceIDListenerService"
             android:exported="false" >
 
             <!-- handles creation, rotation, and updating of registration tokens,
@@ -317,7 +317,7 @@
 
         <!-- GCM Registration Intent Service -->
 
-        <service android:name="com.joslitto.sunshine.gcm.RegistrationIntentService"
+        <service android:name="com.joslittho.sunshine.gcm.RegistrationIntentService"
             android:exported="false">
         </service>
 
@@ -335,7 +335,7 @@
 
         <receiver
 
-            android:name="com.joslitto.sunshine.widget.TodayWidgetProvider"
+            android:name="com.joslittho.sunshine.widget.TodayWidgetProvider"
 
             android:label="@string/title_widget_today"
 
@@ -366,7 +366,7 @@
 
         <service
 
-            android:name="com.joslitto.sunshine.widget.TodayWidgetIntentService"
+            android:name="com.joslittho.sunshine.widget.TodayWidgetIntentService"
 
             android:exported="false"
 
@@ -376,7 +376,7 @@
 
         <receiver
 
-            android:name="com.joslitto.sunshine.widget.DetailWidgetProvider"
+            android:name="com.joslittho.sunshine.widget.DetailWidgetProvider"
 
             android:label="@string/title_widget_details"
 
@@ -409,7 +409,7 @@
 
         <service
 
-            android:name="com.joslitto.sunshine.widget.DetailWidgetRemoteViewsService"
+            android:name="com.joslittho.sunshine.widget.DetailWidgetRemoteViewsService"
 
             android:enabled="@bool/widget_detail_enabled"
 
@@ -423,7 +423,7 @@
 
         <service
 
-            android:name="com.joslitto.sunshine.muzei.WeatherMuzeiArtSourceService"
+            android:name="com.joslittho.sunshine.muzei.WeatherMuzeiArtSourceService"
 
             android:icon="@drawable/ic_muzei"
 
