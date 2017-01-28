@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
 
         // GCM
         classpath 'com.google.gms:google-services:1.5.0-beta2'
@@ -18,6 +18,14 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+    }
+
+    // ext for the android plugin versions
+    ext {
+        buildToolsVersion="25.0.1"
+        minSdkVersion=10
+        targetSdkVersion=25
+        compileSdkVersion=25
     }
 }
 
