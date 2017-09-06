@@ -125,7 +125,7 @@
 
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
 
-                android:textColor="@color/primary_text"
+                android:textColor="@color/secondary_text"
 
                 tools:text="16\u00B0"
 
