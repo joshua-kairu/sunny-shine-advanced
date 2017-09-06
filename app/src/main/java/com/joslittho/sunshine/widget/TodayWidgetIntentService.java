@@ -186,7 +186,7 @@ public class TodayWidgetIntentService extends IntentService {
      *
      * @return A {@link RemoteViews} based on the given width.
      * */
-    // begin method getRemoteViewsForSize
+    // begin method getRemoteViewsForWidth
     private RemoteViews getRemoteViewsForWidth( String packageName, int widgetMinimumWidth ) {
 
         final float SIZE_SMALL =
@@ -430,7 +430,7 @@ public class TodayWidgetIntentService extends IntentService {
 
         return views;
 
-    } // end method getRemoteViewsForSize
+    } // end method getRemoteViewsForWidth
     
     /* INNER CLASSES */
 
