@@ -180,6 +180,8 @@
 
             android:layout_marginEnd="@dimen/space_between_content_areas"
 
+            android:textColor="@color/secondary_text"
+
             android:textSize="@dimen/forecast_widget_text_size"
 
             tools:text="7\u00B0"
