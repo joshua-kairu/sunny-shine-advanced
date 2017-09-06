@@ -1110,7 +1110,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         // 0f1. Create the Notification using NotificationCompat.builder.
         // 0f2. Create an explicit intent for what the notification should open.
         // 0f3. Create an artificial “backstack” so that when the user clicks the back button,
-        // it is clear to Android where the user will go.
+        // it is clear to Android where the user will go - to the main activity.
         // 0f4. Tell the NotificationManager to show the notification.
         // 0last. put in preferences now as the time when the notification was displayed last
 
@@ -1212,7 +1212,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                     catch ( InterruptedException | ExecutionException e ) {
 
                         // 0. log
-                        // 1. fall back to resourcesstyr
+                        // 1. fall back to resources
 
                         // 0. log
 
@@ -1240,14 +1240,15 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                             .setSmallIcon( todayIconId )
                             .setLargeIcon( todayIconLarge )
                             .setContentTitle( notificationTitle )
-                            .setContentText( notificationText );
+                            .setContentText( notificationText )
+                            .setAutoCancel( true );
 
                     // 0f2. Create an explicit intent for what the notification should open.
 
                     Intent mainActivityIntent = new Intent( context, MainActivity.class );
 
                     // 0f3. Create an artificial “backstack” so that when the user clicks the back button,
-                    // it is clear to Android where the user will go.
+                    // it is clear to Android where the user will go - to the main activity.
 
                     // TaskStackBuilder - Utility class for constructing synthetic back stacks
                     //  for cross-task navigation
