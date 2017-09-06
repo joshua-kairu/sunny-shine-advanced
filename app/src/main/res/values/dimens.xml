@@ -191,10 +191,12 @@
 
     <!-- detail list widget -->
     <!-- 3 cells x 3 cells for now -->
-    <dimen name="widget_detail_default_width">250dp</dimen>
+    <!-- ensure that the widget is at least 3 cells x 3 cells and can grow bigger from there or
+    grow smaller to there -->
+    <dimen name="widget_detail_default_width">180dp</dimen>
     <dimen name="widget_detail_default_height">180dp</dimen>
-    <dimen name="widget_detail_min_resize_height">220dp</dimen>
-    <dimen name="widget_detail_min_resize_width">@dimen/widget_detail_default_height</dimen>
+    <dimen name="widget_detail_min_resize_height">@dimen/widget_detail_default_height</dimen>
+    <dimen name="widget_detail_min_resize_width">@dimen/widget_detail_default_width</dimen>
 
     <!-- Text Sizes - We are using DP here rather than SP because these are already large
       font sizes, and going larger will cause lots of view problems.  This is only for
