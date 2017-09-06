@@ -129,7 +129,7 @@
 
                 android:fontFamily="sans-serif-light"
 
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Display2"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
 
                 android:textColor="@color/primary_text"
 
@@ -151,7 +151,7 @@
 
                 android:fontFamily="sans-serif-light"
 
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
 
                 android:textColor="@color/primary_text"
 
