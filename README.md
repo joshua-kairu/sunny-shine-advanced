@@ -12,7 +12,7 @@ The app fetches weather from the net and shows it on an Android phone or tablet.
 
 It should work out of the box on devices running Android 5 and below.
 
-#If you are using Android 6.0 Marshmallow and later the app will not work due to permissions unless you do this:
+# If you are using Android 6.0 Marshmallow and later the app will not work due to permissions unless you do this:
 
 1. Install the app
 
